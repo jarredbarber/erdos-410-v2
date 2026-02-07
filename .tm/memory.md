@@ -141,6 +141,32 @@
 - After s3b completes, do the explore tasks (4up, 9z0, and any new ones) start getting picked up?
 - First priority should be getting verified NL proofs flowing to unblock the formalize pipeline
 
+## Heartbeat — 2026-02-07T22:45 UTC (Heartbeat #8)
+
+**Metrics**: Sorry count: 1 | Verified proofs: 1 (sigma-parity.md ✅) | Tasks: 8 open, 2 in_progress, 7 closed | Build: ✅
+**Status**: First verified proof achieved! Pipeline flowing. Bottom-up DAG fully seeded.
+**Observations**:
+- **FIRST VERIFIED PROOF**: sigma-parity.md (σ(n) odd iff n is square or 2×square) — explore→verify pipeline worked perfectly
+  - 9z0 (explore) closed successfully, ii5 (verify) approved it, 2 git commits
+- **s3b (advisor replanning) was STALE** — 477 lines, last modified 22:16, stalled for 25+ min. Computationally confirmed Lemma 3.4 is false but never created tasks. Recovered and closed.
+- **l2y (Lean helpers formalize) ACTIVE** — 99 lines, exploring Mathlib API, writing helper statements. Good progress.
+- **4up (sigma bounds explore) QUEUED** — marked in_progress but 8 lines (header only), not yet started. Worker handling l2y first.
+- **Overseer created 5 new tasks** (replacing stalled advisor work):
+  - fho: Even stability explore (p2, medium) → lbc: verify
+  - uwa: ω(a_k)→∞ explore (p2, large) → h0a: verify
+  - vp1: Main assembly explore (p3, medium, depends on fho+uwa) → 8xc: verify
+- Full bottom-up pipeline now seeded: sigma-bounds → even-stability → ω-divergence → assembly
+- Each hard task has detailed proof strategy hints (level 3-4 framing for even-stability warning about Lemma 3.4 being false, Zsygmondy hint for ω-divergence)
+**Actions**:
+1. Recovered stale s3b (advisor), then closed it
+2. Created 5 tasks: fho, lbc, uwa, h0a, vp1, 8xc (3 explore + 3 verify) with proper DAG dependencies
+**Watch next**:
+- Does l2y (Lean helpers) complete? This unblocks n7i (formalize sigma bounds)
+- Does 4up (sigma bounds explore) get picked up and produce proofs/sigma-lower-bounds.md?
+- After 4up completes: 5p8 (verify) should run, then n7i (formalize) — this is the path to our first sorry reduction
+- fho (even stability) is the next hard explore — watch for surrender or Lemma 3.4 trap
+- ω-divergence (uwa) is the hardest task — may need framing adjustment after first attempt
+
 ## Heartbeat — 2026-02-07T22:26 UTC (Heartbeat #7)
 
 **Metrics**: Sorry count: 1 | Verified proofs: 0 | Tasks: 6 open, 1 in_progress, 4 closed | Build: ✅

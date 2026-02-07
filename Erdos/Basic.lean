@@ -1,3 +1,4 @@
+import Erdos.Helpers
 import Mathlib.NumberTheory.ArithmeticFunction.Defs
 import Mathlib.NumberTheory.ArithmeticFunction.Misc
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
