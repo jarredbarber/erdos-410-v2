@@ -1,6 +1,7 @@
 # Eventual Even Stability of the σ-Sequence
 
-**Status:** Draft ✏️
+**Status:** Under review 🔍
+**Reviewed by:** erdos410v2-lbc
 **Statement:** For any $n \geq 2$, let $a_k = \sigma^{[k]}(n)$ (the $k$-th iterate of the sum-of-divisors function). Then:
 1. The set $\{k : a_k \text{ is odd}\}$ is finite.
 2. Once $a_k$ is even, the sequence satisfies $a_{k+1} \geq \frac{3}{2} a_k$.
@@ -201,3 +202,85 @@ Computational verification for $n = 2, 3, 4, 5, 10, 100$:
 
 - sigma-parity.md (Verified ✅): Parity characterization of $\sigma(n)$.
 - Standard results: $\sigma(m) \geq m + 1$ for $m \geq 2$; multiplicativity of $\sigma$.
+
+---
+
+## Review Notes (erdos410v2-lbc)
+
+### Status: Revision Required 🔍
+
+The proof contains important insights and correct preliminary results, but has **critical gaps** in the main argument (Part 3) that prevent verification. The issues are fixable but require additional mathematical work.
+
+### Verified Components ✅
+
+1. **Lemma 1.1 (Part 1)**: The growth bound $\sigma(m) \geq \frac{3m}{2}$ for even $m \geq 2$ is correctly proven by case analysis. The divisor argument is sound.
+
+2. **Lemma 2.1 (Part 2)**: The state classification and transition rules correctly follow from the verified Parity Lemma (sigma-parity.md). The dependency is properly cited and verified.
+
+3. **Step 1 of Part 3**: The observation that consecutive odd terms require perfect squares is correct and rigorously justified.
+
+4. **Step 4 of Part 3**: The density calculation for bad states is correct—odd squares and E-S states do have density $O(1/\sqrt{N})$.
+
+### Critical Gaps ❌
+
+**Issue 1: Empirical verification substituted for proof (Step 2)**
+
+The proof claims that chains of odd perfect squares (satisfying $\sigma(t^2) = s^2$ with both $t, s$ odd) are short, but supports this only with computational checks up to $t \leq 100$. This is **not a mathematical proof**.
+
+**Problem:** There is no proof that longer chains don't exist for larger values. The equation $\sigma(t^2) = s^2$ is a Diophantine condition, and while it's plausible that solutions are rare and chains are short, this needs to be proven, not verified empirically.
+
+**What's needed:** Either:
+- A mathematical proof that chains have bounded length (perhaps using growth rates and number-theoretic properties of $\sigma$), OR
+- A proof that the sequence growth eventually prevents revisiting the odd-square regime
+
+**Issue 2: Probabilistic language in deterministic proof (Step 5)**
+
+The proof uses phrases like "with high probability" and argues based on expected density, but the sequence $\{\sigma^{[k]}(n)\}$ is **deterministic**. A sparse set can still be visited infinitely often by a specific sequence if there's structure.
+
+**Problem:** The transition from "bad states are sparse" to "the sequence visits them only finitely many times" is not justified. The counting argument "the number of terms in states O-S or E-S is $O(\sqrt{a_{K+M}})$" has no rigorous foundation—why would this sequence hit bad states at the density of the overall population?
+
+**What's needed:** A proof that the specific dynamics of the $\sigma$ iteration, combined with growth properties, prevent infinite returns to bad states. This might involve:
+- Showing the growth rate from even states eventually dominates the spacing of bad states
+- Proving that the sequence can't "track" the odd squares indefinitely
+- Using properties specific to $\sigma$ (not just generic density arguments)
+
+**Issue 3: Incomplete treatment of E-S transitions (Step 3)**
+
+Similar to Issue 1, the claim that E-S states lead back to even within ≤3 steps relies on "empirical verification" of a limited range.
+
+**Problem:** The proof checks $v \in [1, 19]$ and odd $s \in [1, 99]$ but provides no mathematical reason why larger values can't produce longer excursions into odd states.
+
+**What's needed:** Either establish this bound mathematically or prove it's not needed (i.e., even if individual excursions are unbounded, they still occur only finitely many times).
+
+### Minor Issues ⚠️
+
+1. **Step 5 notation**: The proof states $a_k \geq n + k$, which is correct for growth $\sigma(m) \geq m + 1$, but this conservative bound isn't used effectively in subsequent arguments.
+
+2. **Computational verification table**: While helpful as evidence, the table in the Verification section should be clearly labeled as supporting evidence, not proof.
+
+### Recommendation
+
+**Request revision** with specific focus on:
+
+1. **Priority 1**: Replace empirical verification with mathematical proof (Issues 1 and 3), OR prove that finite visits follow from a different argument that doesn't require bounding chain lengths.
+
+2. **Priority 2**: Provide a rigorous proof that sparsity + growth imply finitely many visits to bad states (Issue 2).
+
+3. **Priority 3**: Clarify whether the result is:
+   - **Theorem**: Proven for all $n$ (requires fixing above gaps)
+   - **Conjecture**: Supported by strong computational evidence but not yet proven
+   - **Conditional result**: Proven conditional on conjectures about $\sigma(t^2) = s^2$ solutions
+
+### Suggested Approaches
+
+Some potential ways to close the gaps:
+
+- **Growth-based argument**: Prove that once $a_k$ is sufficiently large and even, the growth $a_{k+1} \geq \frac{3}{2}a_k$ ensures the sequence "escapes" the range where bad states could be revisited. This would use the fact that bad states thin out super-polynomially.
+
+- **Local analysis**: Instead of global counting, analyze what happens in any interval $[a_k, (\frac{3}{2})^m a_k]$ for large $a_k$, showing that the number of potential bad-state visits in this interval goes to zero.
+
+- **Conditional result**: Prove the result conditional on standard conjectures about the rarity of odd perfect numbers or solutions to $\sigma(t^2) = s^2$, making the dependencies explicit.
+
+### Conclusion
+
+The proof demonstrates deep understanding of the problem and contains several correct lemmas. However, the main result (Part 3, Theorem 3.1) cannot be verified in its current form due to reliance on computational evidence where mathematical proof is required. The gaps are significant but appear fixable with additional work.
