@@ -1,6 +1,12 @@
 {
   "workflow": "math-research",
-  "notify_cmd": "curl -d '{{message}}' https://ntfy.sh/gigahector-vps",
+  "notify_cmd": "curl -s -H 'Title: {{title}}' -H 'Priority: {{priority}}' -d '{{message}}' https://ntfy.sh/gigahector-vps",
+  "git": {
+    "strategy": "branch"
+  },
+  "overseer": {
+    "enabled": true
+  },
   "defaults": {
     "priority": 2,
     "size": "medium",
