@@ -120,3 +120,43 @@
 - Does l3a (replanning) produce a good bottom-up task decomposition?
 - Are subsidiary tasks (4up, 9z0, l2y) finally getting picked up?
 - Key question for replanning: is ω(a_k)→∞ the right intermediate target, or should we use a different route?
+
+## Heartbeat — 2026-02-07T22:10 UTC (Heartbeat #6)
+
+**Metrics**: Sorry count: 1 | Verified proofs: 0 | Tasks: 6 open, 1 in_progress, 4 closed | Build: ✅
+**Status**: Healthy — advisor replanning task (s3b) actively running, no stale tasks.
+**Observations**:
+- Advisor task s3b picked up immediately (started ~22:10), log at 75 lines and growing (file modified 2s ago)
+- Agent reading all context files: PROBLEM.md, main-theorem.md, main-theorem-v2.md, Basic.lean, lakefile.lean
+- Running `lake build` to verify compilation state — actively exploring project structure
+- No new tasks closed since heartbeat #5 (expected — advisor is working)
+- Existing subsidiary tasks (4up, 9z0, l2y, 5p8, ii5, n7i) still open and properly structured in DAG
+- **Note**: s3b task says "l3a" in my previous notes but the actual task ID is s3b — this was the replanning task I created
+- **Potential risk**: Advisor might create tasks that overlap with existing 4up (sigma bounds) and 9z0 (parity). Minor — can deduplicate next heartbeat if needed.
+- Worker can only run 1 task at a time; subsidiary tasks wait behind s3b (p0 > p2). This is correct behavior.
+**Actions**: None — system healthy, advisor actively working on strategic replan.
+**Watch next**:
+- Does s3b complete and produce a good bottom-up decomposition?
+- How many new tasks created? Check for duplicates with existing 4up/9z0/l2y
+- After s3b completes, do the explore tasks (4up, 9z0, and any new ones) start getting picked up?
+- First priority should be getting verified NL proofs flowing to unblock the formalize pipeline
+
+## Heartbeat — 2026-02-07T22:26 UTC (Heartbeat #7)
+
+**Metrics**: Sorry count: 1 | Verified proofs: 0 | Tasks: 6 open, 1 in_progress, 4 closed | Build: ✅
+**Status**: Healthy — advisor replanning (s3b) deep in computational verification, no stale tasks.
+**Observations**:
+- s3b log grew from 75 → 477 lines since last heartbeat — very active, not stalled
+- **Critical mathematical finding**: Agent computationally verified that Lemma 3.4 (non-square propagation under σ) is **FALSE** — 27 counterexamples in [2,500]. This was a pressure point in both draft proofs.
+- Agent now empirically checking eventual even stability for small starting values
+- This is exactly the right approach: ground-truth the proof architecture computationally before creating bottom-up tasks
+- No new git commits (expected — advisor doesn't write code/proofs)
+- No new tasks created yet (expected — still in analysis phase)
+- Task counts unchanged: 6 open, 1 in_progress, 4 closed
+- No stale tasks (worker actively processing s3b)
+**Actions**: None — agent doing excellent pre-planning research.
+**Watch next**:
+- s3b should complete soon and create the bottom-up task decomposition
+- KEY: the disproof of Lemma 3.4 means the existing parity task (9z0) may need updating — the standard characterization "σ(n) odd iff n is square or 2×square" is actually correct, but the *propagation* lemma (non-square odd part stays non-square under σ) is false. Watch whether the advisor accounts for this in task planning.
+- If s3b still in_progress next heartbeat with log >800 lines, may be getting too deep — consider a stale check
+- After s3b: expect a burst of new tasks, then rapid pickup of explore tasks
