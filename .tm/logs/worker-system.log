@@ -849,3 +849,162 @@ $ tm update erdos410v2-5p8 --status completed
 - Proof B: Elegant multiplicativity argument using σ(2^a·m) = σ(2^a)·σ(m)
 
 All edge cases handled, all quantifiers properly scoped, no hidden assumptions detected. The proof is self-contained and complete. File status updated to Verified ✅.
+[2026-02-07T23:55:42.909Z] ✅ Successfully merged task/erdos410v2-5p8 into main
+[2026-02-07T23:55:42.909Z] 🗑️  Deleting branch task/erdos410v2-5p8...
+[2026-02-07T23:55:42.915Z] ✓ Deleted local branch task/erdos410v2-5p8
+[2026-02-07T23:55:42.921Z] ℹ️  No remote configured, skipping push.
+[2026-02-07T23:55:43.923Z] 
+================================================================================
+[2026-02-07T23:55:43.924Z] 📌 Processing task: erdos410v2-n7i - Formalize σ(n) ≥ n + 1 for n ≥ 2 in Lean using proofs/sigma-lower-bounds.md
+[2026-02-07T23:55:43.924Z]    Role: formalize | Priority: 1 | Size: medium
+[2026-02-07T23:55:43.924Z] ================================================================================
+
+[2026-02-07T23:55:43.927Z] ✓ Claimed task erdos410v2-n7i
+
+[2026-02-07T23:55:43.927Z] 🤖 Using agent: formalize with models: anthropic/claude-opus-4-6:high, anthropic/claude-opus-4-5:high, google-antigravity/gemini-3-pro:high
+
+[2026-02-07T23:55:43.927Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-6:high...
+[2026-02-07T23:55:43.942Z] 📸 Capturing file state before agent execution...
+[2026-02-07T23:55:43.954Z] ✓ Captured state: 31 tracked, 1 untracked files
+
+[2026-02-07T23:55:43.954Z] 🌿 Creating branch: task/erdos410v2-n7i
+[2026-02-07T23:55:43.960Z] ✓ Working on branch task/erdos410v2-n7i
+
+[2026-02-07T23:55:47.784Z] 
+$ cd /home/jarred/code/erdos-410-v2 && tm update erdos410v2-n7i --status "Reading NL proof and Lean source files"
+[2026-02-07T23:55:51.245Z] 
+🛠️  Executing tool: read...
+[2026-02-07T23:55:51.251Z] 
+$ cd /home/jarred/code/erdos-410-v2 && find . -name "*.lean" | head -20
+[2026-02-07T23:55:54.065Z] 
+🛠️  Executing tool: read...
+[2026-02-07T23:55:54.067Z] 
+🛠️  Executing tool: read...
+[2026-02-07T23:55:54.070Z] 
+🛠️  Executing tool: read...
+[2026-02-07T23:56:00.319Z] 
+$ cd /home/jarred/code/erdos-410-v2 && tm update erdos410v2-n7i --status "Exploring Mathlib API for sigma, divisors, and Finset lemmas"
+[2026-02-07T23:56:06.774Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/api_explore.lean << 'EOF'
+import Mathlib.NumberTheory.ArithmeticFunction.Defs
+import Mathlib.NumberTheory.ArithmeticFunction.Misc
+import Mathlib.Data.Nat.Divisors
+
+open ArithmeticFunction
+
+-- Check sigma_one_apply
+#check @sigma_one_apply
+-- Check divisors membership
+#check Nat.mem_divisors
+-- Check sum over subset
+#check Finset.sum_le_sum_of_subset
+-- Check pair insert
+#check Finset.sum_pair
+#check Finset.insert_subset_iff
+#check Nat.one_mem_divisors
+#check Nat.mem_divisors
+EOF
+lake env lean /tmp/api_explore.lean 2>&1
+[2026-02-07T23:56:14.366Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/api_explore.lean << 'EOF'
+import Mathlib.NumberTheory.ArithmeticFunction.Defs
+import Mathlib.NumberTheory.ArithmeticFunction.Misc
+
+open ArithmeticFunction
+
+#check @sigma_one_apply
+#check Nat.mem_divisors
+#check Finset.sum_le_sum_of_subset
+#check Finset.sum_pair
+#check Nat.one_mem_divisors
+EOF
+lake env lean /tmp/api_explore.lean 2>&1
+[2026-02-07T23:56:20.364Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/api_explore2.lean << 'EOF'
+import Mathlib.NumberTheory.ArithmeticFunction.Defs
+import Mathlib.NumberTheory.ArithmeticFunction.Misc
+
+open ArithmeticFunction
+
+#check Nat.dvd_refl
+#check Finset.insert_subset_iff
+#check @Finset.pair_subset_iff
+#check Finset.singleton_subset_iff
+#check @Finset.mem_insert
+EOF
+lake env lean /tmp/api_explore2.lean 2>&1
+[2026-02-07T23:56:33.861Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/test_proof.lean << 'EOF'
+import Mathlib.NumberTheory.ArithmeticFunction.Defs
+import Mathlib.NumberTheory.ArithmeticFunction.Misc
+
+open ArithmeticFunction
+
+lemma sigma_one_ge (n : ℕ) (hn : 2 ≤ n) : n + 1 ≤ sigma 1 n := by
+  rw [sigma_one_apply]
+  -- We want to show n + 1 ≤ ∑ d in n.divisors, d
+  -- We have {1, n} ⊆ n.divisors with 1 ≠ n
+  have h1n : (1 : ℕ) ≠ n := by omega
+  have h1_mem : 1 ∈ n.divisors := Nat.one_mem_divisors.mpr (by omega)
+  have hn_mem : n ∈ n.divisors := Nat.mem_divisors.mpr ⟨dvd_refl n, by omega⟩
+  have hsub : ({1, n} : Finset ℕ) ⊆ n.divisors := by
+    rw [Finset.insert_subset_iff]
+    exact ⟨h1_mem, Finset.singleton_subset_iff.mpr hn_mem⟩
+  calc n + 1 = 1 + n := by ring
+    _ = ∑ d in ({1, n} : Finset ℕ), d := (Finset.sum_pair h1n).symm
+    _ ≤ ∑ d in n.divisors, d := Finset.sum_le_sum_of_subset hsub
+EOF
+lake env lean /tmp/test_proof.lean 2>&1
+[2026-02-07T23:56:42.163Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/test_proof.lean << 'EOF'
+import Mathlib.NumberTheory.ArithmeticFunction.Defs
+import Mathlib.NumberTheory.ArithmeticFunction.Misc
+
+open ArithmeticFunction
+
+lemma sigma_one_ge (n : ℕ) (hn : 2 ≤ n) : n + 1 ≤ sigma 1 n := by
+  rw [sigma_one_apply]
+  have h1n : (1 : ℕ) ≠ n := by omega
+  have h1_mem : 1 ∈ n.divisors := Nat.one_mem_divisors.mpr (by omega)
+  have hn_mem : n ∈ n.divisors := Nat.mem_divisors.mpr ⟨dvd_refl n, by omega⟩
+  have hsub : ({1, n} : Finset ℕ) ⊆ n.divisors := by
+    rw [Finset.insert_subset_iff]
+    exact ⟨h1_mem, Finset.singleton_subset_iff.mpr hn_mem⟩
+  have hpair : ∑ d ∈ ({1, n} : Finset ℕ), d = 1 + n := Finset.sum_pair h1n
+  linarith [Finset.sum_le_sum_of_subset hsub]
+EOF
+lake env lean /tmp/test_proof.lean 2>&1
+[2026-02-07T23:56:51.696Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/test_proof2.lean << 'EOF'
+import Mathlib.NumberTheory.ArithmeticFunction.Defs
+import Mathlib.NumberTheory.ArithmeticFunction.Misc
+
+open ArithmeticFunction
+
+lemma sigma_one_ge (n : ℕ) (hn : 2 ≤ n) : n + 1 ≤ sigma 1 n := by
+  rw [sigma_one_apply]
+  have h1n : (1 : ℕ) ≠ n := by omega
+  have h1_mem : 1 ∈ n.divisors := Nat.one_mem_divisors.mpr (by omega)
+  have hn_mem : n ∈ n.divisors := Nat.mem_divisors.mpr ⟨dvd_refl n, by omega⟩
+  have hsub : ({1, n} : Finset ℕ) ⊆ n.divisors := by
+    rw [Finset.insert_subset_iff]
+    exact ⟨h1_mem, Finset.singleton_subset_iff.mpr hn_mem⟩
+  have hpair : ∑ d ∈ ({1, n} : Finset ℕ), (d : ℕ) = 1 + n := Finset.sum_pair h1n
+  have hle : ∑ d ∈ ({1, n} : Finset ℕ), (d : ℕ) ≤ ∑ d ∈ n.divisors, d :=
+    Finset.sum_le_sum_of_subset (f := fun (d : ℕ) => d) hsub
+  linarith
+EOF
+lake env lean /tmp/test_proof2.lean 2>&1
+[2026-02-07T23:56:57.610Z] 
+$ cd /home/jarred/code/erdos-410-v2 && tm update erdos410v2-n7i --status "Proof compiles in test file, applying to Helpers.lean"
+[2026-02-07T23:57:05.608Z] 
+🛠️  Executing tool: edit...
+[2026-02-07T23:57:08.178Z] 
+$ cd /home/jarred/code/erdos-410-v2 && lake build 2>&1
+[2026-02-07T23:57:21.193Z] 
+🛠️  Executing tool: read...
+[2026-02-07T23:57:24.884Z] 
+$ cd /home/jarred/code/erdos-410-v2 && git add -A && git commit -m "Close sorry for sigma_one_ge: σ₁(n) ≥ n + 1 for n ≥ 2
+
+Proof extracts the terms d = 1 and d = n from ∑ d ∈ n.divisors, d
+using Finset.sum_pair and Finset.sum_le_sum_of_subset."

@@ -21,7 +21,17 @@ are verified. They form the key building blocks for the main Erdős 410 theorem.
 
 /-- For n ≥ 2, σ₁(n) ≥ n + 1 (since 1 and n are always divisors). -/
 lemma sigma_one_ge (n : ℕ) (hn : 2 ≤ n) : n + 1 ≤ sigma 1 n := by
-  sorry
+  rw [sigma_one_apply]
+  have h1n : (1 : ℕ) ≠ n := by omega
+  have h1_mem : 1 ∈ n.divisors := Nat.one_mem_divisors.mpr (by omega)
+  have hn_mem : n ∈ n.divisors := Nat.mem_divisors.mpr ⟨dvd_refl n, by omega⟩
+  have hsub : ({1, n} : Finset ℕ) ⊆ n.divisors := by
+    rw [Finset.insert_subset_iff]
+    exact ⟨h1_mem, Finset.singleton_subset_iff.mpr hn_mem⟩
+  have hpair : ∑ d ∈ ({1, n} : Finset ℕ), (d : ℕ) = 1 + n := Finset.sum_pair h1n
+  have hle : ∑ d ∈ ({1, n} : Finset ℕ), (d : ℕ) ≤ ∑ d ∈ n.divisors, d :=
+    Finset.sum_le_sum_of_subset (f := fun (d : ℕ) => d) hsub
+  linarith
 
 /-- For even n ≥ 2, σ₁(n) ≥ 3n/2 (since 1, n/2, and n are all divisors).
     Stated as `3 * n ≤ 2 * σ₁(n)` to avoid natural number division. -/
