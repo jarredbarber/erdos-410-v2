@@ -1008,3 +1008,22 @@ $ cd /home/jarred/code/erdos-410-v2 && git add -A && git commit -m "Close sorry 
 
 Proof extracts the terms d = 1 and d = n from ∑ d ∈ n.divisors, d
 using Finset.sum_pair and Finset.sum_le_sum_of_subset."
+[2026-02-07T23:57:27.921Z] 
+$ cd /home/jarred/code/erdos-410-v2 && tm update erdos410v2-n7i --status "Done — sorry closed, lake build succeeds, committed"
+[2026-02-07T23:57:35.132Z] 
+
+📝 Agent response complete.
+
+[2026-02-07T23:57:35.133Z] 📄 Log saved to .tm/logs/worker-erdos410v2-n7i.md
+[2026-02-07T23:57:35.133Z] 
+📊 Task erdos410v2-n7i completed:
+[2026-02-07T23:57:35.133Z]    Summary: Closed sorry in sigma_one_ge. lake build succeeds.
+[2026-02-07T23:57:35.133Z]    Details: Translated the NL proof from proofs/sigma-lower-bounds.md (Lemma 1.1). The Lean proof:
+1. Rewrites σ 1 n as ∑ d ∈ n.divisors, d via sigma_one_apply
+2. Shows {1, n} ⊆ n.divisors (using Nat.one_mem_divisors and Nat.mem_divisors)
+3. Shows 1 ≠ n (from n ≥ 2)
+4. Computes ∑ d ∈ {1, n}, d = 1 + n via Finset.sum_pair
+5. Gets the inequality via Finset.sum_le_sum_of_subset
+6. Closes with linarith
+
+No new sorry holes introduced. Two pre-existing sorries remain (sigma_one_even_ge and sigma_one_iterate_tendsto_atTop) plus the main theorem.

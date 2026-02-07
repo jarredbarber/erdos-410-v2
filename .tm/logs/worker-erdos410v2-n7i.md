@@ -209,3 +209,26 @@ $ cd /home/jarred/code/erdos-410-v2 && git add -A && git commit -m "Close sorry 
 Proof extracts the terms d = 1 and d = n from ∑ d ∈ n.divisors, d
 using Finset.sum_pair and Finset.sum_le_sum_of_subset."
 ```
+
+```bash
+$ cd /home/jarred/code/erdos-410-v2 && tm update erdos410v2-n7i --status "Done — sorry closed, lake build succeeds, committed"
+```
+```json
+{
+  "status": "completed",
+  "summary": "Closed sorry in sigma_one_ge. lake build succeeds.",
+  "details": "Translated the NL proof from proofs/sigma-lower-bounds.md (Lemma 1.1). The Lean proof:\n1. Rewrites σ 1 n as ∑ d ∈ n.divisors, d via sigma_one_apply\n2. Shows {1, n} ⊆ n.divisors (using Nat.one_mem_divisors and Nat.mem_divisors)\n3. Shows 1 ≠ n (from n ≥ 2)\n4. Computes ∑ d ∈ {1, n}, d = 1 + n via Finset.sum_pair\n5. Gets the inequality via Finset.sum_le_sum_of_subset\n6. Closes with linarith\n\nNo new sorry holes introduced. Two pre-existing sorries remain (sigma_one_even_ge and sigma_one_iterate_tendsto_atTop) plus the main theorem."
+}
+```
+
+## Final Result
+
+```json
+{
+  "status": "completed",
+  "summary": "Closed sorry in sigma_one_ge. lake build succeeds.",
+  "details": "Translated the NL proof from proofs/sigma-lower-bounds.md (Lemma 1.1). The Lean proof:\n1. Rewrites σ 1 n as ∑ d ∈ n.divisors, d via sigma_one_apply\n2. Shows {1, n} ⊆ n.divisors (using Nat.one_mem_divisors and Nat.mem_divisors)\n3. Shows 1 ≠ n (from n ≥ 2)\n4. Computes ∑ d ∈ {1, n}, d = 1 + n via Finset.sum_pair\n5. Gets the inequality via Finset.sum_le_sum_of_subset\n6. Closes with linarith\n\nNo new sorry holes introduced. Two pre-existing sorries remain (sigma_one_even_ge and sigma_one_iterate_tendsto_atTop) plus the main theorem."
+}
+```
+
+End Time: 2026-02-07T23:57:35.133Z
