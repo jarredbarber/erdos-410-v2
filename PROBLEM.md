@@ -8,7 +8,7 @@ Is it true that for all $n \geq 2$,
 
 $$\lim_{k \to \infty} \sigma_k(n)^{1/k} = \infty?$$
 
-The conjecture asks whether iterated application of the sum-of-divisors function grows super-exponentially — i.e., faster than any geometric sequence $c^k$ — for every starting value $n \geq 2$.
+The theorem states that iterated application of the sum-of-divisors function grows super-exponentially — i.e., faster than any geometric sequence $c^k$ — for every starting value $n \geq 2$.
 
 ## Lean4 Formal Theorem
 
