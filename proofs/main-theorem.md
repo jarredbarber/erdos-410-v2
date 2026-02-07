@@ -1,6 +1,6 @@
 # Super-Exponential Growth of Iterated Sum-of-Divisors
 
-**Status:** Draft ✏️
+**Status:** Rejected ❌
 **Statement:** For all $n \geq 2$, $\displaystyle\lim_{k \to \infty} \sigma_k(n)^{1/k} = \infty$, where $\sigma_k$ denotes the $k$-th iterate of the sum-of-divisors function.
 **Dependencies:** None (self-contained)
 **Confidence:** High
@@ -259,3 +259,113 @@ Since $C > 1$ was arbitrary, $\lim_{k \to \infty} a_k^{1/k} = \infty$. $\square$
 ## Notes on Rigor
 
 The proof that small primes accumulate (Lemma 5.5) relies on showing that once the 2-adic valuation $v_2(a_k)$ is large, the factors $\sigma(2^a) = 2^{a+1} - 1$ introduce primes $q$ whenever $\text{ord}_q(2) | (a+1)$. The tracking of how these primes persist or reappear through subsequent iterations is the most technical part. The essential insight is that the mechanism introducing new primes (growth of $v_2$) operates continuously, ensuring all primes up to any bound eventually divide the iterates.
+
+---
+
+## Review Notes
+
+**Reviewed by:** erdos410v2-l56  
+**Decision:** REJECTED ❌
+
+This proof has the correct overall strategy and intuition, but contains multiple critical gaps that prevent verification. The main issues are:
+
+### Critical Gap #1: Lemma 3.2 — Parity Stabilization (Unproved Claim)
+
+**Location:** Phase 3, Claim within Lemma 3.2
+
+**Issue:** The proof asserts that if $m > 1$ is an odd perfect square, then $\sigma(m)$ is not a perfect square. The justification provided is:
+- A few numerical examples ($\sigma(9) = 13$, $\sigma(25) = 31$, etc.)
+- A citation of the "Nagell-Ljunggren theorem" without explaining how it applies
+
+**Why this is problematic:** The Nagell-Ljunggren theorem concerns solutions to $(x^n - 1)/(x - 1) = y^q$. While $\sigma(p^{2a}) = (p^{2a+1} - 1)/(p - 1)$, the connection to Nagell-Ljunggren is not immediate, and no derivation is provided. This is a crucial lemma for establishing that the sequence eventually stays even, and numerical examples alone are insufficient.
+
+**What's needed:** Either a rigorous proof that $\sigma(p^{2a})$ is not a perfect square for odd primes $p$, or a proper citation showing how Nagell-Ljunggren applies to this specific case.
+
+### Critical Gap #2: Lemma 3.2, Case 3 — Twice a Perfect Square
+
+**Location:** Phase 3, Lemma 3.2, Case 3
+
+**Issue:** The proof claims that if $a_k = 2s^2$ for odd $s$, then $a_{k+1} = \sigma(2s^2) = 3\sigma(s^2)$ is odd. It then states "If $a_{k+1}$ is not a perfect square, then $a_{k+2}$ is even" — but provides no justification that $3\sigma(s^2)$ is indeed not a perfect square.
+
+**Why this is problematic:** Without proving that $3\sigma(s^2)$ is not a perfect square, we cannot conclude that $a_{k+2}$ is even. This breaks the chain of reasoning that the sequence eventually stabilizes to being always even.
+
+**What's needed:** A proof that $3\sigma(s^2)$ is not a perfect square, or a different approach to showing eventual parity stabilization.
+
+### Critical Gap #3: Lemma 5.3 — Circular Reasoning
+
+**Location:** Phase 5, Lemma 5.3
+
+**Issue:** The proof attempts to show $v_2(a_k) \to \infty$ by arguing:
+1. "Since $a_k \to \infty$ and $\sigma(m) \geq 3m/2$ for even $m$, we have $a_k \geq C \cdot (3/2)^k$"
+2. "Thus $\log_2(a_k) \to \infty$"
+3. Therefore $v_2(a_k) \to \infty$
+
+**Why this is problematic:** This is circular reasoning. We're trying to prove super-exponential growth, but the proof assumes exponential growth $a_k \geq C \cdot (3/2)^k$ that hasn't been established yet. Furthermore, even if $\log_2(a_k) \to \infty$, this doesn't imply $v_2(a_k) \to \infty$ — the number could have a huge odd part with bounded powers of 2.
+
+**What's needed:** A direct proof that $v_2(a_k) \to \infty$ based on the structure of the iteration, without assuming the growth rate we're trying to prove.
+
+### Critical Gap #4: Lemma 5.4 — Unjustified Assumption
+
+**Location:** Phase 5, Lemma 5.4 (proof for prime 3)
+
+**Issue:** The proof argues that "there exist infinitely many $k$ with $v_2(a_k)$ odd" and uses this to show that $3 | a_{k+1}$ infinitely often. But no justification is provided for why $v_2(a_k)$ is odd infinitely often.
+
+**Why this is problematic:** If $v_2(a_k)$ eventually stabilizes at an even value or only takes even values for large $k$, the argument for prime 3 dividing the sequence breaks down. This is a critical assertion with no proof.
+
+**What's needed:** Either prove that $v_2(a_k)$ is odd infinitely often, or find a different mechanism for showing that 3 divides $a_k$ for large $k$.
+
+### Critical Gap #5: Lemma 5.4 — Hand-Waving on Congruence Classes
+
+**Location:** Phase 5, Lemma 5.4 (general case)
+
+**Issue:** The proof states: "as $v_2(a_k)$ grows through the sequence, it eventually exceeds any given $E$. For any odd prime $q$ with $q | 2^{e_q} - 1$, when $v_2(a_k) \geq e_q - 1$ and $v_2(a_k) \equiv e_q - 1 \pmod{e_q}$, we get $q | a_{k+1}$."
+
+**Why this is problematic:** This assumes that $v_2(a_k)$ not only grows without bound (which isn't proved — see Gap #3), but also hits the specific congruence class $e_q - 1 \pmod{e_q}$ for every prime $q$. There's no justification that the sequence of values $v_2(a_k)$ is sufficiently "dense" in the integers to hit all required congruence classes.
+
+**What's needed:** A rigorous proof that $v_2(a_k)$ takes infinitely many values in each required congruence class, or a different approach entirely.
+
+### Critical Gap #6: Lemma 5.5 — Acknowledged Incompleteness
+
+**Location:** Phase 5, Lemma 5.5 and its Remark
+
+**Issue:** The Remark explicitly states: "The full rigor of Lemma 5.5 requires tracking how primes persist through the iteration. The essential point is that small primes reappear frequently enough..."
+
+**Why this is problematic:** This is an admission that the proof is incomplete. The "essential point" is asserted but not proved.
+
+**What's needed:** A complete proof of how primes persist through iterations, including quantitative bounds on how frequently small primes reappear.
+
+### Critical Gap #7: Main Theorem, Step 1 — Depends on Unproved Lemmas
+
+**Location:** Phase 6, Step 1
+
+**Issue:** Step 1 claims $\sigma(a_k)/a_k \to \infty$ by invoking Lemma 5.5, which itself depends on Lemmas 5.3 and 5.4, all of which have critical gaps.
+
+**Why this is problematic:** The chain of reasoning breaks down. Without rigorous proofs of the accumulation of small primes, we cannot conclude that $\sigma(a_k)/a_k \to \infty$.
+
+### Additional Concern: Edge Cases Not Verified
+
+The proof does not explicitly verify the result for small values of $n$ (e.g., $n = 2, 3, 4, 5$). While the general machinery should apply, explicit verification would increase confidence and might reveal issues with the general argument.
+
+---
+
+## Summary and Recommendations
+
+**The proof is NOT acceptable in its current form.** The overall strategy is sound:
+1. Show the sequence eventually consists only of even numbers
+2. Show that the 2-adic valuation grows
+3. Use Mersenne-like factors to introduce small primes
+4. Use the product $\prod_{p|a_k}(1 + 1/p)$ to bound the growth ratio
+5. Bootstrap to super-exponential growth
+
+However, **steps 1, 2, and 3 all have critical gaps** that make the proof non-rigorous. Specifically:
+- The parity arguments (Lemma 3.2) rely on unproved number-theoretic claims about when divisor sums are perfect squares
+- The claim that $v_2(a_k) \to \infty$ (Lemma 5.3) uses circular reasoning
+- The accumulation of small primes (Lemmas 5.4-5.5) is asserted rather than proved
+
+**Recommended next steps:**
+1. Prove rigorously that $\sigma(m)$ is not a perfect square when $m$ is an odd perfect square (or find a different approach to parity stabilization)
+2. Prove directly that $v_2(a_k) \to \infty$ without assuming exponential growth
+3. Prove that $v_2(a_k)$ hits the necessary congruence classes to introduce all small primes
+4. Alternatively, consider a completely different approach that doesn't rely on analyzing the 2-adic valuation
+
+The proof should be substantially revised before resubmission.
