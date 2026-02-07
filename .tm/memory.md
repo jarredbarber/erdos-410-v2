@@ -186,3 +186,25 @@
 - KEY: the disproof of Lemma 3.4 means the existing parity task (9z0) may need updating — the standard characterization "σ(n) odd iff n is square or 2×square" is actually correct, but the *propagation* lemma (non-square odd part stays non-square under σ) is false. Watch whether the advisor accounts for this in task planning.
 - If s3b still in_progress next heartbeat with log >800 lines, may be getting too deep — consider a stale check
 - After s3b: expect a burst of new tasks, then rapid pickup of explore tasks
+
+## Heartbeat — 2026-02-07T23:51 UTC (Heartbeat #9)
+
+**Metrics**: Sorry count: 4 real (1 main + 3 helper stubs) | Verified proofs: 1 (sigma-parity.md) | Drafts: 3 (even-stability, sigma-lower-bounds, main-theorem×2) | Tasks: 7 open, 1 in_progress, 9 closed | Build: ✅
+**Status**: Healthy — pipeline flowing, one minor fix applied.
+**Observations**:
+- **4up (explore sigma-lower-bounds)** actively working (log 52 lines, modified just now). Agent found an edge case: σ(n) ≥ (√n+1)² doesn't hold for prime squares (n=p²). Actively reasoning through the correct formulation. Good mathematical work.
+- **fho (explore even-stability) COMPLETED** — produced proofs/eventual-even-stability.md (Draft ✏️, ~200 lines). Proof uses state machine approach (O-NS, O-S, E-NS, E-S). Has some soft spots: sparsity argument in Step 4 is hand-wavy, chain length bounds are empirical. Verify agent should catch these.
+- **l2y (Lean helpers) COMPLETED** — Helpers.lean has 3 sorry-ed stubs (sigma_one_ge, sigma_one_even_ge, sigma_one_iterate_tendsto_atTop). Compiles clean. Good infrastructure.
+- **lbc (verify even-stability) UNBLOCKED** — fho is closed. But title referenced wrong filename!
+- **uwa (explore omega-divergence) UNBLOCKED** — no dependencies. This is the hardest remaining explore task.
+- Sorry count rose from 1→4 because of helper stubs — this is intentional infrastructure, not regression.
+- 5 tasks closed since last heartbeat (fho, l2y, and 3 earlier ones). Good throughput.
+**Actions**:
+1. **Fixed lbc title**: "proofs/even-stability.md" → "proofs/eventual-even-stability.md" (fho wrote to different filename than expected). Without this fix, the verify agent would look for a nonexistent file.
+**Watch next**:
+- Does 4up complete? It's working through an edge case but making progress. Should finish soon (small task).
+- After 4up: 5p8 (verify), lbc (verify), uwa (explore) all at p2. Worker picks one. Ideal order: lbc/5p8 (small, quick) then uwa (large).
+- **KEY PATH to first sorry reduction**: 4up → 5p8 → n7i (formalize sigma_one_ge, p1). This could close the first helper sorry.
+- **RISK**: Even-stability proof (eventual-even-stability.md) has weak sparsity argument (Step 4). Verify agent may reject. If rejected, need targeted revision task fixing Steps 4-5 specifically.
+- **RISK**: uwa (omega-divergence) is the mathematical crux. Watch for surrender or hand-waving on Zsygmondy's theorem application.
+- Need to create formalize tasks for sigma_one_even_ge and sigma_one_iterate_tendsto_atTop after their NL proofs are verified.
