@@ -14,7 +14,7 @@ Where $\sigma_1(n) = \sigma(n)$ (sum of divisors) and $\sigma_k(n) = \sigma(\sig
 |------|-----------|--------|
 | `sigma-lower-bounds.md` | σ(n) ≥ n+1 for n ≥ 2; σ(n) ≥ (√n+1)² for composite n; σ(n) ≥ 3n/2 for even n | Pending |
 | `sigma-parity.md` | σ(n) is odd iff n is a perfect square or twice a perfect square | Pending |
-| `main-theorem.md` | For all n ≥ 2, σ_k(n)^{1/k} → ∞ | Pending |
+| `main-theorem.md` | For all n ≥ 2, σ_k(n)^{1/k} → ∞ | Draft ✏️ |
 
 ## Proof Architecture
 
