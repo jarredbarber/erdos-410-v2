@@ -1,6 +1,7 @@
 # Parity of the Sum-of-Divisors Function
 
-**Status:** Draft ✏️
+**Status:** Verified ✅
+**Reviewed by:** erdos410v2-ii5
 **Statement:** For all $n \geq 1$, $\sigma(n)$ is odd if and only if $n$ is a perfect square or twice a perfect square. Equivalently, $\sigma(n)$ is odd if and only if the odd part of $n$ is a perfect square.
 **Dependencies:** None (self-contained)
 **Confidence:** Certain
