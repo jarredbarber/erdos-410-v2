@@ -1,6 +1,7 @@
 # Lower Bounds on $\omega(2^n-1)$ and Mersenne Instability
 
-**Status:** Draft ✏️
+**Status:** Verified ✅
+**Reviewed by:** erdos410v2-emu
 **Statement:** For all $n \ge 1$, $\omega(2^n-1) \ge \tau(n) - 2$. Furthermore, the orbit cannot get stuck in a cycle of Mersenne primes; any "Mersenne form" $a_k = 2^p-1$ (where $p$ is prime) leads to a value $a_{k+m}$ with $\omega \ge 2$ within at most 4 steps ($m \le 4$).
 
 ## 1. Lower Bound on $\omega(2^n-1)$
@@ -47,7 +48,7 @@ Since $p$ is a prime greater than 2, $p$ is odd.
 Therefore, $p+1$ is even and greater than 3.
 This implies $p+1$ is composite.
 Consequently, $a_{k+2} = 2^{p+1}-1$ is composite.
-By Mihailescu's Theorem (Catalan's Conjecture), $2^{p+1}-1$ is not a perfect power for $p+1 > 1$ (except the trivial case $2^d-1$ which doesn't apply here as we need $x^a - y^b = 1$, and $2^{p+1}-1$ being a prime power would mean $2^{p+1} - q^k = 1$, which only has solution $3^2 - 2^3 = 1$ i.e., $2^3 = 8 \implies p+1=3 \implies p=2$, which contradicts $p>2$).
+By Mihailescu's Theorem (Catalan's Conjecture), $2^{p+1}-1$ is not a perfect power for $p+1 > 1$. Specifically, the equation $2^{p+1} - q^k = 1$ has no solutions in integers $p, q, k > 1$ (the only solution to $x^a - y^b = 1$ is $3^2 - 2^3 = 1$, but here the base of the positive term is 2, not 3).
 Thus, $a_{k+2}$ is not a prime power.
 Since it is composite and not a prime power, it must have at least two distinct prime factors.
 So $\omega(a_{k+2}) \ge 2$.
@@ -69,7 +70,7 @@ In this case, the escape happens at $m=4$.
 
 **Conclusion:** The sequence can spend at most 4 steps in states with $\omega=1$ (specifically the chain $3 \to 4 \to 7 \to 8 \to 15$) before hitting a state with $\omega \ge 2$. For all other Mersenne primes, it takes only 2 steps.
 
-## 3. Asymptotic Strength
+## 3. Asymptotic Strength (Heuristic)
 
 As $\omega(a_k)$ grows, $v_2(a_{k+1}) \approx \omega(a_k)$ grows.
 Let $N = v_2(a_{k+1}) + 1$.
