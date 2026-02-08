@@ -79,3 +79,11 @@ For the specific orbit, we expect small primes (2, 3, 7, ...) to appear frequent
 - Structural characterization: low ratio ⟹ odd part is prime power
 
 It cannot prove **bounded recovery time** for arbitrary thresholds L > 2. The gap: when R_k ≤ L, the odd part m_k must be a prime power, and σ(m_k) typically has more prime factors, suggesting eventual recovery. But "typically" is not "always" (Mersenne primes exist), and more prime factors doesn't guarantee higher ratio if the new primes are large. The proof requires Conjecture 6.1 (bounded recovery time) which remains unproven. Without this, the proof only establishes lim sup = ∞, falling into Dead End #1.
+
+---
+
+## Dead End 8: Accumulation of Reciprocal Sum (rejected 2026-02-08)
+
+**Tried:** Prove ∑_{p|a_k} 1/p → ∞ by arguing that new prime factors from Smooth Escape accumulate and decay to small primes (e.g., p → p+1), increasing the sum.
+
+**Failed because:** The "Concentration" effect of 2^k counteracts the "Decay". The transition a_k = 2^e → a_{k+1} = σ(2^e) can map a high-sum configuration (e.g., h(2^e)=0.5) to a low-sum configuration (e.g., h(M_e) ≈ 0 if M_e is Mersenne). Simulation shows the sum h(a_k) fluctuating wildly (e.g., 1.17 → 0.08) rather than accumulating monotonically. The "average" gain argument fails because the dynamics can hit the "worst-case" loss scenarios repeatedly.
