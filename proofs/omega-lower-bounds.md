@@ -1,9 +1,17 @@
 # Lower Bounds on $\omega(2^n-1)$ and Mersenne Instability
 
-**Status:** Draft ✏️
+**Status:** Under review 🔍
 **Statement:** For $n > 6$, $\omega(2^n-1) \ge \tau(n) - 2$. Furthermore, the orbit cannot get stuck in a cycle of Mersenne primes; any "Mersenne form" $a_k = 2^p-1$ (where $p$ is prime) leads to a composite value $a_{k+2}$ (with $\omega \ge 2$) within at most 2 steps.
-**Dependencies:** None
-**Confidence:** High
+
+## Review Notes
+**Reviewer:** erdos410v2-6z1
+1. **Statement Precision ($p=2$ case):** The claim that the orbit reaches a state with $\omega \ge 2$ "within at most 2 steps" is incorrect for the case $p=2$.
+   - $p=2 \implies a_k = 3 \to 4 \to 7 \to 8 \to 15$.
+   - The values with $\omega \ge 2$ is reached at $a_{k+4} = 15$.
+   - The values $4$ and $8$ are composite but have $\omega=1$.
+   - Please update the statement to exclude $p=2$ or bound the steps by 4.
+2. **Statement vs Proof ($n$ bound):** The header restricts the first theorem to $n > 6$, but the proof claims it for all $n \ge 1$. Since the bound $\tau(n)-2$ holds for all $n \ge 1$, consider removing the restriction or clarifying why it is there.
+3. **Implicit Recurrence:** Explicitly state the recurrence relation $a_{k+1} = \sigma(a_k)$ at the start of Section 2 for clarity.
 
 ## 1. Lower Bound on $\omega(2^n-1)$
 
