@@ -1,6 +1,7 @@
 # Super-Exponential Growth of Iterated Sum-of-Divisors (Assembly)
 
-**Status:** Draft ✏️
+**Status:** Under review 🔍
+**Reviewed by:** erdos410v2-xlm
 **Statement:** For all $n \geq 2$,
 $$\lim_{k \to \infty} \sigma^{[k]}(n)^{1/k} = \infty,$$
 where $\sigma^{[k]}$ denotes the $k$-th iterate of the sum-of-divisors function.
@@ -126,3 +127,73 @@ The assembly argument presented above (Steps 0–5) is **completely rigorous** a
 
 - **sigma-lower-bounds.md** (Verified ✅): Basic lower bounds for $\sigma(n)$, specifically $\sigma(n) \geq n + 1$ for $n \geq 2$.
 - **ratio-divergence.md** (Rejected ❌): Attempted proof that $\sigma(a_k)/a_k \to \infty$. The claim is used here but not yet established.
+
+---
+
+## Review Notes (erdos410v2-xlm)
+
+**CONDITIONAL APPROVAL** — The assembly logic (Steps 0-5) is mathematically rigorous and correct. However, this proof cannot advance to **Verified ✅** status until its critical dependency is established.
+
+### Assessment Against Review Criteria
+
+✅ **Statement clarity**: The theorem statement is precise and matches the Lean formalization (`∀ n > 1, Tendsto (fun k ↦ (σ^{[k]}(n) : ℝ)^{1/k}) atTop atTop`).
+
+✅ **Assumptions**: All assumptions are stated explicitly. The proof is transparent about being conditional on Result B.
+
+✅ **Logical flow**: Each step in the assembly argument (Steps 0-5) follows logically from the previous.
+
+✅ **Quantifiers**: Correctly used throughout. The argument with arbitrary $C > 1$ in Step 1 is sound.
+
+✅ **Edge cases**: The base case ($a_0 = n \geq 2$) and the induction in Step 2 are handled correctly.
+
+❌ **Dependencies**: The proof cites **ratio-divergence.md**, which has status **Rejected ❌**. This is a blocking issue.
+
+✅ **Completeness**: The proof DOES prove the stated result, conditional on Result B (ratio divergence).
+
+✅ **Hidden assumptions**: None. The dependency on Result B is explicitly acknowledged.
+
+### Detailed Analysis
+
+**The Assembly Logic Is Sound:**
+
+1. **Step 0** (sequence well-defined): Uses only sigma-lower-bounds.md (Verified ✅). Rigorous. ✓
+
+2. **Step 1** (ratio divergence implies eventual domination): ASSUMES Result B, then correctly derives that $R_k > C$ eventually. The logical inference is valid. ✓
+
+3. **Step 2** (geometric growth past threshold): The induction proof that $a_{K+j} \geq C^j \cdot a_K$ for all $j \geq 0$ is completely rigorous. ✓
+
+4. **Step 3** (extracting k-th root): The algebraic manipulation is correct. ✓
+
+5. **Step 4** (taking the limit): The limit $\left(\frac{a_K}{C^K}\right)^{1/k} \to 1$ is justified by $\log(x^{1/k}) = (\log x)/k \to 0$ for fixed $x > 0$. Correct. ✓
+
+6. **Step 5** (conclusion): The argument that $\liminf_{k \to \infty} a_k^{1/k} \geq C$ for arbitrary $C > 1$ implies $\lim_{k \to \infty} a_k^{1/k} = +\infty$ is valid. ✓
+
+**No gaps were found in the assembly logic.** The proof achieves what it claims: a reduction of Erdős #410 to the ratio divergence result.
+
+### Critical Dependency Gap
+
+The proof depends on **Result B**: For any $n \geq 2$, $\lim_{k \to \infty} \frac{\sigma(a_k)}{a_k} = +\infty$.
+
+**Current status of Result B**: The file `proofs/ratio-divergence.md` attempted to prove this but was **Rejected ❌** by review erdos410v2-i9u due to critical gaps:
+- Unjustified residue class hitting claim
+- Lack of control over which primes achieve maximum exponents  
+- Hand-waving about Chebotarev density
+
+The review of ratio-divergence.md recommended: "A fundamentally different approach is needed rather than revision attempts," specifically suggesting an **energy/potential function** approach that tracks $\log(\sigma(a_k)/a_k)$ and proves it grows on average, without requiring control over which specific primes appear when.
+
+### Verdict and Recommendations
+
+**Status**: Keep at **Under review 🔍** (not Draft, not Verified).
+
+**Blocking issue**: Cannot advance to **Verified ✅** until Result B is established.
+
+**Recommended action**: Create a high-priority `explore` task to establish ratio divergence via the energy function approach suggested in the ratio-divergence.md review. Once that dependency is verified, this assembly proof can immediately be promoted to Verified ✅.
+
+**Mathematical assessment**: The assembly proof is publication-ready conditional logic. It represents a successful reduction of the full Erdős #410 theorem to a single technical lemma (ratio divergence). This is valuable progress.
+
+**Lean formalization readiness**: Once ratio-divergence is verified, this proof provides a clear blueprint for Lean formalization:
+1. `lemma ratio_divergence`: Formalize Result B
+2. `lemma geometric_growth_from_ratio`: Formalize Steps 1-2  
+3. `theorem erdos_410`: Combine via Steps 3-5
+
+The proof structure is clean and suitable for direct translation to Lean.
