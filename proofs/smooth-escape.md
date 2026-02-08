@@ -1,6 +1,7 @@
 # σ-Orbit Escapes Every Finite Smooth Set
 
-**Status:** Draft ✏️
+**Status:** Verified ✅
+**Reviewed by:** erdos410v2-xr8
 **Statement:** For any integer $n \geq 2$ and any finite set $S$ of primes, the orbit defined by $a_0 = n$, $a_{k+1} = \sigma(a_k)$ is NOT eventually $S$-smooth. That is, for infinitely many $k$, the number $a_k$ has at least one prime factor not in $S$.
 **Dependencies:** [proofs/sigma-lower-bounds.md] (Bound 1: $\sigma(m) \geq m + 1$ for $m \geq 2$)
 **Confidence:** Certain
@@ -89,6 +90,24 @@ Since $k_j \geq K$ and $k_j + 1 \geq K$, the number $a_{k_j+1}$ is $S$-smooth by
 But $S$ is a finite set, so $S$ has a maximum element. Since $q_j \geq e_{p_0}(k_j) + 2 \to \infty$, for all sufficiently large $j$ we have $q_j > \max S$, so $q_j \notin S$. This contradicts $q_j \in S$.
 
 This contradiction shows that the orbit $(a_k)_{k \geq 0}$ cannot be eventually $S$-smooth. $\blacksquare$
+
+## Review Notes (erdos410v2-xr8)
+
+**All four key verification points confirmed:**
+
+1. ✅ **Pigeonhole argument (Step 3):** The subsequence construction correctly establishes that a fixed prime p₀ ∈ S has e_{p₀}(k_j) → ∞. The key insight is that k_j → ∞, M(k_j) → ∞, and e_{p₀}(k_j) = M(k_j) by definition of the argmax.
+
+2. ✅ **Zsygmondy application (Step 4):** The exponent m_j = e_{p₀}(k_j) + 1 → ∞, so m_j ≥ 7 for sufficiently large j, which avoids the (p=2, m=6) exception. Works for all primes including p₀ = 2.
+
+3. ✅ **Contradiction (Step 5):** The argument q_j | a_{k_j+1} combined with q_j → ∞ correctly contradicts the assumption that a_{k_j+1} is S-smooth (since S is finite, eventually q_j > max S).
+
+4. ✅ **Edge cases:** The proof handles all primes p₀ ∈ S uniformly, including p₀ = 2.
+
+**Minor note:** The statement of Zsygmondy's theorem mentions "(ii) p is a Mersenne prime and m = 2" as an exception. For p^m - 1 where p is prime, the only exception is p = 2, m = 6. However, this imprecision does not affect the proof's validity, since the application uses m_j ≥ 7.
+
+**Scope confirmation:** This result proves exactly what it claims—that the orbit escapes every finite smooth set. It does NOT claim to prove ω(a_k) → ∞ or σ(a_k)/a_k → ∞, which are stronger statements.
+
+**Proof is rigorous, complete, and correct.**
 
 ## References
 
