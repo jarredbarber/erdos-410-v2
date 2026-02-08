@@ -231,3 +231,30 @@
 - **Remaining sorry reduction path**: zrh closes sigma_one_even_ge → 2 sorries left (main + iterate_tendsto). The iterate_tendsto sorry needs the full proof chain (needs ω→∞ which needs even-stability + omega-divergence).
 - **Critical path to completion**: even-stability revision → omega-divergence → main assembly → formalize iterate + main theorem.
 - Strategic framing level: 1 for formalization, 3-4 for exploration (detailed hints in uwa/vt2 descriptions).
+
+## Heartbeat — 2026-02-08T00:31 UTC (Heartbeat #11)
+
+**Metrics**: Sorry count: 2 (1 main + 1 helper) ↓ from 3 | Verified proofs: 2 (sigma-parity, sigma-lower-bounds) | Tasks: 4 open, 1 in_progress, 17 closed | Build: ✅
+**Status**: Strategic pivot — even-stability abandoned as unnecessary. Formalization accelerating.
+**Observations**:
+- **2ND SORRY CLOSED**: zrh closed sigma_one_even_ge (Helpers.lean). Clean proof matching sigma_one_ge pattern. 
+- **Even-stability SURRENDERED**: 3 revision cycles (fho → vt2 → 5gw) ended with proof conditional on 2 conjectures (A: finite E-S states, B: odd-square chain termination). 26 instances of "Conjecture" in file. Status: Draft ✏️.
+- **CRITICAL INSIGHT: Even-stability is UNNECESSARY for the main theorem!** The proof chain works without it:
+  1. σ(m) ≥ m+1 → a_k → ∞ ✅ (proved)
+  2. ω(a_k) → ∞ via Zsygmondy (NO even-stability needed) → uwa in progress
+  3. σ(a_k)/a_k → ∞ → assembly
+  4. a_k^{1/k} → ∞ → done
+- **uwa (omega-divergence) ACTIVELY WORKING** (92 lines, modified just now). Agent found the right approach: Zsygmondy + pigeonhole. Key progress: proved P (total prime set) must be infinite, now working on showing ω(a_k) itself grows. NOT using even-stability.
+- **vt2 used "Conjecture A"** language — surrender pattern, but irrelevant since we're bypassing even-stability entirely.
+- **sigma_one_iterate_tendsto_atTop** can be closed NOW using sigma_one_ge alone (simple induction: a_k ≥ n+k → ∞).
+**Actions**:
+1. **Removed fho from vp1 dependencies** — assembly no longer depends on even-stability.
+2. **Updated vp1 description** — removed even-stability references, proof now uses only σ bounds + ω→∞.
+3. **Updated 8xc description** — verify task explicitly notes even-stability is unnecessary.
+4. **Created i79** (formalize iterate_tendsto_atTop, p1, medium) — straightforward sorry closure using sigma_one_ge. Will reduce to 1 sorry (main theorem only!).
+**Watch next**:
+- **CRITICAL**: Does uwa succeed? This is THE bottleneck. Agent has the right approach (Zsygmondy). The subtle point is proving ω(a_k) grows (not just that total prime set P is infinite). If it fails, need retry with explicit hint: "If ω bounded, max exponent → ∞ by pigeonhole, then Zsygmondy gives new prime not in bounded support set, contradiction."
+- After uwa: i79 (p1 formalize) runs → sorry count to 1. Then h0a (verify omega-divergence), then vp1 (assembly), then 8xc (verify assembly).
+- Final formalization of main theorem will need a new task connecting everything.
+- Even-stability work (fho, lbc, vt2, vit, 5gw) was 5 tasks spent on a dead end. Lesson: bottom-up approach was right, but should have recognized earlier that ω→∞ subsumes even-stability.
+- **No more verify tasks for even-stability** — it's conditional and unnecessary.
