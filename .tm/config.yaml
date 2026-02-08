@@ -1,0 +1,15 @@
+workflow: math-research
+ecosystem: gemini
+notify_cmd: "curl -s -H 'Title: {{title}}' -H 'Priority: {{priority}}' -d '{{message}}' https://ntfy.sh/gigahector-vps"
+git:
+  strategy: branch
+overseer:
+  enabled: true
+models:
+  heavy: google-antigravity/gemini-3-pro-high:high
+  medium: google-antigravity/gemini-3-pro-high:high
+  light: google-antigravity/gemini-3-flash
+defaults:
+  priority: 2
+  size: medium
+  type: task

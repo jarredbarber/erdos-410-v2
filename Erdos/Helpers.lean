@@ -10,8 +10,8 @@ namespace Erdos410
 
 /-! ## Helper lemmas for σ bounds
 
-These are sorry-ed statements to be filled in once natural language proofs
-are verified. They form the key building blocks for the main Erdős 410 theorem.
+These lemmas establish lower bounds on the growth of the sum-of-divisors function.
+They form the key building blocks for the main Erdős 410 theorem.
 
 ### Key facts used:
 - `sigma_apply`: `σ k n = ∑ d ∈ divisors n, d ^ k`
