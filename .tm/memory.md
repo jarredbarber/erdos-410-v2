@@ -1,17 +1,17 @@
-## Heartbeat — 2026-02-08T21:23 UTC
+## Heartbeat — 2026-02-08T21:39 UTC
 
-**Metrics**: Sorry count: 1 (Erdos/Basic.lean:56) | Verified proofs: 15 (added factor-pump.md) | Dead ends: 8 | Tasks: 2 open, 66 closed | Build: ✅
-**Status**: Critical bottleneck at `ratio_divergence`. Only 1 sorry remains, but it requires the FULL LIMIT (not lim sup).
+**Metrics**: Sorry count: 1 (Erdos/Basic.lean:56) | Verified proofs: 15 | Dead ends: 8 | Tasks: 2 open, 68 closed | Build: ✅
+**Status**: Verifying new ratio divergence proof (`proofs/ratio-divergence-full.md`) and formalizing Mersenne Instability.
 **Observations**:
-- **Factor Pump Verified**: `proofs/factor-pump.md` formalized successfully in `Erdos/FactorPump.lean`. It establishes a feedback loop between odd-part complexity and v2-valuation.
-- **Mersenne Instability**: `proofs/omega-lower-bounds.md` shows the orbit cannot get stuck in Mersenne prime cycles ($\omega=1$). Created verify task `emu` to validate this.
-- **Ratio Divergence Hardness**: Previous attempts failed because they only proved `lim sup` (infinite spikes) but not `lim` (sustained growth). The "Mersenne Channel" ($a_k \approx 2^k$) is the primary trap where the ratio stays bounded ($\approx 1$ or $2$).
-- **Path Forward**: Use the Factor Pump + Mersenne Instability to show the orbit leaves the Mersenne Channel and stays away, forcing the ratio up.
+- **Ratio Divergence**: Task `ry1` produced `proofs/ratio-divergence-full.md` claiming to prove the full limit using "Population Dynamics" and "Factor Pump". It relies on a "history" argument about small prime injections. Created verify task `7zy` to scrutinize this rigorously (suspicion: heuristic).
+- **Mersenne Instability**: `proofs/omega-lower-bounds.md` was verified. Created formalize task `727` to implement it in `Erdos/Mersenne.lean`. This provides the escape mechanism from $\omega=1$ states.
+- **Sorry Count**: Still 1 real sorry (`ratio_divergence`). The previous count of 4 was due to grep matching comments.
+- **Path Forward**: If `ratio-divergence-full.md` passes verification (unlikely without revision), we formalize it. If rejected, we need to rigorous-ify the "history" argument or find a new approach.
 
 **Actions**:
-1. Created `emu` (Verify) to review `proofs/omega-lower-bounds.md` (Mersenne Instability).
-2. Created `ry1` (Explore) to attack `ratio_divergence` with specific instructions to avoid the Lim Sup trap and focus on the Factor Pump mechanism.
+1. Created `7zy` (Verify) for `proofs/ratio-divergence-full.md`.
+2. Created `727` (Formalize) for `Erdos/Mersenne.lean` (Mersenne Instability).
 
 **Watch next**:
-- Does `proofs/omega-lower-bounds.md` pass verification? (Likely yes).
-- Can the new explore task `ry1` formulate a rigorous argument for full limit divergence? Or will it hit another dead end?
+- Does `ratio-divergence-full.md` pass? (Expect rejection or revision request).
+- Does `Erdos/Mersenne.lean` compile cleanly?

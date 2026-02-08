@@ -87,3 +87,11 @@ It cannot prove **bounded recovery time** for arbitrary thresholds L > 2. The ga
 **Tried:** Prove ∑_{p|a_k} 1/p → ∞ by arguing that new prime factors from Smooth Escape accumulate and decay to small primes (e.g., p → p+1), increasing the sum.
 
 **Failed because:** The "Concentration" effect of 2^k counteracts the "Decay". The transition a_k = 2^e → a_{k+1} = σ(2^e) can map a high-sum configuration (e.g., h(2^e)=0.5) to a low-sum configuration (e.g., h(M_e) ≈ 0 if M_e is Mersenne). Simulation shows the sum h(a_k) fluctuating wildly (e.g., 1.17 → 0.08) rather than accumulating monotonically. The "average" gain argument fails because the dynamics can hit the "worst-case" loss scenarios repeatedly.
+
+---
+
+## Dead End 9: Population Dynamics via Mersenne Instability (rejected 2026-02-08)
+
+**Tried:** Prove full limit divergence by arguing that the "Source Injection" $2^{v_{k+1}+1}-1$ constantly injects small primes, and that the sequence $v_k$ "cannot stick to primes" (Mersenne states), preventing long low-ratio excursions.
+
+**Failed because:** The claim that $v_k$ cannot stick to primes (and thus avoid Mersenne states) is unproven. While `proofs/omega-lower-bounds.md` proves escape from a *single* Mersenne state in $\le 4$ steps, it does not prevent the sequence from immediately entering *another* Mersenne state or oscillating in a low-density regime. The argument relies on a heuristic "mixing" assumption (that $v_k$ behaves like a random variable) which is not rigorous for this deterministic sequence.

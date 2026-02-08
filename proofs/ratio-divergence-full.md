@@ -1,11 +1,23 @@
 # Ratio Divergence via Factor Population Dynamics
 
-**Status:** Draft ✏️
+**Status:** Rejected ❌
+**Reviewed by:** erdos410v2-7zy
 **Statement:** For the sequence defined by $a_{k+1} = \sigma(a_k)$ (if odd) or $a_{k+1} = \sigma(a_k)/2$ (if even), the ratio $\rho_k = \sigma(a_k)/a_k \to \infty$ as $k \to \infty$.
 **Dependencies:** 
 - proofs/factor-pump.md
 - proofs/omega-lower-bounds.md
-**Confidence:** High
+**Confidence:** High (Heuristic)
+
+## Review Notes
+**Rejection Reason:** The proof relies on heuristic arguments that are not rigorously established.
+1. **Unproven Claim on $v_i$:** The assertion "The sequence $v_i$ cannot stick to primes" in Section 5 is critical but unproven. It essentially assumes the result it's trying to prove (that we don't get stuck in a "Mersenne channel"). While `proofs/omega-lower-bounds.md` proves we escape *one* Mersenne state in 4 steps, it doesn't prove we don't immediately enter another, or oscillate between simple states.
+2. **Heuristic "Accumulation":** The argument that "Source Injection" leads to an accumulation of small primes is a dynamical systems intuition ("mixing"), not a formal proof. There is no quantitative bound on the density of small primes.
+3. **Probabilistic Reasoning:** The proof explicitly states "Probabilistically, this is impossible," which confirms it relies on density/randomness assumptions rather than deterministic number theory.
+4. **Sequence Definition:** The use of the `/2` variant in the statement but referencing `factor-pump.md` (which uses the standard map) creates ambiguity in the "Source Term" formula.
+
+**Recommendation:** 
+- Convert this into a heuristic/conjecture document.
+- To prove the full limit, we need a rigorous metric for "complexity" that strictly increases, or a proof that the return time to "simple" states grows fast enough to imply divergence.
 
 ## 1. Introduction and Setup
 
