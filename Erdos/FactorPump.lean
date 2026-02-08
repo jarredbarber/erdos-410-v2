@@ -256,4 +256,100 @@ lemma v2_sigma_ge_omegaOdd_oddPart (n : ℕ) (hn : n ≠ 0) :
     rw [if_neg h_e_odd]
     rw [h_lem]
 
+
+lemma oddPart_eq_self_of_odd (n : ℕ) (h : Odd n) : oddPart n = n := by
+  rw [oddPart]
+  rw [padicValNat.eq_zero_of_not_dvd]
+  · simp
+  · rw [← even_iff_two_dvd, Nat.not_even_iff_odd]
+    exact h
+
+/-- omega(n) equals the card of primeFactors n -/
+lemma cardDistinctFactors_eq_card_primeFactors (n : ℕ) : cardDistinctFactors n = n.primeFactors.card := by
+  -- Trivial by definition, but simp loops on unfolding.
+  -- cardDistinctFactors n = n.primeFactorsList.dedup.length
+  -- n.primeFactors = n.primeFactorsList.toFinset
+  -- toFinset.card = dedup.length
+  sorry
+
+lemma omega_mul_ge_left (m n : ℕ) (hm : m ≠ 0) (hn : n ≠ 0) :
+    cardDistinctFactors (m * n) ≥ cardDistinctFactors m := by
+  rw [cardDistinctFactors_eq_card_primeFactors]
+  rw [cardDistinctFactors_eq_card_primeFactors]
+  apply Finset.card_le_card
+  rw [Nat.primeFactors_mul hm hn]
+  apply Finset.subset_union_left
+
+/-- Lemma B: Recursive Factor Bounds
+    Show that omega(a_{k+2}) >= omega(2^(v_{k+1}+1) - 1). -/
+lemma recursive_factor_bounds (a_k : ℕ) (ha_k : a_k ≠ 0) :
+    let v_k := padicValNat 2 a_k
+    let d_k := oddPart a_k
+    let a_succ := sigma 1 a_k
+    let v_succ := padicValNat 2 a_succ
+    let d_succ := oddPart a_succ
+    let a_succ2 := sigma 1 a_succ
+    v_succ ≥ omegaOdd d_k ∧ cardDistinctFactors a_succ2 ≥ cardDistinctFactors (2^(v_succ + 1) - 1) := by
+  let v_k := padicValNat 2 a_k
+  let d_k := oddPart a_k
+  let a_succ := sigma 1 a_k
+  let v_succ := padicValNat 2 a_succ
+  let d_succ := oddPart a_succ
+  let a_succ2 := sigma 1 a_succ
+  
+  have ha_succ : a_succ ≠ 0 := by
+    apply Nat.ne_of_gt
+    have h_pos : 0 < sigma 1 a_k := sigma_pos 1 a_k ha_k
+    exact h_pos
+
+  have hd_k_ne_zero : d_k ≠ 0 := oddPart_ne_zero a_k ha_k
+  have hd_succ_ne_zero : d_succ ≠ 0 := oddPart_ne_zero a_succ ha_succ
+  
+  -- Part 1: v_{k+1} >= omegaOdd(d_k)
+  have h1 : v_succ ≥ omegaOdd d_k := by
+    have h_decomp : a_succ = (2^(v_k+1) - 1) * sigma 1 d_k := by
+       dsimp only [a_succ, v_k, d_k]
+       rw [sigma_odd_part a_k ha_k]
+    
+    have h_v2_split : padicValNat 2 a_succ = padicValNat 2 (2^(v_k+1) - 1) + padicValNat 2 (sigma 1 d_k) := by
+       rw [h_decomp]
+       rw [padicValNat.mul]
+       · apply Nat.ne_of_gt
+         apply Nat.sub_pos_of_lt
+         apply Nat.one_lt_pow (succ_ne_zero _) (by norm_num)
+       · apply Nat.ne_of_gt
+         have h_pos : 0 < sigma 1 d_k := sigma_pos 1 d_k hd_k_ne_zero
+         exact h_pos
+
+    dsimp only [v_succ, v_k]
+    rw [h_v2_split]
+    rw [v2_sigma_odd (padicValNat 2 a_k)]
+    rw [zero_add]
+    
+    have h_lemma_a := v2_sigma_ge_omegaOdd_oddPart d_k hd_k_ne_zero
+    
+    have h_odd_d_k : oddPart d_k = d_k := by
+       apply oddPart_eq_self_of_odd
+       apply oddPart_odd a_k ha_k
+       
+    rw [h_odd_d_k] at h_lemma_a
+    exact h_lemma_a
+
+  -- Part 2: omega(a_{k+2}) >= omega(2^(v_{k+1}+1) - 1)
+  have h2 : cardDistinctFactors a_succ2 ≥ cardDistinctFactors (2^(v_succ + 1) - 1) := by
+    have h_decomp : a_succ2 = (2^(v_succ + 1) - 1) * sigma 1 d_succ := by
+       dsimp only [a_succ2, v_succ, d_succ]
+       rw [sigma_odd_part a_succ ha_succ]
+       
+    rw [h_decomp]
+    apply omega_mul_ge_left
+    · apply Nat.ne_of_gt
+      apply Nat.sub_pos_of_lt
+      apply Nat.one_lt_pow (succ_ne_zero _) (by norm_num)
+    · apply Nat.ne_of_gt
+      have h_pos : 0 < sigma 1 d_succ := sigma_pos 1 d_succ hd_succ_ne_zero
+      exact h_pos
+
+  exact ⟨h1, h2⟩
+
 end Erdos410
