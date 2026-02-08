@@ -3345,3 +3345,48 @@ $ cd /home/jarred/code/erdos-410-v2 && lake build 2>&1
 🛠️  Executing tool: edit...
 [2026-02-08T02:27:04.611Z] 
 $ cd /home/jarred/code/erdos-410-v2 && lake build 2>&1
+[2026-02-08T02:27:21.824Z] 
+$ cd /home/jarred/code/erdos-410-v2 && git add -A && git commit -m "Formalize assembly proof: erdos_410 reduces to ratio_divergence sorry
+
+The main theorem erdos_410 is now proven modulo a single sorry in
+ratio_divergence (σ₁(aₖ)/aₖ → ∞ along the orbit).
+
+Proven lemmas (all sorry-free):
+- iterate_ge_two: σ₁^[k](n) ≥ 2 for n ≥ 2
+- iterate_ge_add: σ₁^[k](n) ≥ n + k for n ≥ 2
+- iterate_cast_pos: (σ₁^[k](n) : ℝ) > 0
+- eventually_ratio_ge: from ratio divergence, ∃K, ∀k≥K, C·aₖ ≤ aₖ₊₁
+- geometric_growth: ∃K, ∀j, C^j·a_K ≤ a_{K+j}
+- eventually_exponential_bound: ∃N, ∀k≥N, C^k ≤ aₖ
+- rpow_kth_root_ge: C^k ≤ a → C ≤ a^{1/k}
+- kth_root_eventually_ge: ∀ᶠ k, C ≤ aₖ^{1/k}
+- erdos_410 (main theorem): uses kth_root_eventually_ge
+
+Remaining sorry: ratio_divergence (proofs/ratio-divergence.md was rejected,
+needs new NL proof approach)."
+[2026-02-08T02:27:24.888Z] 
+$ cd /home/jarred/code/erdos-410-v2 && tm update erdos410v2-goo --status "Completed: assembly formalized, single sorry remains at ratio_divergence"
+[2026-02-08T02:27:28.789Z] 
+$ cd /home/jarred/code/erdos-410-v2 && grep -n "sorry" Erdos/Basic.lean
+[2026-02-08T02:27:40.516Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T02:27:40.516Z] 📄 Log saved to .tm/logs/worker-erdos410v2-goo.md
+[2026-02-08T02:27:40.516Z] 
+📊 Task erdos410v2-goo completed:
+[2026-02-08T02:27:40.516Z]    Summary: Closed sorry in erdos_410 (main theorem). Reduced to single sorry in ratio_divergence. lake build succeeds.
+[2026-02-08T02:27:40.516Z]    Details: Formalized the entire assembly proof from proofs/main-assembly-v2.md into Lean 4.
+
+Proved lemmas (all sorry-free, building on ratio_divergence):
+- iterate_ge_two: σ₁^[k](n) ≥ 2 for n ≥ 2
+- iterate_ge_add: σ₁^[k](n) ≥ n + k for n ≥ 2
+- iterate_cast_pos: (σ₁^[k](n) : ℝ) > 0
+- eventually_ratio_ge: from ratio_divergence, ∃K, ∀k≥K, C·aₖ ≤ aₖ₊₁
+- geometric_growth: ∃K, ∀j, C^j·a_K ≤ a_{K+j} (Step 2 of assembly - induction)
+- eventually_exponential_bound: ∃N, ∀k≥N, C^k ≤ aₖ (clever trick: use C² in geometric growth, then for k≥2K get 2j≥k so (C²)^j ≥ C^k)
+- rpow_kth_root_ge: C^k ≤ a → C ≤ a^{1/k} (using rpow_mul and rpow_le_rpow)
+- kth_root_eventually_ge: ∀ᶠ k in atTop, C ≤ aₖ^{1/k}
+- erdos_410 (MAIN THEOREM): for any bound b, pick C = max(b,2) > 1, use kth_root_eventually_ge
+
+Remaining sorry: ratio_divergence (Erdos/Basic.lean:56) — the claim that σ₁(aₖ)/aₖ → ∞ along the orbit. This requires a new NL proof (proofs/ratio-divergence.md was Rejected ❌). Follow-up task needed for explore agent to find a new proof approach for ratio divergence.
