@@ -1,18 +1,15 @@
-## Heartbeat — 2026-02-08T19:26 UTC
+## Heartbeat — 2026-02-08T19:57 UTC
 
-**Metrics**: Sorry count: 1 (Basic.lean:56) | Verified proofs: 14 | Dead ends: 8 | Tasks: 1 failed (old), 55 closed | Build: ✅
-**Status**: Review requested revisions for combined proof. Factor Pump formalization failed, retrying.
+**Metrics**: Sorry count: 1 (Basic.lean:56) + 12 (FactorPump.lean) | Verified proofs: 14 | Dead ends: 8 | Tasks: 2 open, 58 closed | Build: ✅
+**Status**: Factor Pump core (Lemma A) verified modulo sorries!
 **Observations**:
-- **Task zw3 (Verify)**: Requested revisions. The probabilistic argument in `ratio-divergence-combined.md` (Sections 3-5) is heuristic and not ready for formalization.
-- **Task 62j (Formalize)**: Failed. Need to break it down.
-- **Plan**:
-  - Focus formalization on the *deterministic* core: the Factor Pump mechanism (Lemma A).
-  - Use `explore` to investigate the "Mersenne trap" issue (can we prove $v_2(a_k)$ isn't always a Mersenne exponent?).
-- **Created Tasks**:
-  - `djf`: Formalize just Lemma A (v2(sigma) >= omega_odd).
-  - `fr8`: Explore lower bounds on $\omega(2^n-1)$.
+- **Task djf (Formalize)**: Succeeded! The main lemma `v2_sigma_ge_omegaOdd_oddPart` is proven in Lean, but it relies on 12 new sorries for arithmetic facts.
+- **Task fr8 (Explore)**: Produced `proofs/omega-lower-bounds.md`. Confirms that "Mersenne traps" (where $\omega=1$) are unstable and rare.
+- **Next Steps**: Clean up the 12 sorries in `Erdos/FactorPump.lean`.
+  - Group 1: Basic arithmetic (`oddPart_odd`, `geom_sum_two`, `sigma_one_two_pow`, `v2_sigma_odd`)
+  - Group 2: Multiplicative structure (`sigma_odd_part`)
+  - Group 3: Valuation of sigma powers (`v2_sigma_odd_prime_pow`)
 **Actions**:
-1. Retrying formalization with smaller scope.
-2. Launching exploration into strengthening the Factor Pump.
+1. Created 3 formalize tasks to close the sorries in parallel.
 **Watch next**:
-- Does `djf` succeed in formalizing the core inequality?
+- Can the workers close these standard arithmetic sorries quickly?
