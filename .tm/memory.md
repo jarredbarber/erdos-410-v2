@@ -258,3 +258,30 @@
 - Final formalization of main theorem will need a new task connecting everything.
 - Even-stability work (fho, lbc, vt2, vit, 5gw) was 5 tasks spent on a dead end. Lesson: bottom-up approach was right, but should have recognized earlier that ω→∞ subsumes even-stability.
 - **No more verify tasks for even-stability** — it's conditional and unnecessary.
+
+## Heartbeat — 2026-02-08T00:49 UTC (Heartbeat #12)
+
+**Metrics**: Sorry count: 1 (main theorem only!) ↓ from 2 | Verified proofs: 2 (sigma-parity, sigma-lower-bounds) | Tasks: 3 open, 1 in_progress, 20 closed | Build: ✅
+**Status**: All helper sorries closed! Omega-divergence under revision — sole remaining bottleneck.
+**Observations**:
+- **3RD SORRY CLOSED**: i79 closed sigma_one_iterate_tendsto_atTop! All 3 helper lemmas now formalized.
+- **Sorry count = 1**: Only the main theorem remains. Helpers.lean is sorry-free.
+- **uwa (omega-divergence explore) COMPLETED** — proofs/omega-divergence.md written.
+- **h0a (verify omega-divergence) COMPLETED — REVISION REQUESTED**: Two gaps:
+  1. Lemma 2.1: proof that bounded ω ⟹ finite S is circular (S can be infinite with bounded |S_k|!)
+  2. Part 5: strengthening ω unbounded → ω → ∞ is informal.
+- **c6f (revise omega-divergence) IN PROGRESS** — 110 lines, modified just now. Agent correctly identified the subtlety: primes enter and leave support, so bounded ω(a_k) doesn't immediately force finite total prime set S. Agent exploring alternative arguments. NOT using even-stability (good).
+- **c6f had no downstream verify task** — gap fixed.
+- **vp1 (assembly) was unblocked but omega-divergence not yet verified** — fixed by adding 51i as dependency.
+**Actions**:
+1. Created **51i** (verify revised omega-divergence, p2, medium, depends on c6f)
+2. Updated **vp1 dependency**: now depends on 51i (not just uwa). Assembly waits for verified omega-divergence.
+**Pipeline**: c6f → 51i → vp1 → 8xc → [final formalize task needed]
+**Watch next**:
+- **CRITICAL**: Does c6f succeed? The mathematical issue is genuinely subtle (bounded ω doesn't immediately give finite S). The right approach may be:
+  - Direct: show σ(p^e) has >B prime factors for large e (Zsygmondy), then show some exponent must grow large. The hard part: exponents might not grow if primes keep changing.
+  - Alternative: show the set of S-smooth numbers for any finite S has at most finitely many elements in the σ-iteration orbit. This is a consequence of bounds on S-unit equations (Evertse/Luca/Pomerance).
+  - Weaker but sufficient: maybe we don't need ω → ∞ in the strong sense. If lim sup ω(a_k) = ∞, and we can show σ(a_k)/a_k → ∞ along a subsequence, combined with monotonicity of a_k, we might still get a_k^{1/k} → ∞.
+- If c6f FAILS: Create retry with hint about S-unit equations or the weaker lim sup approach.
+- After c6f+51i: vp1 (assembly) should be quick. Then final formalize of main theorem.
+- **Task economics**: 20 closed, 4 remaining. 5 were spent on even-stability dead end. System now on the correct critical path.
