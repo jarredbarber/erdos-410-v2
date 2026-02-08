@@ -401,3 +401,35 @@
 - After pf0: i9u review is critical. This is the 1st attempt at ratio approach — review may find gaps. But gaps should be DIFFERENT from Zsygmondy persistence gaps.
 - **Endgame path**: pf0 → i9u → 7vy → xlm → goo → DONE (0 sorries!). ~5 tasks away from completion.
 - Sorry count has been 1 for 5 heartbeats. Expected — NL pipeline must complete before formalization can close the last sorry.
+
+## Heartbeat — 2026-02-08T02:26 UTC (Heartbeat #17) — ESCALATION
+
+**Metrics**: Sorry count: 1 (main theorem only) | Verified proofs: 2 | Tasks: 3 open, 1 in_progress, 28 closed | Build: ✅
+**Status**: 🚨 RATIO DIVERGENCE REJECTED — 5th failed proof attempt. Escalated to human.
+**Observations**:
+- **pf0 (ratio-divergence explore) COMPLETED** — wrote proofs/ratio-divergence.md.
+- **i9u (verify) REJECTED ❌** — "alignment trap": agent claimed v_k hits all residue classes (unjustified), claimed control over which prime achieves max exponent (Chebotarev hand-waving). Same fundamental issue as Zsygmondy persistence.
+- **7vy (assembly) COMPLETED** — wrote proofs/main-assembly-v2.md. Assembly logic is CORRECT but depends on rejected ratio-divergence. Agent correctly noted the gap.
+- **xlm (verify assembly) COMPLETED** — approved assembly logic but flagged unverified dependency. Status: Under review 🔍 (can't be Verified until ratio-divergence is).
+- **goo (formalize) IN PROGRESS** — 419 lines, actively building proof skeleton with sorry for ratio_divergence. Proving geometric_growth → kth_root → erdos_410. EXCELLENT work — establishing the Lean infrastructure.
+- **PATTERN**: All 5 proof attempts for the key step (σ(a_k)/a_k → ∞) fail on the same fundamental issue: cannot rigorously control which primes divide σ-iterates. Approaches tried:
+  1. ω-persistence (Zsygmondy): primes APPEAR but can't show they STAY (3 attempts)
+  2. Ratio alignment (v_2 control): can't show v_k hits residue classes (1 attempt)
+  3. Energy/potential function: agents keep falling back into alignment/persistence (partially tried in pf0)
+- **Mathematical analysis**: σ(m)/m → ∞ requires many SMALL primes. But σ introduces LARGE primes via Zsygmondy. Small primes re-enter via σ(p) = p+1 (even), but proving accumulation requires controlling σ-dynamics.
+**Actions**:
+1. Created **2zb** (explore ratio-divergence v2, p1, large) — new attempt with sharpest possible framing: lim sup ω + small prime bound.
+2. Created **6v8** (verify ratio-divergence v2, p2, medium, depends on 2zb) — includes guidance to recommend human escalation if same traps recur.
+3. **Updated goo description** — explicitly allows sorry-ed helpers for ratio_divergence. Agent already doing this.
+4. **ESCALATED TO HUMAN** — sent notification via tm notify. Asked specific question about which approach (A-D) to try. Options:
+   - (A) Re-attempt even stability (easier than full ratio divergence?)
+   - (B) Literature reference (Luca-Pomerance type result)
+   - (C) Alternative path to a_k^{1/k} → ∞ without σ/a → ∞
+   - (D) Accept sorry as boundary of agent capability
+**Pipeline**: goo (in progress, building skeleton) | 2zb (queued) → 6v8 → [close sorry if verified]
+**Watch next**:
+- Does goo produce a compiling proof with sorry for ratio_divergence? This is the TOP PRIORITY — it establishes the precise Lean type for the remaining sorry.
+- Does the human respond to escalation? Check for new hints.md content or task guidance.
+- Does 2zb try a genuinely new approach or fall into the same traps?
+- **DECISION POINT**: If 2zb also gets rejected, STOP creating explore tasks for ratio-divergence. The agents can't solve this step. Wait for human guidance.
+- **Waste tracking**: 10 tasks spent on σ/a → ∞ or ω → ∞ (uwa, h0a, c6f, 51i, 3co, epp, 3r8, pf0, i9u, and now 2zb). 5 on even-stability. 15 of 28 closed tasks were on dead-end approaches.
