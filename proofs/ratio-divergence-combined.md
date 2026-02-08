@@ -1,11 +1,39 @@
 # Divergence of Abundancy Ratio via Smooth Escape and Branching
 
-**Status:** Draft ✏️
+**Status:** Under review 🔍
+**Reviewed by:** erdos410v2-zw3
 **Statement:** The Cesàro mean of the log-abundancy ratio diverges: $\frac{1}{k} \sum_{i=1}^k \log (\frac{\sigma(a_i)}{a_i}) \to \infty$.
 **Dependencies:** 
 - smooth-escape.md (Verified ✅)
 - factor-pump.md (Verified ✅)
-**Confidence:** High
+**Confidence:** High (Heuristic) / Low (Rigorous)
+
+---
+
+## Review Notes (erdos410v2-zw3)
+
+**Outcome:** Revision Requested / Heuristic Status Confirmed
+
+This document provides a compelling **heuristic argument** for the divergence of the abundancy ratio, but it does **not** constitute a rigorous proof suitable for direct formalization in Lean. The gap between the verified lemmas (Smooth Escape, Factor Pump) and the final conclusion is bridged by probabilistic models that have not been proven to apply to this specific deterministic sequence.
+
+**Specific Issues:**
+
+1.  **Probabilistic vs. Deterministic (Section 4.1):**
+    The argument $P(q \nmid a_{k+1}) \approx (1 - \frac{1}{q-1})^{\omega_k}$ assumes that the prime factors of $\sigma(a_k)$ are effectively random residues modulo $q$. While valid for "random integers," the aliquout sequence is deterministic. A rigorous proof would need to show that the factors do not conspire to avoid residue $-1 \pmod q$. As noted in `dead-ends.md` (Dead End 5), $\omega \to \infty$ does not deterministically imply $R \to \infty$ unless we control the size of the primes.
+
+2.  **The "Absorbing State" and "Rare Resets" (Section 5):**
+    The proof claims the sequence stays in a high-$\omega$ state because resets (dropping to low $\omega$) are rare (e.g., hitting a Mersenne prime).
+    *   **Rigorous Gap:** In a deterministic sequence, "rare" is not enough if the "rare" events reset the progress systematically. We need to prove that the "drift" away from low complexity is strong enough to overcome these resets *deterministically* or in density.
+    *   The argument relies on the sequence behaving like a Supercritical Branching Process. This is a strong conjecture, not a proof.
+
+3.  **Formalization Viability:**
+    *   **Smooth Escape** and **Factor Pump** are excellent, verified foundations.
+    *   However, formalizing Sections 3-5 would require formalizing the heuristic model (Erdős-Kac for orbits), which is likely out of scope, or proving that the sequence obeys these statistics (extremely hard).
+
+**Recommendation:**
+This file should be treated as a **Roadmap / Heuristic Guide**. It explains *why* the statement is likely true, but the formalization agents should not attempt to translate Sections 3-5 directly. Instead, focus on:
+*   Strengthening the **Factor Pump**: Can we prove lower bounds on $\omega(2^n-1)$ for the specific exponents $n$ that appear?
+*   Investigating if "Smooth Escape" forces the exponents $v_2(a_k)$ to avoid the "Mersenne forms" (primes $p$ where $2^p-1$ is prime) sufficiently often.
 
 ---
 
