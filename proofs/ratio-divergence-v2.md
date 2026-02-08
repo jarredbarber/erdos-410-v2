@@ -1,9 +1,42 @@
 # Divergence of the Abundancy Ratio
 
-**Status:** Draft ✏️
+**Status:** Rejected ❌
 **Statement:** For any $n \geq 2$, let $a_k = \sigma^{[k]}(n)$. Then $\displaystyle\limsup_{k \to \infty} \frac{\sigma(a_k)}{a_k} = +\infty$.
 **Dependencies:** sigma-lower-bounds.md (Verified ✅), sigma-parity.md (Verified ✅)
 **Confidence:** Moderate (main result depends on Small Prime Recurrence Lemma which requires further analysis)
+**Reviewed by:** erdos410v2-6v8
+
+---
+
+## Review Notes (erdos410v2-6v8)
+
+**Verdict:** REJECTED ❌ — Alignment trap recurrence, escalation recommended
+
+**Critical Issues:**
+
+1. **Lemma 5.4 — Unjustified Claim:** The proof claims that $v_2(a_k)$ takes both even and odd values infinitely often. The "proof" states: *"If $v_2(a_k)$ were eventually always even (or always odd), this would impose a strong constraint on the odd-part exponents that cannot be maintained as $a_k \to \infty$ and primes churn."* This is **hand-waving** — no actual proof provided. The phrase "cannot be maintained" is vague and the reference to "primes churn" assumes control over dynamics.
+
+2. **Part 6 — Alignment Trap:** The claim that "for any finite set $T$ of primes, there exist infinitely many $k$ such that every $p \in T$ divides $a_k$" is unjustified. The "proof by induction" says: *"When all primes in $T$ are present with suitable exponents, the Mersenne/σ mechanism eventually injects $q$."* This assumes:
+   - The sequence can be controlled to maintain all primes in $T$ simultaneously
+   - "Suitable exponents" can be achieved (undefined and deterministic sequence gives no such control)
+   - The Mersenne mechanism will inject the next prime while others are still present
+   
+   **This is the alignment trap:** claiming control over when primes appear and persist.
+
+3. **Lemma 5.3 — Conditional on Unproven Conjecture:** The proof relies on "odd-square chain termination," which is stated as **Conjecture B** in eventual-even-stability.md (still Draft status). While supported by computational evidence, it remains unproven.
+
+**Pattern Recognition:** This is the **third attempt** at proving ratio divergence, and all three have fallen into the same trap:
+- omega-divergence.md: Required specific primes to persist (persistence trap)
+- ratio-divergence.md: Claimed control over $v_2$ alignment
+- ratio-divergence-v2.md: Claims simultaneous presence of arbitrarily many primes (alignment trap)
+
+**What Works:**
+- Parts 1-4 are rigorous: Zsygmondy escape, omega-ratio constraint, structural analysis under bounded ratio
+- The author honestly acknowledges gaps and suggests alternatives
+
+**Fundamental Issue:** The "small prime recurrence" strategy appears to be inherently vulnerable to the alignment trap. The sequence is deterministic, and we cannot prove that small primes align to be simultaneously present.
+
+**Recommendation:** **ESCALATE TO HUMAN.** After three failed attempts with the same fundamental issue, this suggests the problem requires a genuinely different approach. The author's own suggestion (energy function $E_k = \log R_k$ analyzing $E_{k+1}$ vs $E_k$) may be more promising, as it avoids needing to prove simultaneous prime presence.
 
 ---
 
