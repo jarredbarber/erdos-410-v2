@@ -562,3 +562,32 @@
   - (C) Can the "trampoline" observation be formalized? Low R → σ → high R, and the highs keep getting higher?
   - (D) Escalate to human again with the specific finding: "lim sup is within reach but lim is not"
 - **Strategy note**: The trampoline observation is the most promising new insight. If σ maps "thin" (low R) numbers to "thick" (high R) numbers, AND the sequence of high-R values is unbounded, that gives lim sup = ∞. The missing piece is: does the sequence of LOW-R values also eventually → ∞? If min(R_k, R_{k+1}) → ∞, that gives the full Tendsto.
+
+## Heartbeat — 2026-02-08T05:19 UTC (Heartbeat #22)
+
+**Metrics**: Sorry count: 1 (ratio_divergence at Basic.lean:56) | Verified proofs: 2 (sigma-parity, sigma-lower-bounds) | Tasks: 3 open, 1 in_progress, 34 closed | Build: ✅
+**Status**: Pipeline working correctly. p54 completed (lim sup only) → 1ub rejected → fio (revision for full lim) in progress.
+**Observations**:
+- **p54 COMPLETED** — proved lim sup R_k = ∞. Status: Rejected ❌ (correct — we need full lim).
+- **1ub COMPLETED** — correctly rejected for: (1) only lim sup not lim, (2) density gap, (3) heuristic residue universality. Created fio revision task. Good self-organization.
+- **fio (strengthen to full lim) IN PROGRESS** — 222 lines, actively writing. Agent exploring "bounce-back"/"staircase" approach:
+  - KEY INSIGHT: a_k = 2p (p > 3) → R_k < 2, BUT σ(2p) = 3(p+1) → 6|a_{k+1} → R_{k+1} ≥ 2
+  - Agent trying to show: low-R numbers have σ-images with higher R (structural incompatibility)
+  - This is ONE-STEP analysis (R_k → R_{k+1}), not multi-step persistence — genuinely different approach
+  - Agent recognizes the challenge: "whether R increases or decreases depends entirely on the multiplicative structure"
+  - About to write the formal proof
+- **CONCERN**: Agent's log also shows it falling back into familiar patterns ("Zsygmondy...cumulative prime support must expand indefinitely" — same argument that failed). The novel part (bounce-back analysis of consecutive R values) is promising but the agent may not stay focused on it.
+- **rap (S-smooth escape) still queued** at p2. Will run after fio + 8sp finish.
+- **Verified proof count**: Actually 2 (sigma-parity, sigma-lower-bounds). My grep was matching "Verified ✅" in dependency lines. Fixed metric.
+**Actions**:
+1. Created **8sp** (verify strengthened proof, p1, medium, depends on fio) — includes specific guidance about bounce-back/staircase verification.
+**Pipeline**: fio → 8sp → [formalize if approved, or escalate if rejected again]
+**Watch next**:
+- Does fio produce a strengthened proof? At 222 lines, actively writing. Give it 20-30 more min.
+- **STALE THRESHOLD**: If fio > 500 lines next heartbeat without proof file written → intervene.
+- **DECISION POINT**: If 8sp rejects AGAIN, this will be the 9th failed attempt at ratio_divergence (7 explores + 1 revision). At that point:
+  - DO NOT create another explore task
+  - Escalate to human with specific finding: "lim sup provable but lim requires new mathematical insight"
+  - Suggest options: (A) human provides proof of bounce-back lemma, (B) restructure Lean to use weaker result, (C) accept sorry
+- **The bounce-back approach is the best lead yet**: concrete one-step analysis showing low R → high R_{k+1}. If the agent stays focused on this rather than drifting to Zsygmondy arguments, it has a chance.
+- fio attempt count: This is attempt #8 at the core lemma (uwa, c6f, 3co, pf0, 2zb, p54, fio = 7 explores + 1 revision). 8sp would be review #8.
