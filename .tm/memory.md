@@ -722,3 +722,35 @@
 - wf5 output: tasks created? Or stalled analysis?
 - Human response check (still nothing since wf5 creation at 05:58)
 - Task economics: 38 closed + 1 in_progress + 2 deferred = 41 total. 20 productive, 18 dead ends, 1 advisor analysis, 2 deferred.
+
+## Heartbeat — 2026-02-08T07:11 UTC (Heartbeat #29)
+
+**Metrics**: Sorry count: 1 (ratio_divergence at Basic.lean:56) | Verified proofs: 3 (sigma-parity, sigma-lower-bounds, smooth-escape) | Tasks: 3 open, 1 in_progress (tlx), 1 failed (y3h), 40 closed, 2 deferred | Build: ✅ | Worker: ACTIVE
+**Status**: y3h FAILED (expected). tlx energy approach actively running. Pipeline cleaned up.
+**Observations**:
+- **y3h (bounded-ratio contradiction) FAILED** — explicitly reported failure. Core finding: bounded ratio is COMPATIBLE with smooth escape because different low-ratio steps can use different prime sets. Cannot force subsequence S-smoothness. Added as Dead End #6 in proofs/dead-ends.md.
+- **y3h did NOT produce proofs/ratio-divergence-v3.md** on main (failed task branch not merged). The dead-end analysis was in the agent's summary. I manually added Dead End #6 to dead-ends.md and committed.
+- **tlx (energy monotonicity) IN PROGRESS** — 247 lines, actively working (modified just now). Agent exploring:
+  - Exponent concentration under bounded ratio (if ω bounded, average exponent ~ √k)
+  - At least one prime must have unbounded valuation along subsequence
+  - Tension between bounded ratio + bounded ω vs smooth escape requiring expanding primes
+  - "For ratio to approach 3/2, need v₂=1 and all odd prime exponents minimal, but maintaining (3/2)^k growth with low exponents forces many distinct primes — tension with smooth escape"
+  - NOT falling into persistence/alignment traps — reasoning about structural constraints
+  - Has NOT written proof file yet — still in reasoning phase
+- **z4c (verify y3h) CLOSED** — dependency y3h failed, nothing to review.
+- **pz1 from HB#28 didn't persist** — recreated as **yil** (verify for fas).
+- **fas (Mersenne) still queued** at p2 — will run after tlx + bce finish.
+**Actions**:
+1. Closed z4c (orphaned verify for failed y3h)
+2. Created yil (verify for fas — replacing missing pz1)
+3. Added Dead End #6 to proofs/dead-ends.md (bounded-ratio contradiction compatible with smooth escape)
+4. Committed dead-ends.md update
+**Pipeline**: tlx → bce | fas → yil (2 independent tracks)
+**Watch next**:
+- Does tlx produce proofs/ratio-divergence-energy-v2.md? At 247 lines, still in reasoning. Give it 15-20 more min.
+- **STALE THRESHOLD**: If tlx > 500 lines without proof file next heartbeat → intervene.
+- tlx has the most promising structural insight: bounded ratio forces exponent concentration which creates tension with smooth escape. If the agent can formalize this tension into a contradiction, it works.
+- After tlx: bce reviews. Then fas runs (Mersenne approach).
+- **FINAL ESCALATION PLAN**: If both tlx and fas fail → that's 12 total attempts. Definitively escalate: "12 attempts, all failed. Mathematical discovery beyond agent capability. Need human proof or accept sorry."
+- Sorry count stable at 1 for 18 heartbeats.
+- Task economics: 40 closed + 1 failed + 4 open/in-progress + 2 deferred = 47 total.
