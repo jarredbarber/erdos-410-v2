@@ -2,6 +2,7 @@ import Mathlib.NumberTheory.ArithmeticFunction.Defs
 import Mathlib.NumberTheory.ArithmeticFunction.Misc
 import Mathlib.Data.Nat.Prime.Basic
 import Mathlib.Data.Nat.Factors
+import Mathlib.Data.Nat.ModEq
 import Mathlib.NumberTheory.Padics.PadicVal.Defs
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
 import Mathlib.NumberTheory.Divisors
@@ -108,11 +109,66 @@ lemma v2_sigma_odd (k : ℕ) : padicValNat 2 (2^(k+1) - 1) = 0 := by
     apply Nat.pos_of_mul_pos_left h_pos
   omega
 
+lemma sum_mod_eq_sum_mod_mod {α : Type*} (s : Finset α) (f : α → ℕ) (m : ℕ) :
+    (∑ i ∈ s, f i) % m = (∑ i ∈ s, f i % m) % m := by
+  induction s using Finset.induction_on with
+  | empty => simp
+  | insert a s ha ih =>
+    rw [Finset.sum_insert ha, Finset.sum_insert ha]
+    simp [Nat.add_mod, ih]
+
 lemma sigma_odd_prime_pow_mod_two (p k : ℕ) (hp : p.Prime) (hp2 : p ≠ 2) :
-    sigma 1 (p ^ k) % 2 = (k + 1) % 2 := sorry
+    sigma 1 (p ^ k) % 2 = (k + 1) % 2 := by
+  rw [sigma_one_apply_prime_pow hp]
+  change (∑ i ∈ range (k + 1), p ^ i) % 2 = (k + 1) % 2
+  rw [sum_mod_eq_sum_mod_mod]
+  trans (∑ i ∈ range (k + 1), 1) % 2
+  · congr 2
+    ext i
+    rw [Nat.pow_mod]
+    have : p % 2 = 1 := by
+       cases Nat.mod_two_eq_zero_or_one p with
+       | inl h =>
+         rw [← Nat.dvd_iff_mod_eq_zero] at h
+         have h_eq := (Nat.prime_dvd_prime_iff_eq Nat.prime_two hp).mp h
+         rw [h_eq] at hp2
+         contradiction
+       | inr h => exact h
+    rw [this]
+    simp
+  · simp
 
 lemma v2_sigma_odd_prime_pow (p k : ℕ) (hp : p.Prime) (hp2 : p ≠ 2) :
-    if Odd k then 1 ≤ padicValNat 2 (sigma 1 (p ^ k)) else padicValNat 2 (sigma 1 (p ^ k)) = 0 := sorry
+    if Odd k then 1 ≤ padicValNat 2 (sigma 1 (p ^ k)) else padicValNat 2 (sigma 1 (p ^ k)) = 0 := by
+  split_ifs with hk
+  · have h_pos : sigma 1 (p^k) ≠ 0 := by
+      apply Nat.ne_of_gt
+      apply sigma_pos
+      apply pow_ne_zero
+      exact hp.ne_zero
+    apply one_le_padicValNat_of_dvd h_pos
+    apply Nat.dvd_of_mod_eq_zero
+    rw [sigma_odd_prime_pow_mod_two p k hp hp2]
+    -- Odd k -> (k+1)%2 = 0
+    rw [← Nat.not_even_iff_odd] at hk
+    rw [Nat.add_mod]
+    cases Nat.mod_two_eq_zero_or_one k with
+    | inl h =>
+       rw [← Nat.dvd_iff_mod_eq_zero] at h
+       rw [← even_iff_two_dvd] at h
+       contradiction
+    | inr h => rw [h]
+  · apply padicValNat.eq_zero_of_not_dvd
+    intro h_dvd
+    have h_mod_zero : sigma 1 (p^k) % 2 = 0 := Nat.mod_eq_zero_of_dvd h_dvd
+    rw [sigma_odd_prime_pow_mod_two p k hp hp2] at h_mod_zero
+    -- ¬ Odd k -> (k+1)%2 = 1
+    rw [← Nat.not_even_iff_odd] at hk
+    rw [not_not] at hk
+    rw [even_iff_two_dvd] at hk
+    have h_k_mod : k % 2 = 0 := Nat.mod_eq_zero_of_dvd hk
+    rw [Nat.add_mod, h_k_mod] at h_mod_zero
+    contradiction
 
 lemma padicValNat_finset_prod {α : Type*} (s : Finset α) (f : α → ℕ) (p : ℕ) [Fact p.Prime]
     (hf : ∀ x ∈ s, f x ≠ 0) :
