@@ -591,3 +591,134 @@
   - Suggest options: (A) human provides proof of bounce-back lemma, (B) restructure Lean to use weaker result, (C) accept sorry
 - **The bounce-back approach is the best lead yet**: concrete one-step analysis showing low R → high R_{k+1}. If the agent stays focused on this rather than drifting to Zsygmondy arguments, it has a chance.
 - fio attempt count: This is attempt #8 at the core lemma (uwa, c6f, 3co, pf0, 2zb, p54, fio = 7 explores + 1 revision). 8sp would be review #8.
+
+## Heartbeat — 2026-02-08T05:36 UTC (Heartbeat #23) — FULL STOP #2
+
+**Metrics**: Sorry count: 1 (ratio_divergence at Basic.lean:56) | Verified proofs: 3 (sigma-parity, sigma-lower-bounds, smooth-escape ✅ NEW) | Tasks: 0 open, 0 in_progress, 38 closed, 2 deferred | Build: ✅ | Worker: IDLE
+**Status**: 🛑 9th failed attempt at ratio_divergence. Worker idle. Escalated to human. Full stop.
+**Observations**:
+- **4 tasks closed since heartbeat #22**: fio (explore), 8sp (verify), rap (explore), xr8 (verify)
+- **fio COMPLETED** — claimed full lim R_k = ∞, wrote strengthened proof
+- **8sp REJECTED** — correctly identified that proof STILL only proves lim sup, not lim:
+  - Lemma 5.1 Case B (Zsygmondy flux) is heuristic, not rigorous
+  - Lemma 5.2 conflates "∃ p₀ with limsup v_{p₀} = ∞" with "∀ large k, argmax ≤ P₀"
+  - Bounce-back not proven: no bounded-W guarantee
+  - Mass budget shows SOME prime has large exponent at each step, but not that it's ALWAYS a SMALL prime
+  - Reviewer recommended escalation (matches my commitment from HB#22)
+- **🎉 smooth-escape.md NOW Verified ✅** — rap proved it (S-smooth escape lemma), xr8 approved. 3rd verified proof! Clean Zsygmondy one-step contradiction. My level-4 proof sketch worked.
+- **Core mathematical diagnosis**: The gap between lim sup and lim is the RETURN TIME problem. Agents can show R_k exceeds any level infinitely often, but cannot bound how long it takes to return above a level after a dip. This requires dynamical analysis of σ-orbit recurrence that is beyond current agent capability.
+- **Task economics final**: 38 closed + 2 deferred = 40 total. Productive: 20 (sigma chain, parity, helpers, skeleton, smooth-escape, assembly). Dead ends: 18 (5 even-stability, 13 on σ/a→∞ or ω→∞). 45% waste.
+**Actions**:
+1. **Sent 3rd escalation to human** (tm notify, priority 4) — precise description of the gap (lim sup ≠ lim), 4 options (A-D).
+2. **NO new explore tasks created** — per commitment from HB#22.
+**Watch next**:
+- **Human response is the ONLY path forward.** Same as heartbeat #19 but with sharper diagnosis.
+- Check for: (1) new tasks created by human, (2) changes to hints.md, (3) Lean file edits (human might restructure proof directly)
+- If human chooses option A (bounce-back lemma): create explore task with the specific lemma statement
+- If human chooses option B (restructure Lean): might need formalize task to modify Basic.lean
+- If human chooses option C (accept sorry): project is done
+- If human chooses option D (complete NL proof): create formalize task immediately
+- **DO NOT** create any automated explore tasks for ratio_divergence. The agents cannot bridge lim sup → lim.
+- **Project achievements**: Main theorem PROVED modulo 1 sorry. 183 lines compiling Lean. 3 helper lemmas formalized (sorry-free). 3 NL proofs verified. Complete proof skeleton. S-smooth escape lemma verified. lim sup R_k = ∞ established (but insufficient).
+
+## Heartbeat — 2026-02-08T06:06 UTC (Heartbeat #24)
+
+**Metrics**: Sorry count: 1 (ratio_divergence at Basic.lean:56) | Verified proofs: 3 (sigma-parity, sigma-lower-bounds, smooth-escape) | Tasks: 0 open, 1 in_progress (wf5 advisor), 38 closed, 2 deferred | Build: ✅ | Worker: ACTIVE
+**Status**: Advisor (wf5) actively analyzing proof architecture redesign. 8 minutes in. No intervention needed.
+**Observations**:
+- **NEW TASK: wf5** (advisor, p0, medium) — "Redesign proof skeleton to use lim sup." Created at 05:58 UTC (22 min after my heartbeat #23). Human responded to escalation by choosing option B (restructure Lean). Workflow config also updated with "3-Strike Rule" in advisor spec.
+- **wf5 IN PROGRESS** — 353 lines, actively working (modified <1 sec ago). Agent doing deep mathematical analysis:
+  - **CRITICAL FINDING**: Agent correctly identified that **lim sup R_k = ∞ alone is INSUFFICIENT** for a_k^{1/k} → ∞. Concrete counterexample: R_j = 3/2 except at j=2^i where R_j = i → a_k^{1/k} → 3/2, not ∞. Sparse spikes give Cesaro mean → constant.
+  - Agent exploring alternatives: v₂ → ∞, ω growing, energy function, bootstrapping from C → C'
+  - Agent recognizes it keeps circling back to the same fundamental obstacle
+  - Agent hasn't created any tasks yet (expected — still in analysis phase, only 8 min in)
+- **No file changes** since heartbeat #23 (git diff shows only tm internal files)
+- **No new hints** from human beyond what's already in proofs/hints.md
+- **Worker is running** wf5 on opus-4 (heavy model) — appropriate for deep mathematical strategy
+**Actions**: None — advisor actively working. Too early to intervene.
+**CRITICAL WATCH**: The advisor's key finding (lim sup insufficient) may mean the task as described is IMPOSSIBLE. If the advisor:
+  - (A) Finds a genuinely different architecture → great, let it create tasks
+  - (B) Concludes no weaker statement works → need to escalate back to human: "Option B (restructure for lim sup) doesn't work. The main theorem genuinely requires either full R_k → ∞ or a completely different proof strategy."
+  - (C) Stalls >500 lines without creating tasks → recover and escalate
+**STALE THRESHOLD**: If wf5 >500 lines next heartbeat with no tasks created → intervene.
+**What I'd tell the human if escalating**: The advisor confirmed sparse lim sup is insufficient. The three remaining options are: (1) human provides proof of full R_k → ∞ (the bounce-back/return-time argument), (2) completely different proof strategy (not ratio-based — maybe direct argument about σ-orbit growth rate), (3) accept sorry. Restructuring Lean for lim sup won't work.
+
+## Heartbeat — 2026-02-08T06:11 UTC (Heartbeat #25)
+
+**Metrics**: Sorry count: 1 (ratio_divergence at Basic.lean:56) | Verified proofs: 3 (sigma-parity, sigma-lower-bounds, smooth-escape) | Tasks: 1 in_progress, 38 closed, 2 deferred | Build: ✅ | Worker: ACTIVE
+**Status**: wf5 (advisor redesign) auto-recovered and restarted fresh. No intervention needed.
+**Observations**:
+- wf5 was stale from previous heartbeat (353 lines, no tasks created). Worker auto-recovered and restarted at 06:09 UTC. Previous 353-line analysis LOST (log overwritten). However, the key finding (lim sup insufficient — counterexample with sparse spikes giving Cesaro mean → log(3/2)) is ALREADY encoded in the task description.
+- Fresh wf5 attempt started 2 min ago. 8-line log (just header). Too early to assess.
+- No new git commits since smooth-escape merge. No file changes.
+- Helpers.lean: all 3 helper sorries closed (comment says "sorry-ed" but that's stale text, no actual sorry).
+- Only sorry: Basic.lean:56 (ratio_divergence Tendsto statement).
+- Build passes clean.
+- Human created wf5 at 05:58 UTC responding to heartbeat #23 escalation (chose option B: restructure Lean).
+**Actions**: None — task just restarted, too early to intervene.
+**STALE THRESHOLD for wf5**: If >500 lines next heartbeat with no tasks created → recover and create concrete plan myself:
+  1. Create formalize task: "Restructure Basic.lean to use lim_sup_ratio_divergence (∀ M, ∃ᶠ k, R_k > M) instead of Tendsto R_k atTop atTop"
+  2. Create explore task: "Prove: For n≥2, lim sup σ(a_k)/a_k = ∞" (this is what agents CAN prove — multiple drafts achieved this)
+  3. Create explore task: "Prove: If lim sup σ(a_k)/a_k = ∞ AND σ(m)≥m+1 always, then a_k^{1/k} → ∞" — THIS is the key new mathematical challenge
+- Alternative: if the advisor concludes lim sup is genuinely insufficient (as previous run did), options are:
+  (A) Use σ(m)≥3m/2 for even m to get exponential growth (already proved) — only need to show a_k is eventually even (even-stability, which was conditional but may be provable via a simpler argument)
+  (B) Accept sorry as boundary of agent capability
+  (C) Escalate again with specific question about even-stability viability
+**Watch next**:
+- Does wf5 produce tasks within 15-20 min? Key success criteria: advisor creates 1+ formalize tasks for skeleton redesign AND 1+ explore tasks for the new mathematical challenges.
+- If wf5 stalls again → execute recovery plan above.
+- If wf5 concludes lim sup insufficient → need human decision between even-stability route, accepting sorry, or different approach entirely.
+- Task economics: 38 closed + 1 in_progress + 2 deferred = 41 total. 20 productive, 18 dead ends, 2 building blocks (rap/xr8), 1 in-progress. Worker has been active for ~9.2 hours.
+
+## Heartbeat — 2026-02-08T06:17 UTC (Heartbeat #26)
+
+**Metrics**: Sorry count: 1 (ratio_divergence at Basic.lean:56) | Verified proofs: 3 (sigma-parity, sigma-lower-bounds, smooth-escape) | Tasks: 0 open, 1 in_progress (wf5 advisor), 38 closed, 2 deferred | Build: ✅ | Worker: ACTIVE
+**Status**: wf5 (advisor redesign) just restarted 8 min ago. Opus-4 generating first response. No intervention needed.
+**Observations**:
+- wf5 restarted at 06:09 UTC (auto-recovered from stale previous run). Log has 8 lines (header only). Opus-4 model still generating — normal for complex mathematical strategy task.
+- Worker process healthy (PID 1640655, 2.5 hrs uptime).
+- No new git commits since smooth-escape merge (heartbeat #23).
+- No human changes since creating wf5 at 05:58 UTC. Human likely asleep (it's ~6:17 AM UTC / ~1:17 AM EST).
+- Verified proofs: 3 (sigma-parity, sigma-lower-bounds, smooth-escape). All other proof files are Draft/Rejected/Under review.
+- Sorry count stable at 1 for 15 heartbeats (since HB#12). Expected — can't decrease until NL proof verified + formalized.
+- The fundamental mathematical challenge remains: agents proved lim sup σ(aₖ)/aₖ = ∞ but cannot prove the full limit. Previous wf5 run (353 lines, now lost) found that lim sup alone is INSUFFICIENT for aₖ^{1/k} → ∞ (counterexample with sparse spikes).
+- Task description for wf5 mentions "σ(m) ≥ 3m/2 for even m" as baseline, but even this + lim sup may not suffice. The advisor needs to find either: (a) a way to extract full limit from lim sup + structural properties, or (b) a completely different proof architecture.
+**Actions**: None — wf5 just started, too early to assess.
+**Watch next**:
+- Does wf5 produce meaningful output? Check log length and content next heartbeat.
+- **STALE THRESHOLD**: If wf5 >500 lines next heartbeat with no tasks created → recover and execute plan from HB#25:
+  1. Create formalize task: restructure Lean for weaker hypothesis
+  2. Create explore task: prove lim sup σ(aₖ)/aₖ = ∞ (agents CAN do this)
+  3. Create explore task: prove bridging lemma from lim sup to aₖ^{1/k} → ∞
+- **STALE THRESHOLD 2**: If wf5 has 8 lines (no output at all) next heartbeat → log may indicate model API timeout. Recover.
+- If wf5 concludes lim sup insufficient (as previous run did) → need to decide: even-stability route? different architecture? escalate to human?
+- Human response check: look for new tasks, hints.md changes, Lean edits.
+
+## Heartbeat — 2026-02-08T06:36 UTC (Heartbeat #27)
+
+**Metrics**: Sorry count: 1 (ratio_divergence at Basic.lean:56) | Verified proofs: 3 (sigma-parity, sigma-lower-bounds, smooth-escape) | Tasks: 0 open, 1 in_progress (wf5 advisor), 38 closed, 2 deferred | Build: ✅ | Worker: ACTIVE
+**Status**: wf5 (advisor) actively running — 484 lines, 26 min in, no tasks created. Approaching stale threshold.
+**Observations**:
+- wf5 grew from 8 lines (HB#26) to 484 lines — opus-4 generating actively (modified 2 sec ago).
+- Agent doing extensive mathematical analysis of the lim sup vs lim problem. Key findings:
+  - Correctly concluded lim sup alone is insufficient (matches previous run's finding, counterexample with sparse spikes)
+  - Explored bounded-ω contradiction, smooth escape, 2-adic valuation, ratio drop analysis
+  - Keeps circling back to the same wall: bounded ratio ⟹ bounded ω, but bounded ω ⟹̸ bounded prime support
+  - Self-aware: "I think I need to step back from the pure analysis and start organizing concrete tasks"
+  - About to explore "proof by contradiction: bounded ratio along subsequence constrains prime factorization"
+- Only tm command run: `tm update --status "Reading literature and analyzing proof state"` — no tasks created.
+- Pattern: previous wf5 run stalled at 353 lines after ~25 min with no tasks. This run at 484 after ~26 min. Same trajectory.
+- No new git commits. No file changes. No human activity.
+- Sorry count stable at 1 for 16 heartbeats.
+**Actions**: None — agent still under 500-line threshold and actively generating. One more heartbeat.
+**HARD COMMITMENT for next heartbeat**:
+- If wf5 >500 lines with no tasks created → RECOVER immediately and execute backup plan:
+  1. Close wf5 (stale advisor, analysis-only, no output)
+  2. Create explore task: "Prove σ(a_k)/a_k → ∞ by contradiction using smooth escape: if bounded, ω bounded, then support must eventually stabilize on a fixed set (by finiteness of D-element prime sets meeting the orbit), contradicting smooth escape." Level-4 sketch, p1, large.
+  3. Create verify task for above.
+  4. If the explore task also fails → escalate to human: "The mathematical obstacle is genuine. Agents can prove lim sup = ∞ and smooth escape, but cannot bridge to full Tendsto. Need human mathematical insight or accept sorry."
+- If wf5 creates tasks → evaluate quality and DAG structure.
+**Watch next**:
+- wf5 output: tasks created? Or stalled analysis?
+- Human response check (still nothing since wf5 creation at 05:58)
+- Task economics: 38 closed + 1 in_progress + 2 deferred = 41 total. 20 productive, 18 dead ends, 1 advisor analysis, 2 deferred.
