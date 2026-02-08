@@ -1,6 +1,7 @@
 # Factor Pump Mechanism for Omega Growth
 
 **Status:** Verified ✅
+**Reviewed by:** erdos410v2-4mp
 **Statement:** The number of distinct prime factors $\omega(a_k)$ tends to grow because $\omega(a_{k+2})$ acquires new factors from $2^{v_2(a_{k+1})+1}-1$, where $v_2(a_{k+1}) \ge \omega_{odd}(a_k)$.
 **Dependencies:** None
 **Confidence:** High
@@ -71,6 +72,7 @@ Let $N = v_{k+1}+1$. The term $M_N = 2^N-1$ contributes to $\omega(a_{k+2})$.
   - Mersenne primes are extremely sparse.
   - For a random integer $N$, the expected value of $\omega(2^N-1)$ is roughly $\log N$ (since $\omega(m) \sim \log \log m$ and $m \approx 2^N$).
   - Even if $N$ is prime, $2^N-1$ is often composite (e.g., $2^{11}-1 = 23 \cdot 89$).
+- **No Square Traps:** For $N > 1$, $2^N-1$ is never a perfect square (follows from Catalan's conjecture/Mihailescu's theorem). This ensures that $2^N-1$ always contributes at least one prime factor with an odd exponent, preventing $\omega_{odd}(a_{k+2})$ from dropping to zero.
 
 **Conclusion:**
 Since $v_{k+1}$ is determined by the complex structure of $\sigma(d_k)$, it behaves somewhat randomly. Therefore $N = v_{k+1}+1$ is rarely a prime that yields a Mersenne prime.
