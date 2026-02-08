@@ -1,9 +1,10 @@
 # Divergence of the Number of Distinct Prime Factors
 
-**Status:** Draft ✏️
+**Status:** Rejected ❌
 **Statement:** For any $n \geq 2$, let $a_k = \sigma^{[k]}(n)$ denote the $k$-th iterate of the sum-of-divisors function. Then $\omega(a_k) \to \infty$ as $k \to \infty$, where $\omega(m)$ counts the number of distinct prime factors of $m$.
 **Dependencies:** sigma-lower-bounds.md (Verified ✅)
 **Confidence:** High
+**Reviewed by:** erdos410v2-epp (3rd revision)
 
 ---
 
@@ -551,3 +552,53 @@ The divergence of $\omega(a_k)$ follows from:
 
 - sigma-lower-bounds.md: $\sigma(n) \geq n + 1$ for $n \geq 2$.
 - Zsygmondy, K. (1892): "Zur Theorie der Potenzreste." Monatsh. Math. 3: 265–284.
+
+---
+
+## Review Notes (3rd Revision - erdos410v2-epp)
+
+**REJECTED** after three revision attempts. The proof contains persistent fundamental gaps and is pursuing an unnecessarily strong result.
+
+### Critical Gaps Identified
+
+**1. Case II, Step II.4 (Recurrence Coincidence Lemma) - SAME GAP AS 2ND REVIEW:**
+
+The proof claims: "Since M_k is unbounded, there exists K with M_K ≡ m-1 (mod m)."
+
+**Unjustified.** M_k being unbounded means sup M_k = ∞, NOT that M_k hits every residue class mod m. The sequence M_k = max{v_p(a_k) : p | a_k} is determined by the dynamics of iterating σ - it is not a free variable we can choose.
+
+The proof then claims in Case 2: "by choosing K large enough... there exists K where the prime p_K has ord_{q_j}(p_K) | m for all j."
+
+**Unjustified.** Even if Chebotarev density applies (which requires careful setup), it gives density among all primes, not control over which specific prime p_K appears at step K in our sequence. The proof needs p_K to simultaneously satisfy ord_{q_j}(p_K) | m for all j = 1,...,B+1, a very strong condition with no justification provided.
+
+This is **hand-waving**, not a proof. This exact gap was identified in review 51i and remains unfixed.
+
+**2. Theorem 4.1, Step 1 - Claim |T| ≤ L+1:**
+
+The proof shows that L+2 primes from T cannot all divide a_{k_J} simultaneously, but this does not prove |T| ≤ L+1. The primes could cycle through the low-ω steps - appearing and disappearing in turns - allowing |T| >> L+1. The appeal to "adapting Theorem 3.1" is vague and circular.
+
+**3. Theorem 4.1, Step 4 - Zsygmondy recurrence:**
+
+The claim that "exponents cycle through all residue classes" is unproven. The exponent v_p(a_k) depends on the divisibility structure of σ(a_{k-1}), not on free choice. There's no guarantee it achieves every residue class modulo e+1.
+
+### Fundamental Strategic Problem
+
+**The proof is attempting something stronger than necessary.** 
+
+- **What's needed:** Show σ(a_k)/a_k → ∞, which implies σ(a_k)^{1/k} → ∞
+- **What this proves:** ω(a_k) → ∞ (number of distinct primes grows)
+
+These are NOT equivalent. The proof tries to show individual primes *persist* in the sequence (or recur reliably), requiring precise control of the σ dynamics. This is where all three revisions have failed.
+
+The hints.md file points to a better approach: work directly with the abundancy ratio σ(m)/m, using the multiplicative structure σ(m)/m = ∏_{p^a || m} (p^{a+1} - 1)/(p^a(p-1)). As exponents grow, this ratio grows even without new primes. An "energy function" argument could show σ(a_k)/a_k is unbounded without ever tracking which specific primes are present.
+
+### Recommendation
+
+**Do not attempt a 4th revision of this approach.** Three attempts have foundered on the same mechanism. Pursue instead:
+
+1. A direct ratio argument: show σ(a_k)/a_k is unbounded
+2. Exploit higher-order terms in the multiplicative formula for σ(m)/m
+3. Use potential/energy functions rather than tracking individual primes
+4. Avoid the "persistence trap" - primes can enter and exit freely as long as the ratio grows
+
+The Zsygmondy mechanism is powerful for showing primes *appear*, but insufficient for showing they *stay*. The correct proof likely doesn't need persistence at all.
