@@ -1,6 +1,6 @@
 # Divergence of the Abundancy Ratio via Energy Analysis
 
-**Status:** Draft ✏️
+**Status:** Rejected ❌
 **Statement:** For any $n \geq 2$, let $a_k = \sigma^{[k]}(n)$. Then $\displaystyle\lim_{k \to \infty} \frac{\sigma(a_k)}{a_k} = +\infty$.
 **Dependencies:** 
 - sigma-lower-bounds.md (Verified ✅)
@@ -357,6 +357,47 @@ This is weaker than Conjecture 6.1 but might be easier to prove. Combined with $
 - Bounded recovery time for thresholds $L > 2$
 
 **Confidence:** Moderate. The structural analysis is sound, but the full limit requires additional work on the recovery dynamics.
+
+---
+
+## Review Notes
+
+**Reviewed by:** erdos410v2-bce (2026-02-08)
+
+**Decision:** REJECTED ❌
+
+**Critical Issues:**
+
+1. **Falls into Dead End #1 (Lim Sup of Ratios):** The proof explicitly admits in Part 5.2 that it only establishes $\limsup_{k \to \infty} R_k = \infty$, not the full limit $\lim_{k \to \infty} R_k = \infty$. This is exactly the documented dead-end trap in `dead-ends.md`. The theorem requires the **full limit** to prove the Cesàro mean of $\log R_k$ diverges, which is necessary for $a_k^{1/k} \to \infty$.
+
+2. **Energy function does NOT increase on average:** While the proof defines $E(m) = \log(\sigma(m)/m)$ and shows infinitely many large values, it does NOT establish that the average (Cesàro mean) of $E(a_k)$ diverges. This is the fundamental gap between lim sup and lim.
+
+3. **Bad steps not properly bounded:** The proof rigorously shows recovery from $R_k = 2$ (Lemma 3.1), but admits in Section 3.3 that it cannot prove bounded recovery time for arbitrary threshold $L > 2$. The argument in Lemma 3.2 contains acknowledged gaps and is labeled "not fully rigorous."
+
+4. **Proof relies on unproven conjectures:** Part 6 introduces Conjectures 6.1 and 6.2 that are necessary to complete the proof. A proof that requires unproven conjectures is incomplete.
+
+**What is correct:**
+
+The following results are rigorously established and may be useful for future approaches:
+- **Claim 2.1:** $R_k \geq 2$ for all sufficiently large $k$ (with at most one exception at $a_k = 6$)
+- **Lemma 2.4:** Characterization of odd integers $m$ with $\sigma(m)/m \leq 4/3$ (must be prime powers)
+- **Lemma 3.1:** Recovery mechanism: $R_k \leq 2 \Rightarrow R_{k+1} > 2$
+- **Lemma 4.2:** Under bounded ratio $R(m) \leq C$, have $\omega(m) \leq D_C \sqrt{\log m}$
+
+**Why this matters:**
+
+As documented in Dead End #1, proving lim sup is insufficient because:
+- The geometric growth argument requires: $\forall C > 1$, $\exists K$, $\forall k \geq K$: $R_k \geq C$
+- Lim sup only gives: $\forall C > 1$, $\exists$ infinitely many $k$ with $R_k \geq C$
+- Between spikes, the ratio could drop to the floor of 2, giving only $(3/2)^k$ baseline growth
+- This yields $a_k^{1/k} \to 3/2$ (bounded), not divergent
+
+**Recommendation:**
+
+The energy/ratio approach appears to be fundamentally blocked at the lim sup barrier. The structural insights (recovery from $R=2$, low-ratio characterization) are valuable but insufficient. A new approach is needed that either:
+1. Proves bounded recovery time (closing the gap in Lemma 3.2 and Conjecture 6.1), or
+2. Uses a different quantity that avoids the lim sup/lim distinction, or
+3. Exploits specific algebraic structure of the $\sigma$-orbit that forces eventual monotonicity
 
 ---
 

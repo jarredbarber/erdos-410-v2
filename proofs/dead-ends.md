@@ -18,6 +18,8 @@ The current proof chain (ratio → ∞ ⟹ eventually ratio ≥ C ⟹ geometric 
 
 **Conclusion:** No Lean skeleton using only lim sup σ(aₖ)/aₖ = ∞ can prove the theorem. The full limit is necessary for the current proof structure, and no alternative structure has been found that avoids it.
 
+**Update (2026-02-08):** Another attempt (ratio-divergence-energy-v2.md) used an energy function E(m) = log(σ(m)/m) and tried to show recovery from low-ratio configurations. While it rigorously proved R_k ≥ 2 eventually and showed one-step recovery from R_k = 2, it could not establish bounded recovery time for arbitrary thresholds L > 2. The proof explicitly admitted it only achieves lim sup, not lim, falling into this same dead end.
+
 ---
 
 ## Dead End 2: ω(aₖ) → ∞ via Persistence (3 attempts, rejected)
@@ -64,3 +66,16 @@ For the specific orbit, we expect small primes (2, 3, 7, ...) to appear frequent
 **Approach:** Assume liminf σ(aₖ)/aₖ < ∞, extract a bounded-ratio subsequence, show these terms must be eventually S-smooth for some finite S, contradicting the smooth escape theorem.
 
 **Why it fails:** The bounded-ratio constraint (σ(m)/m ≤ C implies ω(m) ≤ D√(log m)) constrains the structure of each *individual* term but NOT which primes appear *across* the subsequence. Different low-ratio steps can have entirely different (finite) sets of primes. Smooth escape and liminf R_k < ∞ are COMPATIBLE: the orbit can oscillate between simple (low-ratio, few primes) and complex (high-ratio, many primes) configurations. The "finiteness of D-element prime sets meeting the orbit" argument fails because the number of possible D-element subsets grows without bound as the terms grow.
+
+---
+
+## Dead End 7: Energy Monotonicity via Recovery Dynamics (rejected 2026-02-08)
+
+**Tried:** Define energy E(m) = log(σ(m)/m). Show that low-ratio configurations (R_k ≤ L) lead to structural recovery (R_{k+j} > L within bounded steps). Combined with lim sup R_k = ∞, this would force lim R_k = ∞.
+
+**Failed because:** While the approach rigorously establishes:
+- R_k ≥ 2 eventually (with at most one exception)
+- One-step recovery: R_k ≤ 2 ⟹ R_{k+1} > 2
+- Structural characterization: low ratio ⟹ odd part is prime power
+
+It cannot prove **bounded recovery time** for arbitrary thresholds L > 2. The gap: when R_k ≤ L, the odd part m_k must be a prime power, and σ(m_k) typically has more prime factors, suggesting eventual recovery. But "typically" is not "always" (Mersenne primes exist), and more prime factors doesn't guarantee higher ratio if the new primes are large. The proof requires Conjecture 6.1 (bounded recovery time) which remains unproven. Without this, the proof only establishes lim sup = ∞, falling into Dead End #1.
