@@ -1,9 +1,93 @@
 # Divergence of the Abundancy Ratio (Full Limit)
 
-**Status:** Draft ✏️
+**Status:** Rejected ❌
 **Statement:** For any $n \geq 2$, let $a_k = \sigma^{[k]}(n)$. Then $\displaystyle\lim_{k \to \infty} \frac{\sigma(a_k)}{a_k} = +\infty$.
 **Dependencies:** sigma-lower-bounds.md (Verified ✅), sigma-parity.md (Verified ✅)
 **Confidence:** High
+**Reviewed by:** erdos410v2-8sp
+
+---
+
+## Review Notes (Rejection)
+
+**Verdict:** REJECTED — This proof establishes $\limsup R_k = \infty$ but **not** the full limit $\lim R_k = \infty$.
+
+### Critical Gap: Lemma 5.1 Case B
+
+**Lemma 5.1** claims: Under bounded $R_k \leq C$, some prime $p_0 \leq P_0(C)$ has $\limsup_{k \to \infty} v_{p_0}(a_k) = \infty$.
+
+**Case B** attempts to prove that if $p^*_k$ (the prime achieving maximum exponent) satisfies $p^*_k \to \infty$, we get a contradiction.
+
+**Issue:** The argument about "unsustainable flux" is not rigorous:
+- The Zsygmondy primitive primes $q_k$ enter at step $k+1$
+- But the proof doesn't establish that they **persist** in the sequence
+- Primes can enter and exit; the total count of distinct primes ever seen $|S_K|$ can grow to infinity without violating $\omega(a_k) \leq D_C\sqrt{\log a_k}$ at each individual step
+- The claim "the dynamics become unsustainable" lacks quantitative bounds on entry/exit rates
+
+**What Case B actually needs to prove:** For any sequence with $\omega(a_k) = O(\sqrt{\log a_k})$ and $p^*_k \to \infty$, show that the primitive divisor influx rate $\sum_{j \leq k} 1$ (number of new primes) exceeds some function of the capacity $\omega(a_j)$ summed over $j \leq k$. This requires a rigorous accounting argument, not heuristics about "flux."
+
+### The Logical Gap in Lemma 5.2
+
+**Lemma 5.2** claims: For any $L > 1$, ∃ $K$ such that $R_k > L$ for **all** $k \geq K$ (the full limit).
+
+**The proof's logic:**
+1. By Lemma 5.1, some small prime $p_0 \leq P_0(C)$ has $\limsup v_{p_0}(a_k) = \infty$
+2. When $v_{p_0}(a_k)$ is large, $R_k$ is large (on that subsequence)
+3. Therefore $R_k$ is eventually always large
+
+**The gap:** Steps 1-2 only show $R_k$ is large **infinitely often** (on the subsequence where $v_{p_0}$ is large), not that $R_k$ is large **eventually always**.
+
+**What the proof actually establishes:**
+- **Proved:** For any $L$, the set $\{k : R_k > L\}$ is infinite (i.e., $\limsup R_k = \infty$)
+- **Not proved:** For any $L$, the set $\{k : R_k \leq L\}$ is finite (i.e., $\liminf R_k = \infty$)
+
+The difference: Lemma 5.1 says some prime $p_0$ has large exponent infinitely often, not that at every large step some prime $p \leq P_0(C)$ has large exponent.
+
+### The "Mass Budget" Argument
+
+The proof attempts to bridge this gap with the "mass budget" argument:
+- Average mass per prime: $\log a_k / \omega(a_k) \to \infty$
+- Therefore at each step, **some** prime has large exponent
+
+**This part is correct.** But then the proof says:
+
+> "By Lemma 5.1 (Case B contradiction), the prime $p$ achieving large exponent at step $k$ satisfies $p \leq P_0(C)$ for all large $k$."
+
+**This is the error:** Lemma 5.1 does NOT prove that at every large step $k$, the prime with maximum exponent is $\leq P_0(C)$. It only proves that **some** prime $\leq P_0(C)$ has large exponent **infinitely often**.
+
+Even if Case B's contradiction were rigorously proved, it would only show that the subsequence where $p^*_k > P_0(C)$ has density zero (or is finite). But there could still be infinitely many steps where all small primes have small exponents and some large prime has moderate exponent.
+
+### The Bounce-Back Mechanism
+
+**Question 1:** If $R_k$ drops to level $L$, does the proof show $R_{k+c} > L$ for bounded $c$?  
+**Answer:** No. Lemma 3.2 is titled "Bounce-Back" but doesn't prove a bounded-step bounce. It only proves eventual permanence above thresholds 3/2 and 2, without giving bounds on the waiting time.
+
+**Question 2:** Is the bounce strictly above $L$?  
+**Answer:** The proof shows $R_k > L$ eventually, but doesn't quantify "how much above" or "how quickly."
+
+**Question 3:** Does the chaining give $\liminf R_k = \infty$?  
+**Answer:** No. The cascade argument in Lemma 5.2 Step 5 is circular—it assumes that large exponents of small primes become "most of the sequence" without proving this.
+
+### What Would Fix This Proof
+
+To establish the full limit, the proof needs **one** of:
+
+**Option A (Strengthen Lemma 5.1):** Prove that for all $k$ sufficiently large, $\arg\max_{p | a_k} v_p(a_k) \leq P_0(C)$. This requires a much stronger version of Case B with rigorous flux accounting.
+
+**Option B (Bounded recurrence):** Prove that if $R_k \leq L$ for some $k$, then $R_{k+W} > L$ for bounded $W = W(L)$. This is the true "bounce-back" lemma. It would require analyzing the $\sigma$-dynamics to show that low-ratio configurations are unstable with bounded escape time.
+
+**Option C (Density argument):** Prove that the set $\{k : R_k \leq L\}$ has density zero (or is eventually empty). This requires showing that the "bad steps" (where all small primes have small exponents) become increasingly rare.
+
+### Recommendation
+
+**REJECT** and escalate to human. The proof makes significant structural progress but does not rigorously establish the full limit. It proves $\limsup R_k = \infty$, which is **not sufficient** for the Lean sorry `Tendsto ... atTop atTop`.
+
+**The core issue:** Distinguishing between "infinitely often" (lim sup) and "eventually always" (full limit) requires a dynamical analysis that is missing from this proof. The structural constraints (bounded $\omega$, growing mass) are necessary but not sufficient.
+
+This is a hard problem and may require either:
+1. Much deeper analysis of the $\sigma$-dynamics (recurrence times, mixing properties)
+2. A different approach entirely (perhaps via the energy function mentioned in the filename but not developed in the proof)
+3. Human insight to find the correct bridging argument
 
 ---
 

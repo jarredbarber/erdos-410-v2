@@ -3961,3 +3961,113 @@ $ cd /home/jarred/code/erdos-410-v2 && git diff --stat proofs/ratio-divergence-e
 When a small prime p has large exponent e, f(p,e) → p/(p-1). Combined with 2 always present (f(2,v₂) ≥ 3/2), R_k ≥ (3/2)·(p/(p-1)) for ALL large k. Since p is bounded by P₀(C) and C was arbitrary, R_k eventually exceeds any threshold.
 
 The proof avoids: (1) the persistence trap (no claim that specific primes persist), (2) assuming ω(a_k) → ∞, and (3) requiring simultaneous prime presence (alignment trap). The growth comes from the mass-budget constraint forcing some small prime to carry large exponent at each step.
+[2026-02-08T05:24:28.164Z] ✅ Successfully merged task/erdos410v2-fio into main
+[2026-02-08T05:24:28.164Z] 🗑️  Deleting branch task/erdos410v2-fio...
+[2026-02-08T05:24:28.172Z] ✓ Deleted local branch task/erdos410v2-fio
+[2026-02-08T05:24:28.178Z] ℹ️  No remote configured, skipping push.
+[2026-02-08T05:24:29.182Z] 
+================================================================================
+[2026-02-08T05:24:29.182Z] 📌 Processing task: erdos410v2-8sp - Review strengthened ratio-divergence proof (lim = ∞)
+[2026-02-08T05:24:29.182Z]    Role: verify | Priority: 1 | Size: medium
+[2026-02-08T05:24:29.182Z] ================================================================================
+
+[2026-02-08T05:24:29.187Z] ✓ Claimed task erdos410v2-8sp
+
+[2026-02-08T05:24:29.187Z] 🤖 Using agent: verify with models: anthropic/claude-sonnet-4-5:medium, google-antigravity/gemini-3-flash:medium
+
+[2026-02-08T05:24:29.187Z] 💭 Starting pi agent session with model: anthropic/claude-sonnet-4-5:medium...
+[2026-02-08T05:24:29.211Z] 📸 Capturing file state before agent execution...
+[2026-02-08T05:24:29.226Z] ✓ Captured state: 61 tracked, 1 untracked files
+
+[2026-02-08T05:24:29.226Z] 🌿 Creating branch: task/erdos410v2-8sp
+[2026-02-08T05:24:29.234Z] ✓ Working on branch task/erdos410v2-8sp
+
+[2026-02-08T05:24:37.137Z] 
+$ cd /home/jarred/code/erdos-410-v2 && tm update erdos410v2-8sp --status "Reading revised ratio-divergence proof file"
+[2026-02-08T05:24:40.825Z] 
+$ cd /home/jarred/code/erdos-410-v2 && ls -la proofs/
+[2026-02-08T05:24:45.526Z] 
+🛠️  Executing tool: read...
+[2026-02-08T05:26:00.037Z] 
+$ cd /home/jarred/code/erdos-410-v2 && tm update erdos410v2-8sp --status "Analyzing proof structure and key lemmas"
+[2026-02-08T05:26:05.605Z] 
+$ cd /home/jarred/code/erdos-410-v2 && tm update erdos410v2-8sp --status "Checking Lemma 5.1 Case B rigor - the critical step"
+[2026-02-08T05:26:28.084Z] 
+$ cd /home/jarred/code/erdos-410-v2 && tm update erdos410v2-8sp --status "Writing detailed review - found critical gap in proof"
+[2026-02-08T05:26:34.328Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T05:27:11.824Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T05:27:15.698Z] 
+$ cd /home/jarred/code/erdos-410-v2 && tm update erdos410v2-8sp --status "completed"
+[2026-02-08T05:27:42.110Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T05:27:42.112Z] 
+📊 Task erdos410v2-8sp completed:
+[2026-02-08T05:27:42.111Z] 📄 Log saved to .tm/logs/worker-erdos410v2-8sp.md
+[2026-02-08T05:27:42.112Z]    Summary: REJECTED — proofs/ratio-divergence-energy.md proves only lim sup R_k = ∞, not the required full limit
+[2026-02-08T05:27:42.112Z]    Details: ## Critical Finding: Proof Establishes Lim Sup, Not Full Limit
+
+The proof claims to establish lim R_k = ∞ but has a critical gap between 'infinitely often' and 'eventually always.'
+
+### Main Issues:
+
+**1. Lemma 5.1 Case B (Non-Rigorous)**
+- Claims: If prime p*_k achieving max exponent satisfies p*_k → ∞, we get contradiction
+- The 'unsustainable flux' argument about Zsygmondy primes is heuristic, not rigorous
+- Primes can enter and exit; proof doesn't quantify entry/exit rates
+- Missing: rigorous accounting showing |S_K| growth incompatible with bounded ω(a_k)
+
+**2. Lemma 5.2 Logical Gap**
+- What's proved: Some small prime p_0 has large exponent INFINITELY OFTEN
+- What's needed: At EVERY large step k, SOME prime ≤ P_0(C) has large exponent
+- These are different statements!
+- Lemma 5.1 gives: ∃ p_0 such that limsup v_{p_0}(a_k) = ∞
+- Proof incorrectly claims: ∀ large k, argmax_p v_p(a_k) ≤ P_0(C)
+
+**3. No Bounded-Step Bounce-Back**
+- Lemma 3.2 titled 'Bounce-Back' but doesn't prove: R_k ≤ L ⟹ R_{k+W} > L for bounded W
+- Only shows eventual permanence above thresholds, without time bounds
+- The 'cascade argument' is circular
+
+**4. Mass Budget Argument Incomplete**
+- Correctly shows: at each step, SOME prime has large exponent
+- Incorrectly concludes: this prime is ≤ P_0(C)
+- Gap: could be different primes at different steps, some large
+
+### What This Proves vs. What's Needed:
+
+**Proved:** For any L, {k : R_k > L} is infinite ⟹ **limsup R_k = ∞**
+
+**Needed:** For any L, {k : R_k ≤ L} is finite ⟹ **lim R_k = ∞**
+
+### The Three Questions:
+
+1. **If R_k drops to level L, does proof show R_{k+c} > L for bounded c?** NO
+2. **Is bounce strictly above L?** Not quantified
+3. **Does chaining give lim inf = ∞?** NO — chain only shows infinitely many large values
+
+### Fixes Required:
+
+To prove the full limit, need ONE of:
+- **Option A:** Rigorously prove Case B (all large steps have max exp on small prime)
+- **Option B:** True bounded bounce-back (R_k ≤ L ⟹ R_{k+W} > L, W bounded)
+- **Option C:** Density argument (bad steps become rare)
+
+### Structural Positives:
+
+- Avoids ω → ∞ trap (works in bounded-ω regime) ✓
+- Avoids prime persistence trap (doesn't claim specific primes persist) ✓
+- Correct structural constraints (omega bound, dichotomy, exponent growth) ✓
+- Good intuition about mass-budget forcing growth ✓
+
+### Recommendation:
+
+**REJECT and escalate to human.** This is the same fundamental issue as previous attempts: distinguishing lim sup from lim requires dynamical analysis (recurrence times, escape rates) that's missing. The problem may require:
+1. Much deeper σ-dynamics analysis
+2. Different approach (e.g., energy function in filename but not developed)
+3. Human mathematical insight
+
+The Lean sorry requires `Tendsto ... atTop atTop` (full limit). This proof does NOT establish it.
