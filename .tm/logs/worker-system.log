@@ -1207,3 +1207,352 @@ $ tm close erdos410v2-vt2
 - Main theorem (finite total odd terms) requires Conjecture A
 
 The proof is now mathematically honest about what is proven vs conjectured, with no empirical/probabilistic reasoning used as proof.
+[2026-02-08T00:15:58.655Z] ✅ Successfully merged task/erdos410v2-vt2 into main
+[2026-02-08T00:15:58.655Z] 🗑️  Deleting branch task/erdos410v2-vt2...
+[2026-02-08T00:15:58.662Z] ✓ Deleted local branch task/erdos410v2-vt2
+[2026-02-08T00:15:58.666Z] ℹ️  No remote configured, skipping push.
+[2026-02-08T00:15:59.669Z] 
+================================================================================
+[2026-02-08T00:15:59.669Z]    Role: formalize | Priority: 1 | Size: medium
+[2026-02-08T00:15:59.669Z] 📌 Processing task: erdos410v2-zrh - Close sigma_one_even_ge sorry at Helpers.lean:40
+[2026-02-08T00:15:59.669Z] ================================================================================
+
+[2026-02-08T00:15:59.672Z] ✓ Claimed task erdos410v2-zrh
+
+[2026-02-08T00:15:59.672Z] 🤖 Using agent: formalize with models: anthropic/claude-opus-4-6:high, anthropic/claude-opus-4-5:high, google-antigravity/gemini-3-pro:high
+
+[2026-02-08T00:15:59.672Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-6:high...
+[2026-02-08T00:15:59.691Z] 📸 Capturing file state before agent execution...
+[2026-02-08T00:15:59.702Z] ✓ Captured state: 34 tracked, 1 untracked files
+
+[2026-02-08T00:15:59.702Z] 🌿 Creating branch: task/erdos410v2-zrh
+[2026-02-08T00:15:59.708Z] ✓ Working on branch task/erdos410v2-zrh
+
+[2026-02-08T00:16:03.906Z] 
+$ cd /home/jarred/code/erdos-410-v2 && tm update erdos410v2-zrh --status "Reading source files and understanding context"
+[2026-02-08T00:16:05.136Z] 
+🛠️  Executing tool: read...
+[2026-02-08T00:16:05.137Z] 
+🛠️  Executing tool: read...
+[2026-02-08T00:16:07.493Z] 
+$ cd /home/jarred/code/erdos-410-v2 && find . -name "*.lean" | head -20
+[2026-02-08T00:16:08.805Z] 
+🛠️  Executing tool: read...
+[2026-02-08T00:16:38.997Z] 
+$ cd /home/jarred/code/erdos-410-v2 && tm update erdos410v2-zrh --status "Exploring Mathlib API for divisor membership and Finset sum lemmas"
+[2026-02-08T00:16:45.592Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/test_api.lean << 'EOF'
+import Mathlib.NumberTheory.ArithmeticFunction.Defs
+import Mathlib.NumberTheory.ArithmeticFunction.Misc
+
+open ArithmeticFunction
+
+-- Check what sigma_one_apply gives us
+#check @sigma_one_apply
+#check @Nat.mem_divisors
+#check @Nat.one_mem_divisors
+#check @Nat.dvd_div_iff_mul_dvd
+#check @Nat.div_dvd_of_dvd
+#check @Finset.sum_le_sum_of_subset
+#check @Finset.sum_pair
+
+-- Check if we can evaluate sigma for small values
+#eval ArithmeticFunction.sigma 1 2
+#eval ArithmeticFunction.sigma 1 4
+EOF
+lake env lean /tmp/test_api.lean 2>&1
+[2026-02-08T00:16:56.480Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/test_api2.lean << 'EOF'
+import Mathlib.NumberTheory.ArithmeticFunction.Defs
+import Mathlib.NumberTheory.ArithmeticFunction.Misc
+
+open ArithmeticFunction
+
+-- Three-element finset sum
+#check @Finset.sum_insert
+-- Even implies 2 | n
+#check @Even.two_dvd
+-- n/2 divides n when 2 | n
+#check @Nat.div_dvd_of_dvd
+
+-- Check Finset.insert_subset_iff
+#check @Finset.insert_subset_iff
+
+-- For omega: can it handle n / 2 facts when Even n?
+example (n : ℕ) (hn : 2 ≤ n) (heven : Even n) : n / 2 ∈ n.divisors := by
+  rw [Nat.mem_divisors]
+  exact ⟨Nat.div_dvd_of_dvd heven.two_dvd, by omega⟩
+
+-- For the three-element case, I need sum over {1, n/2, n}
+-- But n/2 is tricky with DecidableEq since it depends on n
+-- Let me check if Finset.sum for three elements works
+#check @Finset.sum_cons
+EOF
+lake env lean /tmp/test_api2.lean 2>&1
+[2026-02-08T00:17:10.198Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/test_approach.lean << 'EOF'
+import Mathlib.NumberTheory.ArithmeticFunction.Defs
+import Mathlib.NumberTheory.ArithmeticFunction.Misc
+
+open ArithmeticFunction
+
+-- Let's try the case split approach: n = 2 special case, then n ≥ 4
+-- For n = 2, we can compute directly
+-- For n ≥ 4, use {1, n/2, n} as three distinct divisors
+
+-- First test: can we handle n = 2 by norm_num or native_decide?
+example : 3 * 2 ≤ 2 * sigma 1 2 := by native_decide
+
+-- Test approach for general case
+-- We need: 3 * n ≤ 2 * sigma 1 n
+-- Rewrite sigma 1 n = ∑ d ∈ n.divisors, d  
+-- Show {1, n/2, n} ⊆ n.divisors (when n ≥ 4, even)
+-- Sum {1, n/2, n} = 1 + n/2 + n
+-- 2 * (1 + n/2 + n) = 2 + n + 2n = 2 + 3n ≥ 3n ✓
+
+-- Test: does omega handle n / 2 with Even hypotheses?
+example (n : ℕ) (hn : 4 ≤ n) (heven : Even n) : 1 ≠ n / 2 := by omega
+-- Hmm, omega might not know about Even. Let me try:
+example (n : ℕ) (hn : 4 ≤ n) (h2 : 2 ∣ n) : 1 ≠ n / 2 := by omega
+example (n : ℕ) (hn : 4 ≤ n) (h2 : 2 ∣ n) : n / 2 ≠ n := by omega
+example (n : ℕ) (hn : 4 ≤ n) (h2 : 2 ∣ n) : 1 ≠ n := by omega
+-- Test sum computation
+example (n : ℕ) (h2 : 2 ∣ n) : 2 * (1 + n / 2 + n) = 2 + 3 * n := by omega
+example (n : ℕ) : 3 * n ≤ 2 + 3 * n := by omega
+EOF
+lake env lean /tmp/test_approach.lean 2>&1
+[2026-02-08T00:17:15.884Z] 
+$ cd /home/jarred/code/erdos-410-v2 && tm update erdos410v2-zrh --status "Writing proof: case split n=2 (native_decide) + n≥4 (three divisors)"
+[2026-02-08T00:17:31.581Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/test_full.lean << 'EOF'
+import Mathlib.NumberTheory.ArithmeticFunction.Defs
+import Mathlib.NumberTheory.ArithmeticFunction.Misc
+
+open ArithmeticFunction
+
+lemma sigma_one_even_ge (n : ℕ) (hn : 2 ≤ n) (heven : Even n) :
+    3 * n ≤ 2 * sigma 1 n := by
+  -- Case split: n = 2 vs n ≥ 4
+  by_cases hn2 : n = 2
+  · subst hn2; native_decide
+  · -- n ≥ 4 (since n ≥ 2, n is even, n ≠ 2, so n ≥ 4)
+    have hn4 : 4 ≤ n := by omega
+    have h2dvd : 2 ∣ n := heven.two_dvd
+    rw [sigma_one_apply]
+    -- The three divisors: 1, n/2, n
+    have h1_mem : 1 ∈ n.divisors := Nat.one_mem_divisors.mpr (by omega)
+    have hndiv2_mem : n / 2 ∈ n.divisors :=
+      Nat.mem_divisors.mpr ⟨Nat.div_dvd_of_dvd h2dvd, by omega⟩
+    have hn_mem : n ∈ n.divisors := Nat.mem_divisors.mpr ⟨dvd_refl n, by omega⟩
+    -- They are pairwise distinct
+    have h1_ne_ndiv2 : (1 : ℕ) ≠ n / 2 := by omega
+    have hndiv2_ne_n : n / 2 ≠ n := by omega
+    have h1_ne_n : (1 : ℕ) ≠ n := by omega
+    -- {1, n/2, n} ⊆ n.divisors
+    have hsub : ({1, n / 2, n} : Finset ℕ) ⊆ n.divisors := by
+      rw [Finset.insert_subset_iff]
+      exact ⟨h1_mem, by rw [Finset.insert_subset_iff]; exact ⟨hndiv2_mem, Finset.singleton_subset_iff.mpr hn_mem⟩⟩
+    -- Sum over {1, n/2, n} = 1 + n/2 + n
+    have hsum : ∑ d ∈ ({1, n / 2, n} : Finset ℕ), (d : ℕ) = 1 + n / 2 + n := by
+      rw [Finset.sum_insert (by simp [h1_ne_ndiv2, h1_ne_n]),
+          Finset.sum_insert (by simp [hndiv2_ne_n])]
+      simp; ring
+    -- Lower bound
+    have hle : ∑ d ∈ ({1, n / 2, n} : Finset ℕ), (d : ℕ) ≤ ∑ d ∈ n.divisors, d :=
+      Finset.sum_le_sum_of_subset hsub
+    -- 3 * n ≤ 2 * (1 + n/2 + n) = 2 + 3n
+    omega
+EOF
+lake env lean /tmp/test_full.lean 2>&1
+[2026-02-08T00:17:40.846Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/test_even.lean << 'EOF'
+import Mathlib.NumberTheory.ArithmeticFunction.Defs
+import Mathlib.NumberTheory.ArithmeticFunction.Misc
+
+-- Can omega handle Even?
+-- We need to extract from Even n that ∃ k, n = 2 * k
+example (n : ℕ) (hn : 2 ≤ n) (heven : Even n) (hn2 : n ≠ 2) : 4 ≤ n := by
+  obtain ⟨k, hk⟩ := heven
+  omega
+EOF
+lake env lean /tmp/test_even.lean 2>&1
+[2026-02-08T00:17:50.319Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/test_omega.lean << 'EOF'
+import Mathlib.NumberTheory.ArithmeticFunction.Defs
+import Mathlib.NumberTheory.ArithmeticFunction.Misc
+
+-- Test omega with n/2 when we have ⟨k, hk⟩ from Even n
+example (n k : ℕ) (hk : n = k + k) (hn4 : 4 ≤ n) : (1 : ℕ) ≠ n / 2 := by omega
+example (n k : ℕ) (hk : n = k + k) (hn4 : 4 ≤ n) : n / 2 ≠ n := by omega
+-- And the final omega step:
+example (n k : ℕ) (hk : n = k + k) (hn4 : 4 ≤ n)
+    (hle : 1 + n / 2 + n ≤ s) : 3 * n ≤ 2 * s := by omega
+EOF
+lake env lean /tmp/test_omega.lean 2>&1
+[2026-02-08T00:18:03.752Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/test_full2.lean << 'EOF'
+import Mathlib.NumberTheory.ArithmeticFunction.Defs
+import Mathlib.NumberTheory.ArithmeticFunction.Misc
+
+open ArithmeticFunction
+
+lemma sigma_one_even_ge (n : ℕ) (hn : 2 ≤ n) (heven : Even n) :
+    3 * n ≤ 2 * sigma 1 n := by
+  -- Case split: n = 2 vs n ≥ 4
+  by_cases hn2 : n = 2
+  · subst hn2; native_decide
+  · -- n ≥ 4 (since n ≥ 2, n is even, n ≠ 2)
+    obtain ⟨k, hk⟩ := heven
+    have hn4 : 4 ≤ n := by omega
+    rw [sigma_one_apply]
+    -- The three divisors: 1, n/2, n
+    have h1_mem : 1 ∈ n.divisors := Nat.one_mem_divisors.mpr (by omega)
+    have hndiv2_mem : n / 2 ∈ n.divisors :=
+      Nat.mem_divisors.mpr ⟨Nat.div_dvd_of_dvd heven.two_dvd, by omega⟩
+    have hn_mem : n ∈ n.divisors := Nat.mem_divisors.mpr ⟨dvd_refl n, by omega⟩
+    -- They are pairwise distinct
+    have h1_ne_ndiv2 : (1 : ℕ) ≠ n / 2 := by omega
+    have hndiv2_ne_n : n / 2 ≠ n := by omega
+    have h1_ne_n : (1 : ℕ) ≠ n := by omega
+    -- {1, n/2, n} ⊆ n.divisors
+    have hsub : ({1, n / 2, n} : Finset ℕ) ⊆ n.divisors := by
+      rw [Finset.insert_subset_iff]
+      exact ⟨h1_mem, by rw [Finset.insert_subset_iff]; exact ⟨hndiv2_mem, Finset.singleton_subset_iff.mpr hn_mem⟩⟩
+    -- Sum over {1, n/2, n} ≤ sum over divisors
+    have hle : ∑ d ∈ ({1, n / 2, n} : Finset ℕ), (d : ℕ) ≤ ∑ d ∈ n.divisors, d :=
+      Finset.sum_le_sum_of_subset hsub
+    -- Compute sum over {1, n/2, n}
+    have hnotin1 : (1 : ℕ) ∉ ({n / 2, n} : Finset ℕ) := by
+      simp only [Finset.mem_insert, Finset.mem_singleton]; omega
+    have hnotin2 : n / 2 ∉ ({n} : Finset ℕ) := by
+      simp only [Finset.mem_singleton]; omega
+    rw [Finset.sum_insert hnotin1, Finset.sum_insert hnotin2, Finset.sum_singleton] at hle
+    -- Now hle : 1 + (n/2 + n) ≤ ∑ d ∈ n.divisors, d
+    omega
+EOF
+lake env lean /tmp/test_full2.lean 2>&1
+[2026-02-08T00:18:09.950Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/test_twodvd.lean << 'EOF'
+import Mathlib.NumberTheory.ArithmeticFunction.Defs
+import Mathlib.NumberTheory.ArithmeticFunction.Misc
+
+-- Check Even.two_dvd
+example (n : ℕ) (heven : Even n) : 2 ∣ n := by exact?
+EOF
+lake env lean /tmp/test_twodvd.lean 2>&1
+[2026-02-08T00:18:23.232Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/test_full3.lean << 'EOF'
+import Mathlib.NumberTheory.ArithmeticFunction.Defs
+import Mathlib.NumberTheory.ArithmeticFunction.Misc
+
+open ArithmeticFunction
+
+lemma sigma_one_even_ge (n : ℕ) (hn : 2 ≤ n) (heven : Even n) :
+    3 * n ≤ 2 * sigma 1 n := by
+  by_cases hn2 : n = 2
+  · subst hn2; native_decide
+  · obtain ⟨k, hk⟩ := heven
+    have hn4 : 4 ≤ n := by omega
+    have h2dvd : 2 ∣ n := even_iff_two_dvd.mp heven
+    rw [sigma_one_apply]
+    have h1_mem : 1 ∈ n.divisors := Nat.one_mem_divisors.mpr (by omega)
+    have hndiv2_mem : n / 2 ∈ n.divisors :=
+      Nat.mem_divisors.mpr ⟨Nat.div_dvd_of_dvd h2dvd, by omega⟩
+    have hn_mem : n ∈ n.divisors := Nat.mem_divisors.mpr ⟨dvd_refl n, by omega⟩
+    have hsub : ({1, n / 2, n} : Finset ℕ) ⊆ n.divisors := by
+      rw [Finset.insert_subset_iff]
+      exact ⟨h1_mem, by rw [Finset.insert_subset_iff]; exact ⟨hndiv2_mem, Finset.singleton_subset_iff.mpr hn_mem⟩⟩
+    have hle : ∑ d ∈ ({1, n / 2, n} : Finset ℕ), (d : ℕ) ≤ ∑ d ∈ n.divisors, d :=
+      Finset.sum_le_sum_of_subset hsub
+    have hnotin1 : (1 : ℕ) ∉ ({n / 2, n} : Finset ℕ) := by
+      simp only [Finset.mem_insert, Finset.mem_singleton]; omega
+    have hnotin2 : n / 2 ∉ ({n} : Finset ℕ) := by
+      simp only [Finset.mem_singleton]; omega
+    rw [Finset.sum_insert hnotin1, Finset.sum_insert hnotin2, Finset.sum_singleton] at hle
+    omega
+EOF
+lake env lean /tmp/test_full3.lean 2>&1
+[2026-02-08T00:18:34.906Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/test_full4.lean << 'EOF'
+import Mathlib.NumberTheory.ArithmeticFunction.Defs
+import Mathlib.NumberTheory.ArithmeticFunction.Misc
+
+open ArithmeticFunction
+
+lemma sigma_one_even_ge (n : ℕ) (hn : 2 ≤ n) (heven : Even n) :
+    3 * n ≤ 2 * sigma 1 n := by
+  by_cases hn2 : n = 2
+  · subst hn2; native_decide
+  · have h2dvd : 2 ∣ n := even_iff_two_dvd.mp heven
+    obtain ⟨k, hk⟩ := heven
+    have hn4 : 4 ≤ n := by omega
+    rw [sigma_one_apply]
+    have h1_mem : 1 ∈ n.divisors := Nat.one_mem_divisors.mpr (by omega)
+    have hndiv2_mem : n / 2 ∈ n.divisors :=
+      Nat.mem_divisors.mpr ⟨Nat.div_dvd_of_dvd h2dvd, by omega⟩
+    have hn_mem : n ∈ n.divisors := Nat.mem_divisors.mpr ⟨dvd_refl n, by omega⟩
+    have hsub : ({1, n / 2, n} : Finset ℕ) ⊆ n.divisors := by
+      rw [Finset.insert_subset_iff]
+      exact ⟨h1_mem, by rw [Finset.insert_subset_iff]; exact ⟨hndiv2_mem, Finset.singleton_subset_iff.mpr hn_mem⟩⟩
+    have hle : ∑ d ∈ ({1, n / 2, n} : Finset ℕ), (d : ℕ) ≤ ∑ d ∈ n.divisors, d :=
+      Finset.sum_le_sum_of_subset hsub
+    have hnotin1 : (1 : ℕ) ∉ ({n / 2, n} : Finset ℕ) := by
+      simp only [Finset.mem_insert, Finset.mem_singleton]; omega
+    have hnotin2 : n / 2 ∉ ({n} : Finset ℕ) := by
+      simp only [Finset.mem_singleton]; omega
+    rw [Finset.sum_insert hnotin1, Finset.sum_insert hnotin2, Finset.sum_singleton] at hle
+    omega
+EOF
+lake env lean /tmp/test_full4.lean 2>&1
+[2026-02-08T00:18:42.123Z] 
+$ cd /home/jarred/code/erdos-410-v2 && tm update erdos410v2-zrh --status "Proof verified in isolation, applying to Helpers.lean"
+[2026-02-08T00:18:52.225Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T00:18:54.982Z] 
+$ cd /home/jarred/code/erdos-410-v2 && lake build 2>&1
+[2026-02-08T00:19:03.139Z] 
+🛠️  Executing tool: read...
+[2026-02-08T00:19:15.448Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T00:19:18.356Z] 
+$ cd /home/jarred/code/erdos-410-v2 && lake build 2>&1
+[2026-02-08T00:19:32.916Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/test_decide.lean << 'EOF'
+import Mathlib.NumberTheory.ArithmeticFunction.Defs
+import Mathlib.NumberTheory.ArithmeticFunction.Misc
+
+open ArithmeticFunction
+
+-- Can we avoid native_decide for n = 2?
+example : 3 * 2 ≤ 2 * sigma 1 2 := by decide
+EOF
+lake env lean /tmp/test_decide.lean 2>&1
+[2026-02-08T00:19:38.498Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T00:19:40.661Z] 
+$ cd /home/jarred/code/erdos-410-v2 && lake build 2>&1
+[2026-02-08T00:19:53.030Z] 
+🛠️  Executing tool: read...
+[2026-02-08T00:20:01.136Z] 
+$ cd /home/jarred/code/erdos-410-v2 && git add Erdos/Helpers.lean && git commit -m "Close sigma_one_even_ge sorry: for even n ≥ 2, 3n ≤ 2σ₁(n)
+
+Proof approach (following proofs/sigma-lower-bounds.md, Theorem 3.1):
+- n = 2: by decide (σ(2) = 3, 6 ≤ 6)
+- n ≥ 4 even: extract {1, n/2, n} as three distinct divisors,
+  show their sum 1 + n/2 + n gives 2*(1 + n/2 + n) = 2 + 3n ≥ 3n."
+[2026-02-08T00:20:04.482Z] 
+$ cd /home/jarred/code/erdos-410-v2 && tm update erdos410v2-zrh --status "Completed: sorry closed, lake build succeeds, committed"
+[2026-02-08T00:20:11.901Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T00:20:11.902Z] 📄 Log saved to .tm/logs/worker-erdos410v2-zrh.md
+[2026-02-08T00:20:11.902Z] 
+📊 Task erdos410v2-zrh completed:
+[2026-02-08T00:20:11.902Z]    Summary: Closed sorry in sigma_one_even_ge. lake build succeeds.
+[2026-02-08T00:20:11.902Z]    Details: Proof approach following proofs/sigma-lower-bounds.md Theorem 3.1:
+
+- **n = 2**: Closed by `decide` (σ(2) = 3, so 6 ≤ 6).
+- **n ≥ 4 even**: Extract three distinct divisors {1, n/2, n} from n.divisors. Their sum is 1 + n/2 + n. Then 2 * (1 + n/2 + n) = 2 + 3n ≥ 3n, closed by `omega`.
+
+Key steps: `sigma_one_apply` to unfold σ₁, `Nat.div_dvd_of_dvd` for n/2 ∣ n, `Finset.sum_le_sum_of_subset` to bound the full divisor sum from below, `Finset.sum_insert` to compute the three-element sum. No new sorry holes introduced. Committed as 4852ae5.

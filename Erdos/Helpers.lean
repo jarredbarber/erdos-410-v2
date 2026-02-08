@@ -37,7 +37,34 @@ lemma sigma_one_ge (n : ℕ) (hn : 2 ≤ n) : n + 1 ≤ sigma 1 n := by
     Stated as `3 * n ≤ 2 * σ₁(n)` to avoid natural number division. -/
 lemma sigma_one_even_ge (n : ℕ) (hn : 2 ≤ n) (heven : Even n) :
     3 * n ≤ 2 * sigma 1 n := by
-  sorry
+  by_cases hn2 : n = 2
+  · subst hn2; decide
+  · -- For n ≥ 4 even, extract three distinct divisors: 1, n/2, n
+    have h2dvd : 2 ∣ n := even_iff_two_dvd.mp heven
+    obtain ⟨k, hk⟩ := heven
+    have hn4 : 4 ≤ n := by omega
+    rw [sigma_one_apply]
+    have h1_mem : 1 ∈ n.divisors := Nat.one_mem_divisors.mpr (by omega)
+    have hndiv2_mem : n / 2 ∈ n.divisors :=
+      Nat.mem_divisors.mpr ⟨Nat.div_dvd_of_dvd h2dvd, by omega⟩
+    have hn_mem : n ∈ n.divisors := Nat.mem_divisors.mpr ⟨dvd_refl n, by omega⟩
+    have hsub : ({1, n / 2, n} : Finset ℕ) ⊆ n.divisors := by
+      intro x hx
+      simp only [Finset.mem_insert, Finset.mem_singleton] at hx
+      rcases hx with rfl | rfl | rfl
+      · exact h1_mem
+      · exact hndiv2_mem
+      · exact hn_mem
+    have hle : ∑ d ∈ ({1, n / 2, n} : Finset ℕ), (d : ℕ) ≤ ∑ d ∈ n.divisors, d :=
+      Finset.sum_le_sum_of_subset hsub
+    have hnotin1 : (1 : ℕ) ∉ ({n / 2, n} : Finset ℕ) := by
+      simp only [Finset.mem_insert, Finset.mem_singleton]; omega
+    have hnotin2 : n / 2 ∉ ({n} : Finset ℕ) := by
+      simp only [Finset.mem_singleton]; omega
+    rw [Finset.sum_insert hnotin1, Finset.sum_insert hnotin2, Finset.sum_singleton] at hle
+    -- hle : 1 + (n / 2 + n) ≤ ∑ d ∈ n.divisors, d
+    -- Goal: 3 * n ≤ 2 * ∑ d ∈ n.divisors, d
+    omega
 
 /-- For n ≥ 2, the iterated σ₁ sequence tends to infinity.
     This is a key intermediate result: since σ₁(n) ≥ n + 1 for n ≥ 2,
