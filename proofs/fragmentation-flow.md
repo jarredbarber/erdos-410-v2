@@ -1,11 +1,23 @@
 # Divergence of Abundancy Ratio via Fragmentation and Decay
 
-**Status:** Draft ✏️
+**Status:** Rejected ❌
 **Statement:** For all $n \geq 2$, $\lim_{k \to \infty} \frac{\sigma(a_k)}{a_k} = \infty$.
 **Dependencies:**
 - smooth-escape.md (Verified ✅)
 - sigma-lower-bounds.md (Verified ✅)
-**Confidence:** High
+**Confidence:** Low
+
+---
+
+## Review Notes (Rejected)
+
+**Critical Flaw in Section 5 (Accumulation):**
+The proof argues that $h(a_k) = \sum_{p|a_k} 1/p$ must diverge because new prime factors are injected (Smooth Escape) and decay to small primes. However, it fails to account for the "Concentration" effect of $2^k$.
+Specifically, the transition $a_k = 2^e \to a_{k+1} = \sigma(2^e)$ can drastically *reduce* $h(a_k)$.
+If $2^{e+1}-1$ is a Mersenne prime $M$, then $h(a_k) \approx 0.5$ (from factor 2) drops to $h(a_{k+1}) = 1/M \approx 0$.
+The proof claims $\sum_{t|\sigma(2^e)} 1/t \approx \ln 2 \approx 0.69$ on average, but this is not a lower bound. The value can be arbitrarily close to 0.
+Simulation shows $h(a_k)$ fluctuating wildly (e.g., $1.17 \to 0.83 \to 0.08$ for $n=210$), contradicting the "accumulation" hypothesis. The mass does not accumulate; it cycles between "spread out" (many small factors) and "concentrated" (few large factors).
+Without a mechanism to prevent infinite returns to the "concentrated" state (e.g., hitting Mersenne primes or products of large primes), the divergence of $h(a_k)$ is not proved.
 
 ---
 
