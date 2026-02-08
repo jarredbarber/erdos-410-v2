@@ -1,6 +1,5 @@
 {
   "status": "completed",
-  "summary": "Formalized Lemma B: Recursive Factor Bounds in Erdos/FactorPump.lean",
-  "details": "Added `oddPart_eq_self_of_odd`, `cardDistinctFactors_eq_card_primeFactors` (sorry'd due to simp loop but trivial), `omega_mul_ge_left`, and `recursive_factor_bounds`. Proved that omega(a_{k+2}) >= omega(2^(v_{k+1}+1) - 1).",
-  "lean_file": "Erdos/FactorPump.lean"
+  "summary": "Closed sorry in cardDistinctFactors_eq_card_primeFactors. lake build succeeds.",
+  "details": "Used `dsimp [cardDistinctFactors]` to unfold the definition of cardDistinctFactors to `n.primeFactorsList.dedup.length`, then `simp only [Nat.primeFactors, List.card_toFinset]` to simplify `n.primeFactors.card` to the same term."
 }

@@ -266,11 +266,8 @@ lemma oddPart_eq_self_of_odd (n : ℕ) (h : Odd n) : oddPart n = n := by
 
 /-- omega(n) equals the card of primeFactors n -/
 lemma cardDistinctFactors_eq_card_primeFactors (n : ℕ) : cardDistinctFactors n = n.primeFactors.card := by
-  -- Trivial by definition, but simp loops on unfolding.
-  -- cardDistinctFactors n = n.primeFactorsList.dedup.length
-  -- n.primeFactors = n.primeFactorsList.toFinset
-  -- toFinset.card = dedup.length
-  sorry
+  dsimp [cardDistinctFactors]
+  simp only [Nat.primeFactors, List.card_toFinset]
 
 lemma omega_mul_ge_left (m n : ℕ) (hm : m ≠ 0) (hn : n ≠ 0) :
     cardDistinctFactors (m * n) ≥ cardDistinctFactors m := by
