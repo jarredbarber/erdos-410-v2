@@ -56,3 +56,11 @@ The current proof chain (ratio → ∞ ⟹ eventually ratio ≥ C ⟹ geometric 
 **Why it fails:** Even ω(aₖ) → ∞ (full limit) does NOT imply σ(aₖ)/aₖ → ∞ unless the primes are small. If ω(aₖ) → ∞ with all extra primes very large (say > aₖ^{1/ω}), then ∏(1+1/p) converges. The product diverges only when the reciprocal sum ∑_{p|aₖ} 1/p → ∞, which requires many SMALL primes.
 
 For the specific orbit, we expect small primes (2, 3, 7, ...) to appear frequently via the Mersenne mechanism, but proving this rigorously hits the persistence/alignment trap (Dead End 2).
+
+---
+
+## Dead End 6: Bounded-Ratio Contradiction via Smooth Escape
+
+**Approach:** Assume liminf σ(aₖ)/aₖ < ∞, extract a bounded-ratio subsequence, show these terms must be eventually S-smooth for some finite S, contradicting the smooth escape theorem.
+
+**Why it fails:** The bounded-ratio constraint (σ(m)/m ≤ C implies ω(m) ≤ D√(log m)) constrains the structure of each *individual* term but NOT which primes appear *across* the subsequence. Different low-ratio steps can have entirely different (finite) sets of primes. Smooth escape and liminf R_k < ∞ are COMPATIBLE: the orbit can oscillate between simple (low-ratio, few primes) and complex (high-ratio, many primes) configurations. The "finiteness of D-element prime sets meeting the orbit" argument fails because the number of possible D-element subsets grows without bound as the terms grow.
