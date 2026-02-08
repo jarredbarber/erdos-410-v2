@@ -7872,3 +7872,116 @@ $ tm update erdos410v2-7zy --status "Completed: Rejected proofs/ratio-divergence
 📊 Task erdos410v2-7zy completed:
 [2026-02-08T21:38:59.854Z]    Summary: Rejected ❌ — proofs/ratio-divergence-full.md
 [2026-02-08T21:38:59.854Z]    Details: The proof relies on heuristic arguments about 'Population Dynamics' and an unproven claim that the sequence v_i cannot stick to primes. While intuitively appealing, it lacks rigorous justification for why the sequence cannot oscillate between low-complexity Mersenne states. Appended to proofs/dead-ends.md.
+[2026-02-08T21:38:59.862Z] ✅ Closed task erdos410v2-7zy
+
+[2026-02-08T21:38:59.928Z] 🔄 Checking git status...
+[2026-02-08T21:38:59.941Z] 📝 Committing changes...
+[2026-02-08T21:38:59.979Z] 🚀 Pushing to remote...
+[2026-02-08T21:39:01.622Z] 
+================================================================================
+[2026-02-08T21:39:01.622Z] 📌 Processing task: erdos410v2-727 - Formalize the results from proofs/omega-lower-bounds.md (Verified ✅) in a new file Erdos/Mersenne.lean.
+[2026-02-08T21:39:01.622Z]    Role: formalize | Priority: 2 
+[2026-02-08T21:39:01.622Z] ================================================================================
+
+[2026-02-08T21:39:01.629Z] ✓ Claimed task erdos410v2-727
+
+[2026-02-08T21:39:01.629Z] 🤖 Using agent: formalize with models: google-antigravity/gemini-3-pro-high:high
+
+[2026-02-08T21:39:01.629Z] 💭 Starting pi agent session with model: google-antigravity/gemini-3-pro-high:high...
+[2026-02-08T21:39:01.647Z] 📸 Capturing file state before agent execution...
+[2026-02-08T21:39:01.659Z] ✓ Captured state: 110 tracked, 1 untracked files
+
+[2026-02-08T21:39:05.547Z] 
+$ ls -F
+[2026-02-08T21:39:08.387Z] 
+$ ls proofs/
+[2026-02-08T21:39:11.031Z] 
+🛠️  Executing tool: read...
+[2026-02-08T21:39:14.950Z] 
+$ grep -r "omega" .lake/packages/mathlib/Mathlib/ | head -n 5
+grep -r "zsigmondy" .lake/packages/mathlib/Mathlib/ | head -n 5
+[2026-02-08T21:39:19.197Z] 
+$ grep -r "def omega" .lake/packages/mathlib/Mathlib/ | head -n 5
+[2026-02-08T21:39:23.290Z] 
+$ grep -r "primeFactors" .lake/packages/mathlib/Mathlib/Data/Nat/ | head -n 5
+grep -r "divisors" .lake/packages/mathlib/Mathlib/Data/Nat/ | head -n 5
+[2026-02-08T21:39:27.354Z] 
+$ grep -r "zsigmondy" .lake/packages/mathlib/Mathlib/
+[2026-02-08T21:39:30.512Z] 
+$ grep -r "Mihailescu" .lake/packages/mathlib/Mathlib/
+grep -r "Catalan" .lake/packages/mathlib/Mathlib/
+[2026-02-08T21:39:44.154Z] 
+🛠️  Executing tool: read...
+[2026-02-08T21:39:46.932Z] 
+$ ls Erdos/
+[2026-02-08T21:39:50.210Z] 
+🛠️  Executing tool: read...
+[2026-02-08T21:39:54.473Z] 
+$ ls .lake/packages/mathlib/Mathlib/NumberTheory/ArithmeticFunction/
+[2026-02-08T21:39:57.745Z] 
+🛠️  Executing tool: read...
+[2026-02-08T21:40:14.744Z] 
+🛠️  Executing tool: write...
+[2026-02-08T21:40:49.028Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T21:41:13.010Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T21:41:16.454Z] 
+🛠️  Executing tool: read...
+[2026-02-08T21:41:37.389Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T21:41:56.396Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T21:42:21.326Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T21:43:06.893Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T21:43:11.420Z] 
+$ lake build
+[2026-02-08T21:43:18.872Z] 
+$ grep -r "primeFactors_mul" .lake/packages/mathlib/Mathlib/Data/Nat/ | head -n 5
+[2026-02-08T21:43:26.188Z] 
+$ grep -r "sigma" .lake/packages/mathlib/Mathlib/NumberTheory/ArithmeticFunction/ | head -n 5
+grep -r "sigma_one" .lake/packages/mathlib/Mathlib/NumberTheory/ArithmeticFunction/ | head -n 5
+[2026-02-08T21:43:35.081Z] 
+🛠️  Executing tool: read...
+[2026-02-08T21:44:43.133Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T21:44:49.688Z] 
+$ lake build
+[2026-02-08T21:44:56.038Z] 
+🛠️  Executing tool: read...
+[2026-02-08T21:44:59.699Z] 
+$ cat Erdos/Mersenne.lean
+[2026-02-08T21:45:10.166Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T21:45:10.167Z] 📄 Log saved to .tm/logs/worker-erdos410v2-727.md
+[2026-02-08T21:45:10.167Z] 
+📊 Task erdos410v2-727 completed:
+[2026-02-08T21:45:10.167Z]    Summary: Formalized omega lower bounds and Mersenne instability in Erdos/Mersenne.lean
+[2026-02-08T21:45:10.167Z]    Details: The results from `proofs/omega-lower-bounds.md` have been formalized in `Erdos/Mersenne.lean`.
+
+The following has been achieved:
+1.  **Definitions**: Defined `omega` (number of distinct prime factors) and `tau` (number of divisors) in `Erdos410` namespace.
+2.  **Zsigmondy's Theorem**: Added `axiom zsigmondy` which states that for $n > 1$ (except $n=6$), $2^n-1$ has a primitive prime divisor. Also defined `is_primitive_divisor` carefully to handle edge cases ($n \ne 0$).
+3.  **Lower Bound**: Proved `omega_mersenne_lower_bound`: $\omega(2^n-1) \ge \tau(n) - 2$. The proof constructs an injection from the set of divisors (excluding 1 and 6) to the prime factors of $2^n-1$ using Zsigmondy's theorem.
+4.  **Mersenne Instability**: Proved `mersenne_instability`: If $a_k = 2^p - 1$ is a Mersenne prime, then within 4 steps the sequence reaches a state with $\omega \ge 2$.
+    -   **Case $p=2$**: Verified explicitly ($3 \to 4 \to 7 \to 8 \to 15$, $\omega(15)=2$).
+    -   **Case $p>2$**: Proved that $a_{k+2} = 2^{p+1}-1$ is composite and has at least two distinct prime factors because $p+1$ is even, so $2^{p+1}-1 = (2^m-1)(2^m+1)$ splits into coprime factors greater than 1.
+
+The file compiles successfully (`lake build` passed).
+
+```json
+{
+  "status": "completed",
+  "summary": "Formalized omega lower bounds and Mersenne instability in Erdos/Mersenne.lean",
+  "results": [
+    "Defined omega and tau",
+    "Axiomatized Zsigmondy's Theorem",
+    "Proved omega(2^n-1) >= tau(n) - 2",
+    "Proved mersenne_instability for p=2 and p>2"
+  ]
+}
+```
