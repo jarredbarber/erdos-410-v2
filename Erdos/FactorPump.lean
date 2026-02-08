@@ -172,7 +172,23 @@ lemma v2_sigma_odd_prime_pow (p k : ℕ) (hp : p.Prime) (hp2 : p ≠ 2) :
 
 lemma padicValNat_finset_prod {α : Type*} (s : Finset α) (f : α → ℕ) (p : ℕ) [Fact p.Prime]
     (hf : ∀ x ∈ s, f x ≠ 0) :
-    padicValNat p (∏ x ∈ s, f x) = ∑ x ∈ s, padicValNat p (f x) := sorry
+    padicValNat p (∏ x ∈ s, f x) = ∑ x ∈ s, padicValNat p (f x) := by
+  induction s using Finset.induction_on with
+  | empty =>
+    simp
+  | insert a s ha ih =>
+    rw [Finset.prod_insert ha, Finset.sum_insert ha]
+    rw [padicValNat.mul]
+    · rw [ih]
+      intro x hx
+      apply hf
+      exact Finset.mem_insert_of_mem hx
+    · apply hf
+      exact Finset.mem_insert_self a s
+    · rw [Finset.prod_ne_zero_iff]
+      intro x hx
+      apply hf
+      exact Finset.mem_insert_of_mem hx
 
 lemma sigma_prod_prime_pow_eq (n : ℕ) (hn : n ≠ 0) :
     sigma 1 n = ∏ p ∈ n.primeFactors, sigma 1 (p ^ (padicValNat p n)) := by

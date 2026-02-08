@@ -1,15 +1,14 @@
-## Heartbeat — 2026-02-08T19:57 UTC
+## Heartbeat — 2026-02-08T20:28 UTC
 
-**Metrics**: Sorry count: 1 (Basic.lean:56) + 12 (FactorPump.lean) | Verified proofs: 14 | Dead ends: 8 | Tasks: 2 open, 58 closed | Build: ✅
-**Status**: Factor Pump core (Lemma A) verified modulo sorries!
+**Metrics**: Sorry count: 1 (Basic.lean:56) + 1 (FactorPump.lean) | Verified proofs: 14 | Dead ends: 8 | Tasks: 2 open, 61 closed | Build: ✅
+**Status**: Lemma A almost done (1 sorry left). Moving to Lemma B.
 **Observations**:
-- **Task djf (Formalize)**: Succeeded! The main lemma `v2_sigma_ge_omegaOdd_oddPart` is proven in Lean, but it relies on 12 new sorries for arithmetic facts.
-- **Task fr8 (Explore)**: Produced `proofs/omega-lower-bounds.md`. Confirms that "Mersenne traps" (where $\omega=1$) are unstable and rare.
-- **Next Steps**: Clean up the 12 sorries in `Erdos/FactorPump.lean`.
-  - Group 1: Basic arithmetic (`oddPart_odd`, `geom_sum_two`, `sigma_one_two_pow`, `v2_sigma_odd`)
-  - Group 2: Multiplicative structure (`sigma_odd_part`)
-  - Group 3: Valuation of sigma powers (`v2_sigma_odd_prime_pow`)
+- **Task d4f (Formalize)**: Succeeded! Closed `v2_sigma_odd_prime_pow` and `sigma_odd_prime_pow_mod_two`.
+- **Task 0a1 (Formalize)**: Succeeded! Closed 5 standard lemmas.
+- **Remaining Sorry**: Only `padicValNat_finset_prod` remains in `Erdos/FactorPump.lean`.
+- **Next Step**: Finish Lemma A (one sorry) and start Lemma B (Factor Pump recursion).
 **Actions**:
-1. Created 3 formalize tasks to close the sorries in parallel.
+1. Created `nvb` to close the final Lemma A sorry (`padicValNat_finset_prod`).
+2. Created `c5z` to formalize Lemma B (`omega(a_{k+2}) >= ...`).
 **Watch next**:
-- Can the workers close these standard arithmetic sorries quickly?
+- Does Lemma B require any tricky divisibility facts about $2^N-1$ and $\sigma(\text{oddPart})$?
