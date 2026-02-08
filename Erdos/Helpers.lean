@@ -1,6 +1,7 @@
 import Mathlib.NumberTheory.ArithmeticFunction.Defs
 import Mathlib.NumberTheory.ArithmeticFunction.Misc
 import Mathlib.Order.Filter.AtTopBot.Defs
+import Mathlib.Order.Filter.AtTopBot.Basic
 import Mathlib.Order.Filter.Tendsto
 
 open ArithmeticFunction Filter
@@ -66,11 +67,27 @@ lemma sigma_one_even_ge (n : ℕ) (hn : 2 ≤ n) (heven : Even n) :
     -- Goal: 3 * n ≤ 2 * ∑ d ∈ n.divisors, d
     omega
 
+/-- Helper: the k-th iterate of σ₁ applied to n is at least n + k. -/
+private lemma iterate_sigma_one_ge (n : ℕ) (hn : 2 ≤ n) (k : ℕ) :
+    n + k ≤ (sigma 1)^[k] n := by
+  induction k with
+  | zero => simp [Function.iterate_zero_apply]
+  | succ k ih =>
+    rw [Function.iterate_succ_apply']
+    have hge2 : 2 ≤ (sigma 1)^[k] n := by omega
+    have := sigma_one_ge ((sigma 1)^[k] n) hge2
+    omega
+
 /-- For n ≥ 2, the iterated σ₁ sequence tends to infinity.
     This is a key intermediate result: since σ₁(n) ≥ n + 1 for n ≥ 2,
     the iterates are strictly increasing and unbounded. -/
 lemma sigma_one_iterate_tendsto_atTop (n : ℕ) (hn : 2 ≤ n) :
     Tendsto (fun k => (sigma 1)^[k] n) atTop atTop := by
-  sorry
+  rw [tendsto_atTop_atTop]
+  intro b
+  use b
+  intro a ha
+  have := iterate_sigma_one_ge n hn a
+  omega
 
 end Erdos410
