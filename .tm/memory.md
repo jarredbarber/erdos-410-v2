@@ -208,3 +208,26 @@
 - **RISK**: Even-stability proof (eventual-even-stability.md) has weak sparsity argument (Step 4). Verify agent may reject. If rejected, need targeted revision task fixing Steps 4-5 specifically.
 - **RISK**: uwa (omega-divergence) is the mathematical crux. Watch for surrender or hand-waving on Zsygmondy's theorem application.
 - Need to create formalize tasks for sigma_one_even_ge and sigma_one_iterate_tendsto_atTop after their NL proofs are verified.
+
+## Heartbeat — 2026-02-08T00:11 UTC (Heartbeat #10)
+
+**Metrics**: Sorry count: 3 real (1 main + 2 helper stubs) ↓ from 4 | Verified proofs: 2 (sigma-parity, sigma-lower-bounds) | Drafts: 1 (even-stability, Under review 🔍) | Tasks: 6 open, 1 in_progress, 13 closed | Build: ✅
+**Status**: 🎉 FIRST SORRY CLOSED! Pipeline working end-to-end. Formalization proceeding.
+**Observations**:
+- **MILESTONE: sigma_one_ge sorry CLOSED** (n7i completed). The full explore→verify→formalize pipeline worked:
+  - 4up (explore sigma-lower-bounds) ✅ → 5p8 (verify) ✅ → n7i (formalize) ✅ → sorry gone!
+  - Clean Lean proof: unfold sigma_one_apply, extract {1,n} from divisors, sum_pair, sum_le_sum_of_subset, linarith. Elegant.
+- **sigma-lower-bounds.md now Verified ✅** — 2nd verified proof.
+- **lbc (verify even-stability) requested revision** — found 3 critical gaps (empirical chain bounds, probabilistic language, E-S transition bound). Expected from heartbeat #9. Created vt2 (revision task).
+- **vt2 (revise even-stability)** actively working (log 62 lines, modified just now). Agent exploring growth-based escape argument — promising approach.
+- **vt2 has no downstream verify task** — gap in pipeline! Fixed.
+- **No formalize task for sigma_one_even_ge** — gap! sigma-lower-bounds already verified, sorry exists at Helpers.lean:40.
+**Actions**:
+1. Created **vit** (verify revised even-stability, p2, small, depends on vt2) — ensures revised proof gets reviewed.
+2. Created **zrh** (formalize sigma_one_even_ge, p1, medium, no deps) — will close 2nd helper sorry. Pattern similar to n7i. Jumps queue at p1.
+**Watch next**:
+- Does vt2 complete successfully? Growth-based escape argument is the right approach. If it fails, may need a fundamentally different strategy for even-stability (perhaps: prove a weaker but still sufficient result).
+- After vt2: zrh (p1) runs first → second sorry reduction. Then vit (p2) verifies the revised even-stability. Then uwa (p2, large) starts omega-divergence.
+- **Remaining sorry reduction path**: zrh closes sigma_one_even_ge → 2 sorries left (main + iterate_tendsto). The iterate_tendsto sorry needs the full proof chain (needs ω→∞ which needs even-stability + omega-divergence).
+- **Critical path to completion**: even-stability revision → omega-divergence → main assembly → formalize iterate + main theorem.
+- Strategic framing level: 1 for formalization, 3-4 for exploration (detailed hints in uwa/vt2 descriptions).
