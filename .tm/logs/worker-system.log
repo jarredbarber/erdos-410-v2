@@ -2998,3 +2998,395 @@ $ tm update erdos410v2-xlm --status "Review complete - assembly logic verified, 
 **Recommendation**: The ratio-divergence review suggests an energy/potential function approach: track log(σ(a_k)/a_k) and prove accumulation without controlling specific primes. This avoids the alignment trap that caused previous proof attempts to fail.
 
 **Mathematical Value**: This proof successfully reduces the full theorem to a single technical lemma, providing a clear blueprint for Lean formalization once the dependency is resolved.
+[2026-02-08T02:18:33.306Z] ✅ Successfully merged task/erdos410v2-xlm into main
+[2026-02-08T02:18:33.306Z] 🗑️  Deleting branch task/erdos410v2-xlm...
+[2026-02-08T02:18:33.312Z] ✓ Deleted local branch task/erdos410v2-xlm
+[2026-02-08T02:18:33.318Z] ℹ️  No remote configured, skipping push.
+[2026-02-08T02:18:34.321Z] 
+================================================================================
+[2026-02-08T02:18:34.321Z] 📌 Processing task: erdos410v2-goo - Close sorry at Basic.lean:11 (erdos_410) using verified assembly
+[2026-02-08T02:18:34.321Z]    Role: formalize | Priority: 0 | Size: large
+[2026-02-08T02:18:34.321Z] ================================================================================
+
+[2026-02-08T02:18:34.325Z] ✓ Claimed task erdos410v2-goo
+
+[2026-02-08T02:18:34.325Z] 🤖 Using agent: formalize with models: anthropic/claude-opus-4-6:high, anthropic/claude-opus-4-5:high, google-antigravity/gemini-3-pro:high
+
+[2026-02-08T02:18:34.325Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-6:high...
+[2026-02-08T02:18:34.339Z] 📸 Capturing file state before agent execution...
+[2026-02-08T02:18:34.351Z] ✓ Captured state: 53 tracked, 1 untracked files
+
+[2026-02-08T02:18:34.351Z] 🌿 Creating branch: task/erdos410v2-goo
+[2026-02-08T02:18:34.357Z] ✓ Working on branch task/erdos410v2-goo
+
+[2026-02-08T02:18:39.227Z] 
+🛠️  Executing tool: read...
+[2026-02-08T02:18:39.228Z] 
+🛠️  Executing tool: read...
+[2026-02-08T02:18:39.229Z] 
+🛠️  Executing tool: read...
+[2026-02-08T02:19:07.512Z] 
+$ cd /home/jarred/code/erdos-410-v2 && tm update erdos410v2-goo --status "Reading project state and planning formalization approach"
+[2026-02-08T02:19:11.703Z] 
+$ cd /home/jarred/code/erdos-410-v2 && ls Erdos/ proofs/
+[2026-02-08T02:19:11.711Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat lakefile.lean
+[2026-02-08T02:19:14.267Z] 
+$ cd /home/jarred/code/erdos-410-v2 && ls *.lean *.toml 2>/dev/null; cat lean-toolchain 2>/dev/null
+[2026-02-08T02:19:16.688Z] 
+🛠️  Executing tool: read...
+[2026-02-08T02:19:16.690Z] 
+🛠️  Executing tool: read...
+[2026-02-08T02:19:19.093Z] 
+$ cd /home/jarred/code/erdos-410-v2 && lake build 2>&1 | tail -20
+[2026-02-08T02:20:02.922Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/api_explore.lean << 'EOF'
+import Mathlib.NumberTheory.ArithmeticFunction.Defs
+import Mathlib.NumberTheory.ArithmeticFunction.Misc
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Order.Filter.AtTopBot.Defs
+import Mathlib.Order.Filter.AtTopBot.Basic
+import Mathlib.Order.Filter.Tendsto
+
+open ArithmeticFunction Filter
+
+-- Check what tendsto_atTop_atTop gives us for ℝ
+#check @Filter.tendsto_atTop_atTop ℝ ℕ _ _
+
+-- Check rpow-related things
+#check Real.rpow_le_rpow
+#check Real.rpow_natCast  
+#check Real.one_rpow
+#check Real.rpow_mul
+
+-- Check (C^k)^{1/k} = C
+#check Real.rpow_inv_natCast_pow
+
+-- Check monotonicity of rpow
+#check Real.rpow_le_rpow_left
+
+EOF
+lake env lean /tmp/api_explore.lean 2>&1
+[2026-02-08T02:20:17.155Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/api_explore2.lean << 'EOF'
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Order.Filter.AtTopBot.Defs
+import Mathlib.Order.Filter.AtTopBot.Basic
+import Mathlib.Order.Filter.Tendsto
+
+open Filter
+
+-- What's the right tendsto_atTop for ℕ → ℝ → atTop?
+#check @Filter.tendsto_atTop_atTop ℕ ℝ _ _
+
+-- rpow monotonicity
+example (x y z : ℝ) (hx : 0 ≤ x) (hxy : x ≤ y) (hz : 0 ≤ z) : x ^ z ≤ y ^ z := by
+  exact Real.rpow_le_rpow hx hxy hz
+
+-- (C^k)^{1/k} = C when C ≥ 0, k ≠ 0
+-- Need: x^(a*b) = (x^a)^b
+#check Real.rpow_mul
+-- So (C^k)^(1/k) = C^(k * 1/k) = C^1 = C
+
+-- How 1/k interacts... 1/(k : ℝ) 
+-- The theorem statement uses (1 : ℝ) / (k : ℝ), which is just division
+
+-- Key: if C^k ≤ a_k and both positive, then C ≤ a_k^{1/k}
+-- because f(x) = x^{1/k} is monotone for x ≥ 0
+-- So a_k^{1/k} ≥ (C^k)^{1/k} = C^{k/k} = C^1 = C
+
+-- Let me check what the pow stuff looks like
+example (C : ℝ) (k : ℕ) (hC : 0 ≤ C) (hk : k ≠ 0) : 
+    (C ^ k : ℝ) ^ ((1 : ℝ) / (k : ℝ)) = C := by
+  rw [show (1 : ℝ) / (k : ℝ) = (↑k)⁻¹ from one_div (k : ℝ)]
+  rw [← Real.rpow_natCast C k]
+  rw [Real.rpow_mul hC]
+  simp [Nat.cast_ne_zero.mpr hk]
+
+EOF
+lake env lean /tmp/api_explore2.lean 2>&1
+[2026-02-08T02:20:26.550Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/api_explore3.lean << 'EOF'
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+
+-- (C ^ k)^(1/k) = C
+-- rpow_mul says x^(y*z) = (x^y)^z, so (x^y)^z = x^(y*z)
+-- We want (C^k)^(k⁻¹) = C^(k * k⁻¹) = C^1 = C
+-- But rpow_mul gives us x^(y*z) = (x^y)^z
+-- So we need the reverse: (x^y)^z = x^(y*z), which is ← rpow_mul
+
+example (C : ℝ) (k : ℕ) (hC : 0 ≤ C) (hk : k ≠ 0) : 
+    (C ^ k : ℝ) ^ ((1 : ℝ) / (k : ℝ)) = C := by
+  rw [show (1 : ℝ) / (k : ℝ) = (↑k)⁻¹ from one_div (k : ℝ)]
+  rw [← Real.rpow_natCast C k]
+  rw [← Real.rpow_mul hC]
+  simp [Nat.cast_ne_zero.mpr hk]
+
+EOF
+lake env lean /tmp/api_explore3.lean 2>&1
+[2026-02-08T02:20:44.240Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/api_explore4.lean << 'EOF'
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Order.Filter.AtTopBot.Defs
+import Mathlib.Order.Filter.AtTopBot.Basic
+import Mathlib.Order.Filter.Tendsto
+
+open Filter
+
+-- Check: rpow monotone for the base, fixed exponent ≥ 0
+-- If 0 ≤ x ≤ y and 0 ≤ z, then x^z ≤ y^z
+example (x y z : ℝ) (hx : 0 ≤ x) (hxy : x ≤ y) (hz : 0 ≤ z) : x ^ z ≤ y ^ z :=
+  Real.rpow_le_rpow hx hxy hz
+
+-- Check: if x > 0 and x^z ≤ y^z and z > 0, do we get x ≤ y?
+-- i.e., rpow_le_rpow_left or something inverse direction
+#check Real.rpow_le_rpow_of_exponent_le
+
+-- We need: C^k ≤ a → C ≤ a^{1/k} (when C > 0, a > 0, k > 0)
+-- This follows from: x ↦ x^{1/k} is monotone + (C^k)^{1/k} = C
+
+-- Let me check what we need for the main proof
+-- tendsto_atTop_atTop for ℕ → ℝ: ∀ b, ∃ N, ∀ k ≥ N, b ≤ f k
+
+-- Let me prove the key rpow step
+example (C a : ℝ) (k : ℕ) (hC : 0 < C) (ha : 0 ≤ a) (hk : k ≠ 0) 
+    (h : C ^ k ≤ a) : C ≤ a ^ ((1 : ℝ) / (k : ℝ)) := by
+  have hCk : (0 : ℝ) ≤ C ^ k := by positivity
+  rw [show (1 : ℝ) / (k : ℝ) = (↑k)⁻¹ from one_div (k : ℝ)]
+  calc C = (C ^ k : ℝ) ^ ((↑k)⁻¹ : ℝ) := by
+        rw [← Real.rpow_natCast C k, ← Real.rpow_mul (le_of_lt hC)]
+        simp [Nat.cast_ne_zero.mpr hk]
+    _ ≤ a ^ ((↑k)⁻¹ : ℝ) := by
+        apply Real.rpow_le_rpow hCk h
+        positivity
+
+EOF
+lake env lean /tmp/api_explore4.lean 2>&1
+[2026-02-08T02:22:11.024Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/api_explore5.lean << 'EOF'
+import Mathlib.Order.Filter.AtTopBot.Defs
+import Mathlib.Order.Filter.AtTopBot.Basic
+import Mathlib.Order.Filter.Tendsto
+
+open Filter
+
+-- Check how to extract witnesses from Eventually atTop
+#check @Filter.Eventually.exists_forall_of_atTop
+#check Filter.eventually_atTop
+
+-- Check tendsto_atTop_atTop direction
+example (f : ℕ → ℝ) (h : Tendsto f atTop atTop) : ∀ b : ℝ, ∃ N, ∀ k, N ≤ k → b ≤ f k := by
+  rwa [Filter.tendsto_atTop_atTop] at h
+
+-- Check if we can go from "for all C > 1, eventually f k ≥ C" to "tendsto f atTop atTop"
+-- This is basically the converse direction
+-- tendsto_atTop_atTop says: Tendsto f atTop atTop ↔ ∀ b, ∃ N, ∀ k ≥ N, b ≤ f k
+-- So we need: for all b, ∃ N, ∀ k ≥ N, b ≤ f k
+-- Given: for all C > 1, ∃ N, ∀ k ≥ N, C ≤ f k
+-- We can set C = max b 2 (so C > 1) and use C ≥ b.
+
+EOF
+lake env lean /tmp/api_explore5.lean 2>&1
+[2026-02-08T02:22:22.099Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/api_explore6.lean << 'EOF'
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Order.Filter.AtTopBot.Defs
+import Mathlib.Order.Filter.AtTopBot.Basic
+import Mathlib.Order.Filter.Tendsto
+
+open Filter
+
+-- Now ℝ has Preorder from the Analysis import
+example (f : ℕ → ℝ) (h : Tendsto f atTop atTop) : ∀ b : ℝ, ∃ N, ∀ k, N ≤ k → b ≤ f k := by
+  rwa [Filter.tendsto_atTop_atTop] at h
+
+-- And the converse
+example (f : ℕ → ℝ) (h : ∀ b : ℝ, ∃ N : ℕ, ∀ k, N ≤ k → b ≤ f k) : Tendsto f atTop atTop := by
+  rwa [Filter.tendsto_atTop_atTop]
+
+-- So the main proof reduces to: ∀ b, ∃ N, ∀ k ≥ N, b ≤ a_k^{1/k}
+-- If we have: ∀ C > 1, ∀ᶠ k in atTop, C ≤ a_k^{1/k}
+-- Then for any b, pick C = max b 2:
+example (f : ℕ → ℝ) 
+    (h : ∀ C : ℝ, 1 < C → ∀ᶠ k in atTop, C ≤ f k) :
+    Tendsto f atTop atTop := by
+  rw [Filter.tendsto_atTop_atTop]
+  intro b
+  have hC : (1 : ℝ) < max b 2 := by
+    simp only [lt_max_iff]; right; norm_num
+  obtain ⟨N, hN⟩ := (h _ hC).exists_forall_of_atTop
+  exact ⟨N, fun k hk => le_trans (le_max_left b 2) (hN k hk)⟩
+
+EOF
+lake env lean /tmp/api_explore6.lean 2>&1
+[2026-02-08T02:23:56.227Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/api_explore7.lean << 'EOF'
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Order.Filter.AtTopBot.Defs
+import Mathlib.Order.Filter.AtTopBot.Basic
+import Mathlib.Order.Filter.Tendsto
+
+open Filter
+
+-- Check how division/tendsto interact
+-- From Tendsto f atTop atTop and f = g/h with h eventually positive,
+-- can we get eventually g ≥ C * h?
+-- This is basically: if f(k) → ∞ and f(k) = ratio, then eventually f(k) ≥ C
+-- which gives g(k) ≥ C * h(k)
+
+-- Key identity for the iterate
+example (f : ℕ → ℕ) (n k : ℕ) : f^[k + 1] n = f (f^[k] n) := by
+  rw [Function.iterate_succ_apply']
+
+-- Nat cast monotonicity
+#check Nat.cast_le (α := ℝ)
+
+-- For showing (C^k)^{1/k} = C
+example (C : ℝ) (k : ℕ) (hC : 0 ≤ C) (hk : k ≠ 0) : 
+    (C ^ k : ℝ) ^ ((1 : ℝ) / (k : ℝ)) = C := by
+  rw [show (1 : ℝ) / (k : ℝ) = (↑k)⁻¹ from one_div (k : ℝ)]
+  rw [← Real.rpow_natCast C k]
+  rw [← Real.rpow_mul hC]
+  simp [Nat.cast_ne_zero.mpr hk]
+
+-- For rpow monotonicity: if a ≤ b and z ≥ 0, then a^z ≤ b^z (for a ≥ 0)
+-- Real.rpow_le_rpow
+
+-- Check: Nat.cast_pos for the iterate
+example (n k : ℕ) (hn : 2 ≤ n) : (0 : ℝ) < ((ArithmeticFunction.sigma 1)^[k] n : ℝ) := by
+  have : 2 ≤ (ArithmeticFunction.sigma 1)^[k] n := by
+    have := Erdos410.iterate_sigma_one_ge n hn k
+    omega
+  exact Nat.cast_pos.mpr (by omega)
+
+EOF
+lake env lean /tmp/api_explore7.lean 2>&1
+[2026-02-08T02:24:10.765Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/api_explore8.lean << 'EOF'
+import Erdos.Helpers
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Order.Filter.AtTopBot.Defs
+import Mathlib.Order.Filter.AtTopBot.Basic
+import Mathlib.Order.Filter.Tendsto
+
+open ArithmeticFunction Filter
+
+-- Check: Nat.cast_pos for the iterate
+example (n k : ℕ) (hn : 2 ≤ n) : (0 : ℝ) < ((sigma 1)^[k] n : ℝ) := by
+  have := Erdos410.iterate_sigma_one_ge n hn k
+  exact Nat.cast_pos.mpr (by omega)
+
+-- Test: pow with natural exponent for reals
+-- C ^ k for C : ℝ, k : ℕ — this is HPow.hPow
+-- Is it the same as rpow? No, it's the monoid power.
+-- But rpow_natCast bridges them: C ^ (↑k : ℝ) = C ^ k (as monoid pow)
+
+-- Test: the full C^k ≤ a_k → C ≤ a_k^{1/k} argument
+example (C : ℝ) (a : ℕ) (hC : 0 < C) (ha : 0 < a) (k : ℕ) (hk : k ≠ 0)
+    (h : C ^ k ≤ (a : ℝ)) : C ≤ (a : ℝ) ^ ((1 : ℝ) / (k : ℝ)) := by
+  have ha' : (0 : ℝ) ≤ (a : ℝ) := Nat.cast_nonneg a
+  have hCk : (0 : ℝ) ≤ C ^ k := by positivity
+  calc C = (C ^ k : ℝ) ^ ((1 : ℝ) / (k : ℝ)) := by
+        rw [show (1 : ℝ) / (k : ℝ) = (↑k)⁻¹ from one_div (k : ℝ)]
+        rw [← Real.rpow_natCast C k, ← Real.rpow_mul (le_of_lt hC)]
+        simp [Nat.cast_ne_zero.mpr hk]
+    _ ≤ (a : ℝ) ^ ((1 : ℝ) / (k : ℝ)) := by
+        apply Real.rpow_le_rpow hCk h
+        positivity
+
+EOF
+lake env lean /tmp/api_explore8.lean 2>&1
+[2026-02-08T02:24:16.285Z] 
+$ cd /home/jarred/code/erdos-410-v2 && grep -n "private lemma iterate" Erdos/Helpers.lean
+[2026-02-08T02:24:28.497Z] 
+$ cd /home/jarred/code/erdos-410-v2 && tm update erdos410v2-goo --status "Building proof skeleton with sorry-ed lemmas, testing compilation"
+[2026-02-08T02:25:23.388Z] 
+🛠️  Executing tool: write...
+[2026-02-08T02:25:26.159Z] 
+$ cd /home/jarred/code/erdos-410-v2 && lake build 2>&1 | tail -30
+[2026-02-08T02:25:38.452Z] 
+$ cd /home/jarred/code/erdos-410-v2 && cat > /tmp/fix_pow.lean << 'EOF'
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+
+-- Find the right lemma: if 1 ≤ C then C^k ≤ C^(2*j) when k ≤ 2*j
+-- This is pow monotone in exponent for base ≥ 1
+#check @pow_le_pow_right
+example (C : ℝ) (k j : ℕ) (hC : 1 ≤ C) (h : k ≤ 2 * j) : C ^ k ≤ C ^ (2 * j) := by
+  exact?
+
+EOF
+lake env lean /tmp/fix_pow.lean 2>&1
+[2026-02-08T02:25:52.224Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T02:25:54.862Z] 
+$ cd /home/jarred/code/erdos-410-v2 && lake build 2>&1 | tail -20
+[2026-02-08T02:26:10.352Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T02:26:14.175Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T02:26:16.469Z] 
+$ cd /home/jarred/code/erdos-410-v2 && lake build 2>&1 | tail -15
+[2026-02-08T02:26:26.821Z] 
+🛠️  Executing tool: read...
+[2026-02-08T02:26:30.458Z] 
+$ cd /home/jarred/code/erdos-410-v2 && lake build 2>&1
+[2026-02-08T02:26:35.426Z] 
+🛠️  Executing tool: read...
+[2026-02-08T02:26:39.472Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T02:26:42.649Z] 
+$ cd /home/jarred/code/erdos-410-v2 && lake build 2>&1
+[2026-02-08T02:26:43.657Z] [overseer] 💓 Heartbeat complete: ESCALATED: Ratio-divergence rejected (5th failed proof). Created 2zb (last explore attempt) + 6v8 (verify). Updated goo for sorry-ed skeleton. Notified human.
+[2026-02-08T02:26:51.473Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T02:26:53.584Z] 
+$ cd /home/jarred/code/erdos-410-v2 && lake build 2>&1
+[2026-02-08T02:27:02.101Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T02:27:04.611Z] 
+$ cd /home/jarred/code/erdos-410-v2 && lake build 2>&1
+[2026-02-08T02:27:21.824Z] 
+$ cd /home/jarred/code/erdos-410-v2 && git add -A && git commit -m "Formalize assembly proof: erdos_410 reduces to ratio_divergence sorry
+
+The main theorem erdos_410 is now proven modulo a single sorry in
+ratio_divergence (σ₁(aₖ)/aₖ → ∞ along the orbit).
+
+Proven lemmas (all sorry-free):
+- iterate_ge_two: σ₁^[k](n) ≥ 2 for n ≥ 2
+- iterate_ge_add: σ₁^[k](n) ≥ n + k for n ≥ 2
+- iterate_cast_pos: (σ₁^[k](n) : ℝ) > 0
+- eventually_ratio_ge: from ratio divergence, ∃K, ∀k≥K, C·aₖ ≤ aₖ₊₁
+- geometric_growth: ∃K, ∀j, C^j·a_K ≤ a_{K+j}
+- eventually_exponential_bound: ∃N, ∀k≥N, C^k ≤ aₖ
+- rpow_kth_root_ge: C^k ≤ a → C ≤ a^{1/k}
+- kth_root_eventually_ge: ∀ᶠ k, C ≤ aₖ^{1/k}
+- erdos_410 (main theorem): uses kth_root_eventually_ge
+
+Remaining sorry: ratio_divergence (proofs/ratio-divergence.md was rejected,
+needs new NL proof approach)."
+[2026-02-08T02:27:24.888Z] 
+$ cd /home/jarred/code/erdos-410-v2 && tm update erdos410v2-goo --status "Completed: assembly formalized, single sorry remains at ratio_divergence"
+[2026-02-08T02:27:28.789Z] 
+$ cd /home/jarred/code/erdos-410-v2 && grep -n "sorry" Erdos/Basic.lean
+[2026-02-08T02:27:40.516Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T02:27:40.516Z] 📄 Log saved to .tm/logs/worker-erdos410v2-goo.md
+[2026-02-08T02:27:40.516Z] 
+📊 Task erdos410v2-goo completed:
+[2026-02-08T02:27:40.516Z]    Summary: Closed sorry in erdos_410 (main theorem). Reduced to single sorry in ratio_divergence. lake build succeeds.
+[2026-02-08T02:27:40.516Z]    Details: Formalized the entire assembly proof from proofs/main-assembly-v2.md into Lean 4.
+
+Proved lemmas (all sorry-free, building on ratio_divergence):
+- iterate_ge_two: σ₁^[k](n) ≥ 2 for n ≥ 2
+- iterate_ge_add: σ₁^[k](n) ≥ n + k for n ≥ 2
+- iterate_cast_pos: (σ₁^[k](n) : ℝ) > 0
+- eventually_ratio_ge: from ratio_divergence, ∃K, ∀k≥K, C·aₖ ≤ aₖ₊₁
+- geometric_growth: ∃K, ∀j, C^j·a_K ≤ a_{K+j} (Step 2 of assembly - induction)
+- eventually_exponential_bound: ∃N, ∀k≥N, C^k ≤ aₖ (clever trick: use C² in geometric growth, then for k≥2K get 2j≥k so (C²)^j ≥ C^k)
+- rpow_kth_root_ge: C^k ≤ a → C ≤ a^{1/k} (using rpow_mul and rpow_le_rpow)
+- kth_root_eventually_ge: ∀ᶠ k in atTop, C ≤ aₖ^{1/k}
+- erdos_410 (MAIN THEOREM): for any bound b, pick C = max(b,2) > 1, use kth_root_eventually_ge
+
+Remaining sorry: ratio_divergence (Erdos/Basic.lean:56) — the claim that σ₁(aₖ)/aₖ → ∞ along the orbit. This requires a new NL proof (proofs/ratio-divergence.md was Rejected ❌). Follow-up task needed for explore agent to find a new proof approach for ratio divergence.
