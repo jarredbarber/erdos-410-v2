@@ -1,15 +1,17 @@
-## Heartbeat — 2026-02-08T21:00 UTC
+## Heartbeat — 2026-02-08T21:23 UTC
 
-**Metrics**: Sorry count: 2 (Basic.lean:56, FactorPump.lean:273) | Verified proofs: 14 | Dead ends: 8 | Tasks: 2 open, 63 closed | Build: ✅
-**Status**: Lemma A (v2_sigma_ge_omegaOdd_oddPart) COMPLETE. Lemma B (recursive_factor_bounds) has 1 trivial sorry.
+**Metrics**: Sorry count: 1 (Erdos/Basic.lean:56) | Verified proofs: 15 (added factor-pump.md) | Dead ends: 8 | Tasks: 2 open, 66 closed | Build: ✅
+**Status**: Critical bottleneck at `ratio_divergence`. Only 1 sorry remains, but it requires the FULL LIMIT (not lim sup).
 **Observations**:
-- **Lemma A Done**: Task `nvb` successfully closed the last sorry in `padicValNat_finset_prod`.
-- **Lemma B Progress**: Task `c5z` formalized the main recurrence but left a trivial sorry (`cardDistinctFactors_eq_card_primeFactors`).
-- **Next Logic**: Need to verify `proofs/omega-lower-bounds.md` to connect Lemma B to infinite growth.
-- **Pending Verification**: `proofs/omega-lower-bounds.md` claims $\omega(2^n-1) \ge \tau(n)-2$ via Zsigmondy.
+- **Factor Pump Verified**: `proofs/factor-pump.md` formalized successfully in `Erdos/FactorPump.lean`. It establishes a feedback loop between odd-part complexity and v2-valuation.
+- **Mersenne Instability**: `proofs/omega-lower-bounds.md` shows the orbit cannot get stuck in Mersenne prime cycles ($\omega=1$). Created verify task `emu` to validate this.
+- **Ratio Divergence Hardness**: Previous attempts failed because they only proved `lim sup` (infinite spikes) but not `lim` (sustained growth). The "Mersenne Channel" ($a_k \approx 2^k$) is the primary trap where the ratio stays bounded ($\approx 1$ or $2$).
+- **Path Forward**: Use the Factor Pump + Mersenne Instability to show the orbit leaves the Mersenne Channel and stays away, forcing the ratio up.
+
 **Actions**:
-1. Created `dtg` (Formalize) to close the trivial sorry in `Erdos/FactorPump.lean`.
-2. Created `6z1` (Verify) to review `proofs/omega-lower-bounds.md`.
+1. Created `emu` (Verify) to review `proofs/omega-lower-bounds.md` (Mersenne Instability).
+2. Created `ry1` (Explore) to attack `ratio_divergence` with specific instructions to avoid the Lim Sup trap and focus on the Factor Pump mechanism.
+
 **Watch next**:
-- Does `proofs/omega-lower-bounds.md` hold up? If so, we can formalize Zsigmondy's consequence.
-- Once Lemma B is fully closed, we can combine it with the lower bound to show divergence.
+- Does `proofs/omega-lower-bounds.md` pass verification? (Likely yes).
+- Can the new explore task `ry1` formulate a rigorous argument for full limit divergence? Or will it hit another dead end?
