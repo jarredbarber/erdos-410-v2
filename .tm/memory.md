@@ -374,3 +374,30 @@
 - After new explore task: this is a DIFFERENT mathematical approach. Fresh start. Should not inherit the Zsygmondy baggage.
 - vp1 description needs updating to remove ω→∞ references. Advisor should do this, or I will.
 - Total task count: 24 closed + 1 in_progress + 2 open = 27 tasks. 7 were dead ends (5 even-stability + 3 omega-divergence Zsygmondy). 20 productive.
+
+## Heartbeat — 2026-02-08T02:00 UTC (Heartbeat #16)
+
+**Metrics**: Sorry count: 1 (main theorem only) | Verified proofs: 2 | Tasks: 4 open, 1 in_progress, 25 closed | Build: ✅
+**Status**: New ratio-based approach launched. Pipeline healthy. Explorer actively working.
+**Observations**:
+- **3r8 (advisor) COMPLETED SUCCESSFULLY** — created 5 clean tasks + deferred 2 old ones:
+  - pf0 (explore ratio divergence, p1, large) → i9u (verify) → 7vy (assembly) → xlm (verify) → goo (formalize, p0!)
+  - Deferred vp1, 8xc (old ω→∞ tasks) — correct
+  - Task descriptions are excellent: pf0 has level-4 sketch, explicit ⚠️ warning against persistence trap
+- **pf0 (explore ratio divergence) IN PROGRESS** — 234 lines, 13 min in, actively working.
+  - Agent exploring 3 angles: v₂(aₖ) boundedness, energy function Φ(m)=log(σ(m)/m), smooth part accumulation
+  - **CONCERN**: Agent mentions "persistence"/"circles back" 3 times — keeps getting drawn toward tracking individual primes despite explicit task warning. Self-aware but struggling to find a clean alternative.
+  - Good structural insight: starting from aₖ=2p (large prime), ratio jumps from 3/2 to ≥2 in one step via σ introducing 6·((p+1)/2)
+  - Currently trying: show v₂(aₖ) bounded → contradiction. This is a DIFFERENT angle from ω-persistence (specific valuation vs all primes), potentially viable.
+  - Not stalled, not surrendering. Normal progress for a large explore task.
+- **DAG is clean**: pf0 → i9u → 7vy → xlm → goo. No orphans, no broken deps.
+- **goo (final formalize) at p0** — will jump queue once dependencies satisfied. Good.
+- **Deferred tasks (vp1, 8xc)** — properly sidelined. Can be resumed if ratio approach fails.
+**Actions**: None — system healthy, explorer actively producing.
+**Watch next**:
+- Does pf0 produce proofs/ratio-divergence.md? Large task, give it ~30 more min (total ~45 min).
+- **STALE THRESHOLD**: If pf0 >450 lines without writing the proof file next heartbeat → intervene.
+- If pf0 fails or gets stuck in persistence trap → retry with SHARPER task: focus ONLY on the contradiction argument. "Assume σ(aₖ)/aₖ ≤ C for all k. Show this implies a_k is eventually S-smooth for some fixed S. But S-smooth + σ bounds gives a_k ≤ f(C). Contradiction with a_k → ∞."
+- After pf0: i9u review is critical. This is the 1st attempt at ratio approach — review may find gaps. But gaps should be DIFFERENT from Zsygmondy persistence gaps.
+- **Endgame path**: pf0 → i9u → 7vy → xlm → goo → DONE (0 sorries!). ~5 tasks away from completion.
+- Sorry count has been 1 for 5 heartbeats. Expected — NL pipeline must complete before formalization can close the last sorry.
