@@ -285,3 +285,62 @@
 - If c6f FAILS: Create retry with hint about S-unit equations or the weaker lim sup approach.
 - After c6f+51i: vp1 (assembly) should be quick. Then final formalize of main theorem.
 - **Task economics**: 20 closed, 4 remaining. 5 were spent on even-stability dead end. System now on the correct critical path.
+
+## Heartbeat — 2026-02-08T01:06 UTC (Heartbeat #13)
+
+**Metrics**: Sorry count: 1 (main theorem only) | Verified proofs: 2 | Tasks: 2 open, 1 in_progress, 21 closed | Build: ✅
+**Status**: Pipeline flowing — omega-divergence revision completed, 2nd review in progress. Approaching decision point.
+**Observations**:
+- **c6f (revise omega-divergence) COMPLETED** — addressed both gaps:
+  - Lemma 2.1: restructured into Case I (finite S → Zsygmondy escape) + Case II (infinite S → Zsygmondy accumulation)
+  - Part 5: added Theorem 4.1 with counting argument for ω → ∞ vs just unbounded
+- **51i (2nd review omega-divergence) IN PROGRESS** — 108 lines, actively writing review notes.
+  - Reviewer finding: Case I sound, Case II has a NEW gap, Theorem 4.1 incomplete
+  - Likely outcome: another revision request
+- **No new git commits or sorry changes since last heartbeat** — expected (explore + verify pipeline)
+- omega-divergence.md is 503 lines (very large for a single proof — monolith risk)
+**Actions**: None — 51i actively reviewing, no stale tasks.
+**CONTINGENCY PLAN (if 51i requests revision — this is attempt #3)**:
+- DO NOT create another blind revision of the 503-line monolith
+- Instead, **DECOMPOSE** the omega-divergence proof into 2 smaller, independently verifiable lemmas:
+  1. **Support Growth Lemma** (explore): "For any finite set S of primes, there exists C(S) such that if m ≥ C(S) is S-smooth, then σ(m) is NOT S-smooth." Proof: Zsygmondy gives bounded exponents for each p ∈ S, bounding m.
+  2. **ω → ∞ assembly** (explore): "Using the Support Growth Lemma, prove ω(a_k) → ∞." This is a shorter argument: at each step, if a_k is large enough, at least one new prime enters. Track the churning to show ω grows.
+- Each piece is small enough for rigorous verification
+- This mirrors the successful sigma-lower-bounds → formalize pipeline (small pieces that pass review)
+**Watch next**:
+- Does 51i approve or request revision? If approve → vp1 unblocked → near finish. If revision → execute contingency.
+- If vp1 runs next, verify it doesn't reference even-stability (description was updated in heartbeat #11)
+- After assembly: final formalize task for main theorem. This will be the hardest formalization — may need proof skeleton with multiple sub-sorries.
+
+## Heartbeat — 2026-02-08T01:27 UTC (Heartbeat #14)
+
+**Metrics**: Sorry count: 1 (main theorem only) | Verified proofs: 2 | Tasks: 3 open, 1 in_progress, 22 closed | Build: ✅
+**Status**: 3rd omega-divergence revision in progress. Human provided hints suggesting different approach. Decision point approaching.
+**Observations**:
+- **51i CLOSED — revision requested** (as predicted). 3rd revision cycle on omega-divergence.
+- **Human added proofs/hints.md** with excellent alternative strategy:
+  - "You're proving something stronger than you need" — don't prove ω→∞ via persistence
+  - Instead: potential/energy function on σ(m)/m, or show reciprocal sum of primes diverges
+  - σ multiplicativity is underexploited — higher-order terms in σ(p^a)/p^a matter
+  - Proposed alternative: show σ(m)/m is eventually increasing along orbit
+- **3co (3rd revision) IN PROGRESS** — 158 lines, actively writing. BUT: agent is STILL using Zsygmondy persistence approach ("sticky prime" / periodic recurrence), NOT the hints-based approach. Agent listed proofs/ dir but did not read hints.md.
+- **Pipeline gap**: 3co had no downstream verify task — fixed.
+- **Pipeline gap**: vp1 depended on 51i (closed with revision-requested) — fixed, now depends on epp.
+- **Pattern recognition**: Omega-divergence has now gone through: uwa (explore, Zsygmondy) → h0a (reject) → c6f (revise, Case I/II) → 51i (reject) → 3co (revise, periodic recurrence). Same approach, same failure mode. Human hints suggest the approach itself is wrong.
+**Actions**:
+1. Created **epp** (verify 3rd revision omega-divergence, p2, medium, depends on 3co) — includes guidance to consider REJECTION if Zsygmondy persistence still fails
+2. Updated **vp1 dependency** → epp (not 51i)
+**CONTINGENCY (if epp rejects — will execute immediately)**:
+- Close the omega-divergence Zsygmondy track entirely
+- Create fresh explore task: "Prove σ(σₖ(n))/σₖ(n) → ∞ via potential function"
+  - Key idea from hints: define R_k = σ(a_k)/a_k = ∏ (p^{e+1}-1)/(p^e(p-1)). Show R_k → ∞ without tracking individual primes.
+  - Approach: for any constant C, if R_k ≤ C for all k, then a_k ≤ C^k · a_0. But σ(m) for m with large prime powers has R > 1 + 1/p + ... + 1/p^e ≈ p/(p-1). As sequence grows and exponents increase, R gets a boost.
+  - Alternatively: show that R_{k+1} ≥ f(R_k) for some f with f(x) > x when x is small.
+- This is a FUNDAMENTALLY DIFFERENT APPROACH that avoids the persistence trap entirely.
+- Update vp1 description to use σ/n → ∞ directly (not ω → ∞).
+**Watch next**:
+- Does 3co finish? How long until completion? (158 lines, writing phase — should be 15-30 min)
+- After 3co: epp reviews. Key question: does the reviewer read hints.md and use it to contextualize the review?
+- If epp approves → proceed to vp1 → 8xc → final formalize
+- If epp rejects → execute contingency immediately
+- **Risk**: 3co is a large task burning cycles on a likely-failing approach. But interrupting wastes work. Accept the cost.
