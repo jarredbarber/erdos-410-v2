@@ -1,20 +1,18 @@
-## Heartbeat — 2026-02-08T19:08 UTC
+## Heartbeat — 2026-02-08T19:26 UTC
 
-**Metrics**: Sorry count: 1 (Basic.lean:56) | Verified proofs: 14 | Dead ends: 8 | Tasks: 2 failed (old), 50 closed | Build: ✅
-**Status**: Breakout success! `zb1` produced `ratio-divergence-combined.md` using Verified components.
+**Metrics**: Sorry count: 1 (Basic.lean:56) | Verified proofs: 14 | Dead ends: 8 | Tasks: 1 failed (old), 55 closed | Build: ✅
+**Status**: Review requested revisions for combined proof. Factor Pump formalization failed, retrying.
 **Observations**:
-- **Task zb1**: Completed successfully. Produced `proofs/ratio-divergence-combined.md` (renamed from `verified`).
-- **New Proof**: Combines `smooth-escape.md` (Verified) and `factor-pump.md` (Verified).
-  - Claim: Smooth escape forces large primes -> Factor pump uses large primes to boost $\omega$ -> Large $\omega$ forces ratio divergence.
-- **Verified Foundation**:
-  - `proofs/factor-pump.md`: Rigorously proves `v2(sigma(n)) >= omega_odd(n)`.
-  - `proofs/smooth-escape.md`: Rigorously proves sequence leaves any finite set $S$.
-- **Next Steps**:
-  1. Verify the combined proof.
-  2. Formalize the Factor Pump mechanism (Lemma A/B).
+- **Task zw3 (Verify)**: Requested revisions. The probabilistic argument in `ratio-divergence-combined.md` (Sections 3-5) is heuristic and not ready for formalization.
+- **Task 62j (Formalize)**: Failed. Need to break it down.
+- **Plan**:
+  - Focus formalization on the *deterministic* core: the Factor Pump mechanism (Lemma A).
+  - Use `explore` to investigate the "Mersenne trap" issue (can we prove $v_2(a_k)$ isn't always a Mersenne exponent?).
+- **Created Tasks**:
+  - `djf`: Formalize just Lemma A (v2(sigma) >= omega_odd).
+  - `fr8`: Explore lower bounds on $\omega(2^n-1)$.
 **Actions**:
-1. Renamed `proofs/ratio-divergence-verified.md` to `proofs/ratio-divergence-combined.md`.
-2. Creating `verify` task for the combined proof.
-3. Creating `formalize` task for Factor Pump.
+1. Retrying formalization with smaller scope.
+2. Launching exploration into strengthening the Factor Pump.
 **Watch next**:
-- Does the combined proof hold up to scrutiny regarding the "absorbing state" argument?
+- Does `djf` succeed in formalizing the core inequality?
