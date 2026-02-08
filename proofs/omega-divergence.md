@@ -1,6 +1,7 @@
 # Divergence of the Number of Distinct Prime Factors
 
-**Status:** Draft ✏️
+**Status:** Under review 🔍
+**Reviewed by:** erdos410v2-h0a
 **Statement:** For any $n \geq 2$, let $a_k = \sigma^{[k]}(n)$ denote the $k$-th iterate of the sum-of-divisors function. Then $\omega(a_k) \to \infty$ as $k \to \infty$, where $\omega(m)$ counts the number of distinct prime factors of $m$.
 **Dependencies:** sigma-lower-bounds.md (Verified ✅)
 **Confidence:** High
@@ -332,3 +333,106 @@ The key technical tool is Zsygmondy's theorem, which guarantees that large prime
 
 - sigma-lower-bounds.md: $\sigma(n) \geq n + 1$ for $n \geq 2$.
 - Zsygmondy, K. (1892): "Zur Theorie der Potenzreste." Monatsh. Math. 3: 265–284.
+
+---
+
+## Review Notes
+
+**Reviewer:** erdos410v2-h0a  
+**Date:** 2026-02-08  
+**Decision:** Revision requested 🔍
+
+### Summary
+
+The proof has the correct overall strategy and the core technical machinery (Parts 1, 3, and 4 Steps 3-6) is sound. However, there are two significant gaps that need to be addressed:
+
+1. **Lemma 2.1 (Part 2)** — The proof that bounded ω implies finite prime support is incomplete
+2. **Part 5** — The strengthening from "ω unbounded" to "ω(a_k) → ∞" contains informal arguments
+
+### Detailed Issues
+
+#### Issue 1: Lemma 2.1 is not rigorously proved
+
+**Location:** Part 2, Lemma 2.1
+
+**Issue:** The lemma claims that if $\omega(a_k) \leq B$ for all $k$, then the prime support $S = \bigcup_{k} \{p : p \mid a_k\}$ is finite with $|S| \leq B$.
+
+The proof correctly observes that primes can enter and exit the factorization, so we cannot simply argue that if $|S| > B$, then some $a_k$ has more than $B$ prime factors. The proof then attempts several arguments:
+
+1. A "pumping" argument about the rate of prime entry vs. exit
+2. Counting primitive divisors introduced by Zsygmondy
+3. An appeal to monotonicity
+
+However, none of these arguments is carried through to completion. The proof eventually states:
+
+> "This is the core of Part 3, so let us accept Lemma 2.1 for finite $S$ and proceed, or alternatively: **assume $|S| \leq B$ to begin with**..."
+
+This is circular! The proof of Lemma 2.1 should establish that $S$ is finite, but instead it defers to Part 3 or assumes a stronger version of the hypothesis.
+
+**What needs to be fixed:**
+
+The proof needs to rigorously show that if $\omega(a_k) \leq B$ for all $k$, then $S$ cannot be infinite. A complete argument should handle the case where primes enter and exit. Potential approaches:
+
+- **Option A (Counting):** Show that the rate at which new Zsygmondy primes are introduced (which grows with the maximum exponent) exceeds what can be accommodated with bounded ω, making infinite $S$ impossible.
+  
+- **Option B (Direct):** Show that once sufficiently many distinct primes have appeared, the "recycling" mechanism (primes exiting and re-entering) cannot prevent $\omega$ from exceeding $B$ at some step.
+
+- **Option C (Restructure):** Instead of proving Lemma 2.1 separately, assume both bounded ω and consider the two cases (finite $S$ vs. infinite $S$) directly, deriving contradictions in both cases.
+
+The current exposition mixes these approaches without completing any of them.
+
+#### Issue 2: Part 5 argument is informal
+
+**Location:** Part 5 (Why ω(a_k) → ∞, not just unbounded)
+
+**Issue:** The main theorem claims that $\omega(a_k) \to \infty$, meaning: for all $M$, there exists $K$ such that for all $k \geq K$, $\omega(a_k) \geq M$. This is stronger than merely saying $\omega$ is unbounded (which would allow oscillation like $1, 5, 1, 10, 1, 15, ...$).
+
+Part 5 attempts to prove the stronger version by arguing that:
+- Zsygmondy primes, once introduced, tend to "persist" or "recur" 
+- The rate of introduction exceeds the rate of exit
+- Therefore $\omega$ must eventually stay large
+
+However, these arguments are not made rigorous. Terms like "persistence principle" and "recurrence" are used informally without precise definitions. The claim that "most" Zsygmondy primes persist is not quantified or proved.
+
+**What needs to be fixed:**
+
+Either:
+
+1. **Complete the strong argument:** Rigorously prove that once ω reaches a certain value, it cannot drop below some threshold. This requires careful analysis of when Zsygmondy primes exit the factorization and showing that the growth mechanism prevents ω from decreasing too much.
+
+2. **Settle for the weaker statement:** If the strong version is difficult to prove, clarify whether the weaker statement (ω unbounded) is sufficient for the main Erdős problem. If so, remove or clearly mark Part 5 as conjectural/sketch.
+
+3. **Provide a counterexample to show the distinction matters:** If ω could oscillate while being unbounded, show an example or explain why this would or wouldn't matter for the main theorem.
+
+### What Works Well
+
+The following parts of the proof are sound and well-written:
+
+✓ **Part 1 (Lemma 1.1):** The sequence diverges — correctly uses the verified dependency.  
+✓ **Part 3 (Lemmas 3.1-3.3):** The core Zsygmondy argument — rigorous and clear.  
+✓ **Zsygmondy preliminaries:** Correct statement with exceptional cases noted.  
+✓ **Part 4, Steps 3-6:** Assuming finite $S$, the contradiction is cleanly derived.  
+✓ **Example section:** Helpful illustration of the mechanism.
+
+### Logical Flow Check
+
+- [x] Statement is precise and unambiguous
+- [x] All assumptions explicitly stated
+- [ ] **Each step follows logically** — Gaps in Lemma 2.1 and Part 5
+- [x] Quantifiers used correctly
+- [x] Edge cases (Zsygmondy exceptions) handled
+- [x] Dependencies verified (sigma-lower-bounds.md ✅)
+- [ ] **Completeness** — Gaps prevent full verification
+- [x] No hidden assumptions detected
+
+### Recommendation
+
+**Revision requested.** The proof should be revised to address the gaps in Lemma 2.1 and Part 5. The core mathematical machinery is sound, but the logical structure needs tightening. Once these issues are resolved, the proof will be ready for verification.
+
+### Suggested Next Steps
+
+1. **For the explorer agent:** Revise Part 2 to provide a complete, rigorous proof of Lemma 2.1, or restructure the argument to avoid this lemma altogether.
+
+2. **For the explorer agent:** Either complete the argument in Part 5 rigorously, or clearly delineate what is proved (ω unbounded) vs. what is conjectured (ω → ∞ in the strong sense).
+
+3. **For the advisor:** Consider whether the weaker statement (ω unbounded) is sufficient for the main Erdős problem before investing effort in the stronger version.
