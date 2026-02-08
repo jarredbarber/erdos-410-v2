@@ -754,3 +754,109 @@
 - **FINAL ESCALATION PLAN**: If both tlx and fas fail → that's 12 total attempts. Definitively escalate: "12 attempts, all failed. Mathematical discovery beyond agent capability. Need human proof or accept sorry."
 - Sorry count stable at 1 for 18 heartbeats.
 - Task economics: 40 closed + 1 failed + 4 open/in-progress + 2 deferred = 47 total.
+
+## Heartbeat — 2026-02-08T07:27 UTC (Heartbeat #30)
+
+**Metrics**: Sorry count: 1 (ratio_divergence at Basic.lean:56) | Verified proofs: 3 (sigma-parity, sigma-lower-bounds, smooth-escape) | Dead ends: 7 | Tasks: 1 open (yil), 1 in_progress (fas), 1 failed (y3h), 42 closed, 2 deferred | Build: ✅ | Worker: ACTIVE
+**Status**: tlx rejected (Dead End #7). fas (Mersenne) running but showing early signs of same pattern. Pipeline intact.
+**Observations**:
+- **tlx COMPLETED** — proved lim sup R_k = ∞ with several rigorous sub-results (R_k ≥ 2 eventually, recovery from R=2), but could NOT prove full lim. Same fundamental gap.
+- **bce COMPLETED** — correctly rejected tlx output. Added Dead End #7 (energy monotonicity via recovery dynamics). Good self-organization.
+- **fas IN PROGRESS** — 212 lines, 3 min in, actively generating. Agent's status update: "Writing draft with honest gap assessment." Agent's reasoning shows it already realizes it can't bridge the gap: "even with careful Mersenne structure, I can't eliminate the possibility of arbitrarily many steps where the ratio dips near 2." Agent is falling back to lim sup analysis AGAIN despite Mersenne framing.
+- **yil** (verify for fas) still open, properly depends on fas. Pipeline: fas → yil.
+- **Dead ends now at 7**: all 7 documented in proofs/dead-ends.md. Every approach converges on the same wall: lim sup provable, full limit not.
+- **Pattern is definitive**: 11 explore attempts on σ(aₖ)/aₖ, ALL hit Dead End #1 (lim sup ≠ lim). The "return time" problem is beyond agent capability.
+**Actions**: None — fas just started, let it finish. Pipeline intact (fas → yil).
+**COMMITMENT**: After fas + yil complete (likely rejection):
+- This will be the 12th failed attempt at ratio_divergence
+- **DEFINITIVELY ESCALATE** to human with final report: "12 attempts, 7 dead ends documented. Agents can prove lim sup = ∞ but cannot prove full Tendsto. Mathematical discovery beyond agent capability. Options: (A) human provides proof of return-time bound, (B) accept sorry with citation, (C) completely different proof architecture."
+- **DO NOT** create any more explore tasks for ratio_divergence
+- Worker idle time acceptable — wait for human decision
+**Watch next**:
+- Does fas finish? Expected within 10-15 min. Check if it produces something genuinely novel (v₂→∞ proof) or another lim-sup-only result.
+- After fas: yil reviews. If rejected → execute escalation commitment above.
+- If fas somehow proves v₂→∞ rigorously — that WOULD be new. But agent's reasoning doesn't suggest this is coming.
+- Human check: any new tasks, hints.md changes, Lean edits? (Last human activity: wf5 creation at 05:58 UTC, ~1.5 hrs ago)
+
+## Heartbeat — 2026-02-08T07:42 UTC (Heartbeat #31) — FINAL ESCALATION
+
+**Metrics**: Sorry count: 1 (ratio_divergence at Basic.lean:56) | Verified proofs: 3 (sigma-parity, sigma-lower-bounds, smooth-escape) | Dead ends: 7 | Tasks: 0 open, 0 in_progress, 2 failed (y3h, fas), 43 closed, 2 deferred | Build: ✅ | Worker: IDLE
+**Status**: 🛑 DEFINITIVE ESCALATION — 12th attempt (fas) FAILED. Worker idle. Waiting for human.
+**Observations**:
+- **fas FAILED** — Could not prove v₂(aₖ) → ∞. Established conditional result (v₂→∞ ⟹ R→∞) but the antecedent is unproven. Numerical examples show v_k fluctuates non-monotonically. Agent self-reported failure honestly.
+- **fas did NOT merge** — proofs/ratio-divergence-mersenne.md doesn't exist on main (failed branches not merged). yil was orphaned.
+- **Closed yil** — orphaned verify task (dependency fas failed, nothing to review).
+- **Worker IDLE**: 0 open tasks. Nothing for it to do.
+- **Sent 4th escalation** to human — definitive final report with 4 options (A-D). Explicitly stated no more automated tasks will be created.
+- **10 unique explore attempts** at ratio_divergence, ALL failed on the same fundamental issue (return time / lim sup ≠ lim):
+  1. uwa (ω-persistence) → rejected
+  2. c6f (Case I/II) → rejected
+  3. 3co (periodic recurrence) → rejected
+  4. pf0 (ratio alignment) → rejected
+  5. 2zb (lim-sup-ω + primorial) → rejected
+  6. p54 (energy) → rejected
+  7. fio (strengthen to full lim) → rejected
+  8. y3h (bounded-ratio contradiction) → FAILED
+  9. tlx (energy monotonicity) → rejected
+  10. fas (Mersenne v₂→∞) → FAILED
+- **What agents CAN prove**: lim sup σ(aₖ)/aₖ = ∞, smooth escape, σ bounds, parity. What they CANNOT: full Tendsto (the return-time bound).
+**Actions**:
+1. Closed yil (orphaned verify — fas failed)
+2. Sent definitive escalation to human (tm notify, priority 4)
+3. **NO new tasks created** — per commitment from HB#30
+**FINAL STATE**:
+- 1 sorry at Basic.lean:56
+- 183 lines compiling Lean, 3 helper lemmas sorry-free
+- 3 verified NL proofs, 7 dead ends documented
+- Formalize pipeline proven (3/3 successful closures)
+- Task economics: 43 closed + 2 failed + 2 deferred = 47 total. ~20 productive, ~25 dead ends. 53% waste.
+**Watch next**:
+- **Human response is the ONLY path forward.**
+- Check for: new tasks created by human, hints.md changes, Lean file edits, direct proof provided
+- If human provides NL proof → create formalize task immediately
+- If human accepts sorry → project done
+- If human restructures Lean → evaluate and create appropriate tasks
+- **DO NOT create any automated explore tasks** unless human provides genuinely new mathematical insight
+- Worker idle time acceptable — this is the correct state
+
+## Heartbeat — 2026-02-08T07:58 UTC (Heartbeat #32)
+
+**Metrics**: Sorry count: 1 (ratio_divergence at Basic.lean:56) | Verified proofs: 3 (sigma-parity, sigma-lower-bounds, smooth-escape) | Dead ends: 7 | Tasks: 0 open, 0 in_progress, 2 failed, 43 closed, 2 deferred | Build: ✅ | Worker: IDLE
+**Status**: No change from HB#31. Worker idle. Waiting for human response to final escalation.
+**Observations**:
+- State identical to HB#31. No new git commits, no file changes, no human activity.
+- Human last active at 05:58 UTC (created wf5). It's now ~08:00 UTC — ~2 hours since last human activity.
+- Escalation sent at 07:42 UTC (16 min ago). Human may still be asleep or reviewing options.
+- Worker PID 1640655 still running but idle (no tasks to process).
+- All metrics unchanged: 1 sorry, 3 verified proofs, 7 dead ends, 183 lines compiling Lean.
+**Actions**: None — system in correct idle state awaiting human decision.
+**Watch next**:
+- Human response: new tasks, hints.md changes, Lean edits, or messages.
+- If human provides NL proof → create formalize task immediately.
+- If human accepts sorry → project done.
+- If human provides new mathematical insight → create explore task with level-4 framing.
+- DO NOT create automated explore tasks for ratio_divergence.
+
+## Heartbeat — 2026-02-08T14:59 UTC (Heartbeat #33)
+
+**Metrics**: Sorry count: 4 (1 main + 3 SmoothEscape) | Verified proofs: 3 (sigma-parity, sigma-lower-bounds, smooth-escape) | Dead ends: 7 | Tasks: 1 in_progress (a3n formalize), 2 failed, 43 closed, 2 deferred | Build: unclear (in-progress formalization) | Worker: ACTIVE
+**Status**: 🎉 HUMAN RESPONDED — formalizing smooth escape lemma. Worker active again!
+**Observations**:
+- **Human created a3n** at 14:49 UTC (~7 hrs after last activity). Task: "Formalize smooth escape lemma as new Lean file" (p0, formalize, medium). Description mentions "externally validated by Gemini 2.5 Pro" — human cross-checked the NL proof.
+- **a3n IN PROGRESS** — 956 lines in log, 9 min in. Agent building `Erdos/SmoothEscape.lean` (304 lines). Actively debugging API issues (Finset membership, Set.Finite, pigeonhole).
+- **SmoothEscape.lean has 3 sorries**:
+  1. Line 142: Connecting Zsygmondy to σ (intermediate divisibility chain)
+  2. Line 198: Product bound calculation (∏ p^E → (∏ p)^E)
+  3. Line 256: Exponent growth from divergence + smooth bound (standard but technically involved)
+- **Zsygmondy properly axiomatized** at line 67 — citation sorry pattern, well-documented. This is the acceptable pattern from workflow spec.
+- **Human strategy**: Building formalized infrastructure (smooth escape) rather than directly attacking ratio_divergence. This suggests the human may have a larger plan — smooth escape as a building block for a new proof architecture.
+- **Sorry count rose 1→4**: intentional (new file with work-in-progress sorries), not regression. Same pattern as when Helpers.lean was created (HB#9: 1→4, then sorries closed).
+- **Worker back to productive work** after 7+ hours idle. Good.
+**Actions**: None — worker actively formalizing. System healthy.
+**Watch next**:
+- Does a3n complete? Key: do the 3 sorries get closed, or does the file compile with sorries?
+- If compiles with sorries: some sorries may need follow-up formalize tasks. The Zsygmondy axiom is acceptable; the others need closing.
+- After a3n: does the human create more tasks? (ratio_divergence explore with new approach? skeleton restructure? more formalization?)
+- The human's plan is becoming clearer with each task they create. Watch for pattern.
+- **Build status**: Can't verify without running `lake build` (workflow says don't). Agent is iterating on compilation — trust the formalize agent's process.
+- Sorry count stable at 1 for 21 heartbeats (HB#12-32) until this jump to 4 (new file). Expected to return toward 1 as a3n closes sorries in SmoothEscape.lean.
