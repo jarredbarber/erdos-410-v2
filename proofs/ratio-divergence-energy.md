@@ -1,9 +1,72 @@
 # Divergence of the Abundancy Ratio via Structural Incompatibility
 
-**Status:** Draft ✏️
+**Status:** Rejected ❌
 **Statement:** For any $n \geq 2$, let $a_k = \sigma^{[k]}(n)$. Then $\displaystyle\limsup_{k \to \infty} \frac{\sigma(a_k)}{a_k} = +\infty$.
 **Dependencies:** sigma-lower-bounds.md (Verified ✅), sigma-parity.md (Verified ✅)
 **Confidence:** Moderate (Main result proven; one technical lemma requires verification)
+**Reviewed by:** erdos410v2-1ub
+
+---
+
+## Review Notes
+
+**Reviewed by:** erdos410v2-1ub  
+**Date:** 2026-02-08
+
+### CRITICAL ISSUE: Statement Strength Mismatch
+
+The proof establishes that **lim sup R_k = ∞**, which means there exist infinitely many k where R_k is arbitrarily large. However, the Lean formalization requires:
+
+```lean
+Tendsto (fun k ↦ ... R_k ...) atTop atTop
+```
+
+This means **lim R_k = ∞** — that R_k eventually grows without bound for ALL large k, not just infinitely many k.
+
+**The difference:**
+- **lim sup = ∞** (what this proof shows): For any C, there exist infinitely many k with R_k > C. The sequence can oscillate (some values large, some small).
+- **lim = ∞** (what Lean requires): For any C, there exists K such that for ALL k ≥ K, R_k > C. The sequence eventually stays large.
+
+The final step (Theorem 8.3) explicitly states: "This gives limsup R_k ≥ C for any C, hence limsup R_k = +∞." This is only the weaker result.
+
+### Technical Gaps
+
+1. **Lemma 8.1 (Residue Universality)**: The proof that v₂(a_k) mod d hits all residue classes infinitely often relies on hand-waving arguments about "the odd part m_k evolving through all configurations." The LTE-based calculation is correct but doesn't establish that the DYNAMICS actually produce all residue classes. A rigorous proof would need to:
+   - Track the evolution of the odd part sequence m_k more carefully
+   - Show that the structural constraints (bounded ω, unbounded growth) force sufficient variability in exponents
+   - Prove that this variability translates to hitting all residue classes mod d
+
+2. **Gap in Part 5**: The density argument correctly identifies that individual prime densities don't immediately force simultaneous presence. Parts 7-8 attempt to fix this via residue universality, but the connection is incomplete.
+
+### Path Forward
+
+To prove the full limit (lim R_k = ∞), one of these approaches is needed:
+
+**Option 1: Eventual monotonicity**
+- Show that R_k is eventually non-decreasing (or at least R_k ≥ f(k) for some f(k) → ∞)
+- This would directly give lim R_k = lim sup R_k = ∞
+
+**Option 2: Lower bound growth**
+- Instead of showing "infinitely many k with R_k > C," show "for all k ≥ K(C), R_k > C"
+- This requires proving that once R_k exceeds a threshold, it can never drop back below it (or drops only finitely many times)
+- May need to track a different quantity (e.g., min{R_j : j ≥ k} or a weighted average)
+
+**Option 3: Structural persistence**
+- Show that once "enough" small primes are present, the structural constraints prevent them from ALL leaving simultaneously
+- This would require a more careful analysis of which primes can exit and when
+- Must avoid the "persistence trap" — don't claim individual primes persist, but show a collective minimum
+
+### Positive Aspects
+
+The proof makes significant progress:
+- ✓ Avoids the persistence trap (doesn't claim individual primes always divide a_k eventually)
+- ✓ The omega bound (Lemma 1.1) is correct
+- ✓ The structural dichotomy (Lemma 2.2) is sound
+- ✓ Exponent growth (Lemma 4.1) is convincing
+- ✓ 2-adic variability (Lemma 4.2) is plausible
+- ✓ The small prime re-entry mechanism via Mersenne numbers is correct
+
+The overall strategy (structural incompatibility + residue universality) is promising, but needs strengthening to achieve the full limit.
 
 ---
 

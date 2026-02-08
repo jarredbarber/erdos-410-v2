@@ -533,3 +533,32 @@
 - If p54 fails: the rap (S-smooth escape) task will run, producing a new verified sub-result. Then need advisor to figure out bridging.
 - If p54 succeeds: need verify task (create one if agent doesn't) → then formalize task to close ratio_divergence sorry → DONE!
 - STALE THRESHOLD: If p54 > 500 lines without writing proof file next heartbeat → intervene.
+
+## Heartbeat — 2026-02-08T05:02 UTC (Heartbeat #21)
+
+**Metrics**: Sorry count: 1 (ratio_divergence at Basic.lean:56) | Verified proofs: 2 | Drafts: 1 new (ratio-divergence-energy.md) | Tasks: 3 open, 1 in_progress, 32 closed | Build: ✅
+**Status**: p54 actively working. Proof file written but has two critical issues. Verify pipeline created.
+**Observations**:
+- **p54 (explore ratio_divergence via energy) IN PROGRESS** — 493 lines, actively growing (~7 lines/10 sec). Agent wrote proofs/ratio-divergence-energy.md (597 lines, Draft ✏️) and continues reasoning about 2-adic equidistribution.
+- **CRITICAL ISSUE #1: Statement mismatch** — The proof claims lim sup R_k = ∞, but the Lean sorry needs Tendsto (lim = ∞). Lim sup is strictly weaker and INSUFFICIENT:
+  - Lean proof uses ratio_divergence → eventually_ratio_ge (∀ k ≥ K, R_k ≥ C) → geometric_growth → exponential bound → kth root
+  - Lim sup only gives R_k ≥ C for INFINITELY MANY k, not all k ≥ K
+  - Restructuring Lean to use lim sup doesn't work either: (1/k)∑ log R_j needs to → ∞, but sparse boosts from lim sup give Cesaro mean → log(3/2), not → ∞
+  - We GENUINELY need Tendsto (full limit)
+- **CRITICAL ISSUE #2: Acknowledged gap** — The density/pigeonhole argument (Part 5-7) doesn't close. Agent identifies this openly: "density argument doesn't quite close because individual densities are too small." The ∑ D_q/q converges, so frequency alone doesn't force simultaneous presence.
+- **What's good**: Structural framework is sound (bounded R → bounded ω → sparse structure). Lemmas 1.1-4.2 look rigorous. The "trampoline" observation (low R → σ → high R) is a genuinely new insight. Concrete example: R drops from 2 to 1.055 (Mersenne) then JUMPS to 3.44. This rebound mechanism hasn't been tried before.
+- **Agent still working**: Trying to close the gap via 2-adic equidistribution argument. If it can show v₂(a_k) is equidistributed mod d for any d, it gets all small primes simultaneously → R → ∞. But equidistribution is itself hard.
+- **rap (S-smooth escape) still queued** at p2 — will run after p54 finishes.
+**Actions**:
+1. Created **1ub** (verify ratio-divergence-energy.md, p1, medium, depends on p54) — includes explicit guidance about lim sup vs lim mismatch and density gap. Reviewer instructed to REJECT if only lim sup proved.
+**Pipeline**: p54 → 1ub → [revision or formalize depending on review]
+**Watch next**:
+- Does p54 finish? At 493 lines, approaching stale territory (threshold: 500+). But actively growing, so not stale YET. Give it one more heartbeat (~15 min).
+- **STALE THRESHOLD**: If p54 > 600 lines next heartbeat without meaningful new proof content → recover.
+- Does the agent strengthen from lim sup to lim? The 2-adic equidistribution approach MIGHT work but is very ambitious.
+- If 1ub rejects (likely given the two critical issues): need a DECISION about next steps:
+  - (A) Can we restructure the Lean proof to not need full Tendsto? → advisor task
+  - (B) Can we prove full Tendsto via a different approach? → 8th attempt (after 7 failures)
+  - (C) Can the "trampoline" observation be formalized? Low R → σ → high R, and the highs keep getting higher?
+  - (D) Escalate to human again with the specific finding: "lim sup is within reach but lim is not"
+- **Strategy note**: The trampoline observation is the most promising new insight. If σ maps "thin" (low R) numbers to "thick" (high R) numbers, AND the sequence of high-R values is unbounded, that gives lim sup = ∞. The missing piece is: does the sequence of LOW-R values also eventually → ∞? If min(R_k, R_{k+1}) → ∞, that gives the full Tendsto.
