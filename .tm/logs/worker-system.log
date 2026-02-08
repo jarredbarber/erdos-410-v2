@@ -3390,3 +3390,118 @@ Proved lemmas (all sorry-free, building on ratio_divergence):
 - erdos_410 (MAIN THEOREM): for any bound b, pick C = max(b,2) > 1, use kth_root_eventually_ge
 
 Remaining sorry: ratio_divergence (Erdos/Basic.lean:56) — the claim that σ₁(aₖ)/aₖ → ∞ along the orbit. This requires a new NL proof (proofs/ratio-divergence.md was Rejected ❌). Follow-up task needed for explore agent to find a new proof approach for ratio divergence.
+[2026-02-08T02:27:40.664Z] ✅ Successfully merged task/erdos410v2-goo into main
+[2026-02-08T02:27:40.664Z] 🗑️  Deleting branch task/erdos410v2-goo...
+[2026-02-08T02:27:40.670Z] ✓ Deleted local branch task/erdos410v2-goo
+[2026-02-08T02:27:40.676Z] ℹ️  No remote configured, skipping push.
+[2026-02-08T02:27:41.678Z] 
+================================================================================
+[2026-02-08T02:27:41.678Z] 📌 Processing task: erdos410v2-2zb - Prove σ(a_k)/a_k → ∞ via lim sup ω and small prime bound
+[2026-02-08T02:27:41.678Z]    Role: explore | Priority: 1 | Size: large
+[2026-02-08T02:27:41.678Z] ================================================================================
+
+[2026-02-08T02:27:41.682Z] ✓ Claimed task erdos410v2-2zb
+
+[2026-02-08T02:27:41.683Z] 🤖 Using agent: explore with models: anthropic/claude-opus-4-6:high, anthropic/claude-opus-4-5:high, google-antigravity/gemini-3-pro:high
+
+[2026-02-08T02:27:41.683Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-6:high...
+[2026-02-08T02:27:41.704Z] 📸 Capturing file state before agent execution...
+[2026-02-08T02:27:41.717Z] ✓ Captured state: 54 tracked, 1 untracked files
+
+[2026-02-08T02:27:41.717Z] 🌿 Creating branch: task/erdos410v2-2zb
+[2026-02-08T02:27:41.723Z] ✓ Working on branch task/erdos410v2-2zb
+
+[2026-02-08T02:27:45.400Z] 
+$ cd /home/jarred/code/erdos-410-v2 && ls proofs/
+[2026-02-08T02:27:45.403Z] 
+🛠️  Executing tool: read...
+[2026-02-08T02:27:48.716Z] 
+🛠️  Executing tool: read...
+[2026-02-08T02:27:48.717Z] 
+🛠️  Executing tool: read...
+[2026-02-08T02:27:48.717Z] 
+🛠️  Executing tool: read...
+[2026-02-08T02:27:52.536Z] 
+🛠️  Executing tool: read...
+[2026-02-08T02:27:52.538Z] 
+🛠️  Executing tool: read...
+[2026-02-08T02:27:52.539Z] 
+🛠️  Executing tool: read...
+[2026-02-08T02:27:56.259Z] 
+🛠️  Executing tool: read...
+[2026-02-08T02:27:56.260Z] 
+🛠️  Executing tool: read...
+[2026-02-08T02:36:14.603Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T02:36:14.604Z] 📄 Log saved to .tm/logs/worker-erdos410v2-2zb.md
+[2026-02-08T02:36:14.604Z] WARN: ⚠️ No response received from model anthropic/claude-opus-4-6:high (possibly out of usage). Trying next model...
+[2026-02-08T02:36:14.604Z] 💭 Starting pi agent session with model: anthropic/claude-opus-4-5:high...
+[2026-02-08T02:36:14.619Z] 📸 Capturing file state before agent execution...
+[2026-02-08T02:36:14.630Z] 🌿 Creating branch: task/erdos410v2-2zb
+[2026-02-08T02:36:14.643Z] ✓ Switched to existing branch task/erdos410v2-2zb
+
+[2026-02-08T02:36:14.630Z] ✓ Captured state: 54 tracked, 1 untracked files
+
+[2026-02-08T02:36:19.724Z] 
+🛠️  Executing tool: read...
+[2026-02-08T02:36:19.726Z] 
+🛠️  Executing tool: read...
+[2026-02-08T02:36:19.729Z] 
+🛠️  Executing tool: read...
+[2026-02-08T02:36:19.737Z] 
+$ ls -la proofs/
+[2026-02-08T02:36:24.935Z] 
+🛠️  Executing tool: read...
+[2026-02-08T02:36:24.937Z] 
+🛠️  Executing tool: read...
+[2026-02-08T02:36:24.943Z] 
+$ tm update erdos410v2-2zb --status "Reading existing proofs and understanding rejected approaches"
+[2026-02-08T02:37:12.727Z] 
+🛠️  Executing tool: read...
+[2026-02-08T02:37:12.733Z] 
+$ tm update erdos410v2-2zb --status "Developing new proof approach - avoiding persistence trap"
+[2026-02-08T02:41:43.659Z] [overseer] 💓 Heartbeat starting...
+[2026-02-08T02:41:43.662Z] [overseer] Running with model: anthropic/claude-opus-4-6:high
+[2026-02-08T02:43:06.671Z] [overseer] 💓 Heartbeat complete: No intervention needed. goo completed proof skeleton (MILESTONE). 2zb actively exploring with best-yet mathematical reasoning.
+[2026-02-08T02:45:46.970Z] 
+🛠️  Executing tool: write...
+[2026-02-08T02:45:46.977Z] 
+$ tm update erdos410v2-2zb --status "Writing clean proof of ratio divergence"
+[2026-02-08T02:47:50.003Z] 
+🛠️  Executing tool: write...
+[2026-02-08T02:50:35.110Z] 
+🛠️  Executing tool: write...
+[2026-02-08T02:50:41.017Z] 
+$ tm update erdos410v2-2zb --status "Completed draft - proof has conditional gaps on small prime recurrence"
+[2026-02-08T02:50:46.533Z] 
+🛠️  Executing tool: read...
+[2026-02-08T02:51:00.622Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T02:51:00.622Z] 📄 Log saved to .tm/logs/worker-erdos410v2-2zb.md
+[2026-02-08T02:51:00.622Z] 
+📊 Task erdos410v2-2zb completed:
+[2026-02-08T02:51:00.622Z]    Summary: Published proof draft to proofs/ratio-divergence-v2.md with partial progress on σ(a_k)/a_k → ∞
+[2026-02-08T02:51:00.622Z]    Details: Confidence: Moderate. The proof establishes several key unconditional results:
+
+1. **Zsygmondy Escape (Theorem 2.1):** Total prime support S is infinite - this is fully proven and sound.
+
+2. **Omega-Ratio Constraint (Theorem 3.2):** If σ(a_k)/a_k ≤ C for all k, then ω(a_k) = O(√log a_k) - a new result that shows bounded ratio implies very restricted prime structure.
+
+3. **Small Prime Forcing (Lemma 3.1):** If ω(m) = W, then Σ 1/p ≥ W/m^{1/W}, connecting ω to the reciprocal sum of primes.
+
+The proof strategy is sound and avoids both the 'persistence trap' (not requiring specific primes to stay) and the 'alignment trap' (not claiming residue class hitting). 
+
+However, the main theorem is CONDITIONAL on:
+- Odd-square chain termination (that σ(t²) = s² chains are finite)
+- The claim that 2 and 3 divide a_k infinitely often with suitable dynamics to make them coincide
+
+The 'bounded ratio with large primes churning' scenario is internally consistent and not yet ruled out. The key gap is proving that small primes must simultaneously be present for infinitely many k, which would immediately give lim sup R_k = ∞ via Mertens' theorem.
+
+Recommended next steps:
+1. Prove odd-square chain termination unconditionally
+2. Analyze the 2-adic valuation dynamics more carefully
+3. Consider the alternative 'energy function' approach from hints.md

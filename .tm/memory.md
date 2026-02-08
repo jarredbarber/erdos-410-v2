@@ -433,3 +433,30 @@
 - Does 2zb try a genuinely new approach or fall into the same traps?
 - **DECISION POINT**: If 2zb also gets rejected, STOP creating explore tasks for ratio-divergence. The agents can't solve this step. Wait for human guidance.
 - **Waste tracking**: 10 tasks spent on σ/a → ∞ or ω → ∞ (uwa, h0a, c6f, 51i, 3co, epp, 3r8, pf0, i9u, and now 2zb). 5 on even-stability. 15 of 28 closed tasks were on dead-end approaches.
+
+## Heartbeat — 2026-02-08T02:42 UTC (Heartbeat #18)
+
+**Metrics**: Sorry count: 1 (ratio_divergence at Basic.lean:56) | Verified proofs: 2 | Tasks: 1 open, 1 in_progress, 30 closed | Build: ✅
+**Status**: 🎉 PROOF SKELETON COMPLETE! Main theorem proved modulo ratio_divergence. Explorer making best-yet mathematical progress.
+**Observations**:
+- **MILESTONE: goo COMPLETED** — main theorem `erdos_410` now PROVED in Lean, contingent on sorry-ed `ratio_divergence` lemma at Basic.lean:56. This is HUGE structural progress:
+  - 8 intermediate lemmas proved sorry-free (iterate_ge_two, iterate_ge_add, iterate_cast_pos, eventually_ratio_ge, geometric_growth, eventually_exponential_bound, rpow_kth_root_ge, kth_root_eventually_ge)
+  - Main theorem proven from kth_root_eventually_ge
+  - Clever trick: use C² in geometric growth, then for k≥2K get 2j≥k so (C²)^j ≥ C^k
+  - Basic.lean is now 183 lines, all compiling
+- **Precisely-typed sorry**: `Tendsto (fun k ↦ (((sigma 1)^[k + 1] n : ℕ) : ℝ) / ((sigma 1)^[k] n : ℝ)) atTop atTop` — this is σ(a_k)/a_k → ∞
+- **2zb (ratio-divergence v2) IN PROGRESS** — 243 lines, actively writing proof. BEST MATHEMATICAL REASONING YET:
+  - Key insight: when ω(m) ≥ c·log(m), the primorial constraint forces p_1 ≤ m^{1/ω} ≤ e^{1/c}. For c=1, first half of primes ≤ 7.4, so {2,3,5,7} must all divide m.
+  - This gives σ(m)/m ≥ exp(c/(4e^{2/c}) · log m) → polynomial growth in m
+  - **CORRECTLY identifies the gap**: lim sup ω = ∞ ≠ ω → ∞. The task needs R_k → ∞, not just lim sup.
+  - Agent is about to write the proof. Deeper understanding than any previous attempt.
+  - NOT falling into persistence or alignment traps — reasoning about structural constraints instead
+- **Human escalation sent** (heartbeat #17). No response yet. Check for hints.md changes.
+**Actions**: None — 2zb actively producing excellent mathematical work. Let it finish.
+**Watch next**:
+- Does 2zb produce proofs/ratio-divergence-v2.md? Agent about to write. Give it 15-20 more min.
+- **KEY QUESTION**: Can the agent bridge lim sup ω = ∞ → σ/a → ∞? This is the exact gap that defeated all previous attempts. The primorial argument is new and promising but the gap remains.
+- If 2zb produces a proof: 6v8 reviews. If approved → need to update assembly and close the ratio_divergence sorry.
+- If 2zb fails or gets rejected: **STOP**. Wait for human. No more blind attempts.
+- **Formalize pipeline**: Once ratio_divergence has a verified NL proof, just need one formalize task to close Basic.lean:56. Everything else is done.
+- **Project state**: 30 closed, 1 in_progress (2zb), 1 open (6v8). 2 deferred (old ω tasks). Build passes. Sorry at precisely typed ratio_divergence.
