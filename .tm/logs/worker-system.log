@@ -2105,3 +2105,123 @@ $ tm update erdos410v2-c6f --state closed
 - Properly handles the gap between 'unbounded' and 'limit = ∞'
 
 The key technical tool throughout is the **recurrence property** of Zsygmondy primitive divisors: prime q primitive for p^{e+1}-1 re-enters whenever exponent of p is ≡ -1 (mod e+1). This 'stickiness' is what forces ω to grow without bound.
+[2026-02-08T01:04:44.789Z] ✅ Successfully merged task/erdos410v2-c6f into main
+[2026-02-08T01:04:44.789Z] 🗑️  Deleting branch task/erdos410v2-c6f...
+[2026-02-08T01:04:44.797Z] ✓ Deleted local branch task/erdos410v2-c6f
+[2026-02-08T01:04:44.803Z] ℹ️  No remote configured, skipping push.
+[2026-02-08T01:04:45.806Z] 
+================================================================================
+[2026-02-08T01:04:45.806Z] 📌 Processing task: erdos410v2-51i - Review revised proofs/omega-divergence.md (2nd review)
+[2026-02-08T01:04:45.806Z]    Role: verify | Priority: 2 | Size: medium
+[2026-02-08T01:04:45.806Z] ================================================================================
+
+[2026-02-08T01:04:45.810Z] ✓ Claimed task erdos410v2-51i
+
+[2026-02-08T01:04:45.811Z] 🤖 Using agent: verify with models: anthropic/claude-sonnet-4-5:medium, google-antigravity/gemini-3-flash:medium
+
+[2026-02-08T01:04:45.811Z] 💭 Starting pi agent session with model: anthropic/claude-sonnet-4-5:medium...
+[2026-02-08T01:04:45.832Z] 📸 Capturing file state before agent execution...
+[2026-02-08T01:04:45.846Z] ✓ Captured state: 42 tracked, 1 untracked files
+
+[2026-02-08T01:04:45.846Z] 🌿 Creating branch: task/erdos410v2-51i
+[2026-02-08T01:04:45.854Z] ✓ Working on branch task/erdos410v2-51i
+
+[2026-02-08T01:04:50.235Z] 
+$ tm update erdos410v2-51i --status "Reading revised proof file"
+[2026-02-08T01:04:51.403Z] 
+🛠️  Executing tool: read...
+[2026-02-08T01:05:56.299Z] [overseer] 💓 Heartbeat starting...
+[2026-02-08T01:05:56.303Z] [overseer] Running with model: anthropic/claude-opus-4-6:high
+[2026-02-08T01:05:58.933Z] 
+$ tm update erdos410v2-51i --status "Analyzing Case I and Case II arguments"
+[2026-02-08T01:06:03.209Z] 
+$ tm update erdos410v2-51i --status "Checking Theorem 4.1 strengthening argument"
+[2026-02-08T01:06:11.645Z] 
+$ tm update erdos410v2-51i --status "Writing review notes and updating proof status"
+[2026-02-08T01:06:16.533Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T01:07:15.121Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T01:07:28.317Z] 
+$ tm create -r explore -p 2 --size large "Fix Case II and Theorem 4.1 in omega-divergence proof" --description "Third revision of omega-divergence proof to address gaps found in 2nd review (erdos410v2-51i):
+
+CRITICAL GAPS:
+1. Case II, Step II.4: The construction assuming a single prime p achieves maximal exponent at steps where those maxima are 1,2,...,R is unjustified. The maximal exponents may skip values or be achieved by different primes at different steps.
+
+2. Theorem 4.1: The proof that T is finite appeals to flawed Case II logic. The Cases A/B recurrence argument doesn't rigorously establish that Zsygmondy primes re-enter the low-omega subsequence.
+
+WHAT WORKS (preserve these):
+- Part 1 (growth) ✓
+- Part 2 (Lemmas 2.1, 2.2, 2.3) ✓  
+- Case I of Theorem 3.1 ✓
+- Zsygmondy mechanism ✓
+
+RECOMMENDED FIXES:
+For Case II: Use 'sticky prime' argument instead of lcm construction:
+- Zsygmondy primes recur when exponent ≡ -1 (mod period)
+- With infinitely many entering but only B present at once, exit rate must be unbounded
+- But exits require exponent to NOT satisfy recurrence (divisibility fails)
+- As periods grow, exits become rarer → eventually >B primes present
+
+For Theorem 4.1: Either fix T-finite proof without using Case II, or use alternative approach by extracting bounded-omega subsequence and applying full Theorem 3.1 to it.
+
+See detailed review notes in proofs/omega-divergence.md." --depends erdos410v2-51i
+[2026-02-08T01:07:34.520Z] 
+$ tm create -r explore -p 2 --size large --deps erdos410v2-51i "Fix Case II and Theorem 4.1 in omega-divergence proof" --description "Third revision of omega-divergence proof to address gaps found in 2nd review (erdos410v2-51i):
+
+CRITICAL GAPS:
+1. Case II, Step II.4: The construction assuming a single prime p achieves maximal exponent at steps where those maxima are 1,2,...,R is unjustified. The maximal exponents may skip values or be achieved by different primes at different steps.
+
+2. Theorem 4.1: The proof that T is finite appeals to flawed Case II logic. The Cases A/B recurrence argument doesn't rigorously establish that Zsygmondy primes re-enter the low-omega subsequence.
+
+WHAT WORKS (preserve these):
+- Part 1 (growth) ✓
+- Part 2 (Lemmas 2.1, 2.2, 2.3) ✓  
+- Case I of Theorem 3.1 ✓
+- Zsygmondy mechanism ✓
+
+RECOMMENDED FIXES:
+For Case II: Use 'sticky prime' argument instead of lcm construction:
+- Zsygmondy primes recur when exponent ≡ -1 (mod period)
+- With infinitely many entering but only B present at once, exit rate must be unbounded
+- But exits require exponent to NOT satisfy recurrence (divisibility fails)
+- As periods grow, exits become rarer → eventually >B primes present
+
+For Theorem 4.1: Either fix T-finite proof without using Case II, or use alternative approach by extracting bounded-omega subsequence and applying full Theorem 3.1 to it.
+
+See detailed review notes in proofs/omega-divergence.md."
+[2026-02-08T01:07:41.014Z] 
+$ tm create -r explore -p 2 --size large --deps erdos410v2-51i -t "Fix Case II and Theorem 4.1 in omega-divergence proof" --description "Third revision of omega-divergence proof to address gaps found in 2nd review (erdos410v2-51i):
+
+CRITICAL GAPS:
+1. Case II, Step II.4: The construction assuming a single prime p achieves maximal exponent at steps where those maxima are 1,2,...,R is unjustified. The maximal exponents may skip values or be achieved by different primes at different steps.
+
+2. Theorem 4.1: The proof that T is finite appeals to flawed Case II logic. The Cases A/B recurrence argument doesn't rigorously establish that Zsygmondy primes re-enter the low-omega subsequence.
+
+WHAT WORKS (preserve these):
+- Part 1 (growth) ✓
+- Part 2 (Lemmas 2.1, 2.2, 2.3) ✓  
+- Case I of Theorem 3.1 ✓
+- Zsygmondy mechanism ✓
+
+RECOMMENDED FIXES:
+For Case II: Use sticky prime argument instead of lcm construction:
+- Zsygmondy primes recur when exponent ≡ -1 (mod period)
+- With infinitely many entering but only B present at once, exit rate must be unbounded
+- But exits require exponent to NOT satisfy recurrence (divisibility fails)
+- As periods grow, exits become rarer → eventually >B primes present
+
+For Theorem 4.1: Either fix T-finite proof without using Case II, or use alternative approach by extracting bounded-omega subsequence and applying full Theorem 3.1 to it.
+
+See detailed review notes in proofs/omega-divergence.md."
+[2026-02-08T01:07:45.268Z] 
+$ tm update erdos410v2-51i --status completed
+[2026-02-08T01:08:05.013Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T01:08:05.016Z] 📄 Log saved to .tm/logs/worker-erdos410v2-51i.md
+[2026-02-08T01:08:05.017Z] 
+📊 Task erdos410v2-51i completed:
+[2026-02-08T01:08:05.017Z]    Summary: Revision requested — proofs/omega-divergence.md
+[2026-02-08T01:08:05.017Z]    Details: The revision successfully eliminated the circular argument from Gap 1 by restructuring into Case I (finite support) and Case II (infinite support). Case I is now rigorous and correct. However, Case II contains a critical gap in Step II.4 (unjustified construction of indices where a single prime achieves maximal exponents 1,2,...,R), and Theorem 4.1 has multiple issues (proof that T is finite uses flawed Case II logic; recurrence arguments in Cases A/B are informal). Created follow-up task erdos410v2-3co with specific recommendations for fixes. Status changed to Under review 🔍.
