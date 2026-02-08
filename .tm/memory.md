@@ -460,3 +460,76 @@
 - If 2zb fails or gets rejected: **STOP**. Wait for human. No more blind attempts.
 - **Formalize pipeline**: Once ratio_divergence has a verified NL proof, just need one formalize task to close Basic.lean:56. Everything else is done.
 - **Project state**: 30 closed, 1 in_progress (2zb), 1 open (6v8). 2 deferred (old ω tasks). Build passes. Sorry at precisely typed ratio_divergence.
+
+## Heartbeat — 2026-02-08T02:58 UTC (Heartbeat #19) — FULL STOP
+
+**Metrics**: Sorry count: 1 (ratio_divergence at Basic.lean:56) | Verified proofs: 2 | Tasks: 0 open, 0 in_progress, 32 closed, 2 deferred | Build: ✅ | Worker: IDLE
+**Status**: 🛑 ALL AUTOMATED ATTEMPTS EXHAUSTED. Worker idle. Waiting for human decision.
+**Observations**:
+- **2zb COMPLETED, 6v8 REJECTED** — 6th failed attempt at ratio_divergence. Same alignment trap.
+  - 6v8 reviewer explicitly recommended escalation to human (good self-awareness)
+  - Proof titled "lim sup" but Part 6 fell back into alignment trap: "When all primes in T are present with suitable exponents..."
+  - Also relied on unproven Conjecture B from even-stability (dead end)
+- **Worker is IDLE**: 0 open tasks, 0 in_progress. Nothing for it to do.
+- **Human hasn't responded** to first escalation (heartbeat #17, ~1 hour ago). Sent second, more detailed escalation with options A-E.
+- **All 6 attempts at the core lemma failed on the same issue**: agents cannot prove small primes accumulate in σ-orbits without unjustified claims about sequence dynamics.
+  - Attempts: uwa (ω-persistence) → c6f (Case I/II) → 3co (periodic recurrence) → pf0 (ratio alignment) → 2zb (lim-sup-ω+primorial) → ALL rejected
+  - Every approach eventually falls into persistence/alignment trap regardless of framing
+- **Proof file statuses**: sigma-parity ✅, sigma-lower-bounds ✅, omega-divergence ❌, ratio-divergence ❌, ratio-divergence-v2 ❌, main-assembly-v2 🔍 (blocked), even-stability ✏️ (conditional)
+- **What works perfectly**: The Lean proof skeleton (183 lines), helper lemmas (sorry-free), formalization pipeline (3/3 successful). The bottleneck is purely mathematical discovery.
+**Actions**:
+1. **Sent 2nd escalation** to human via tm notify (priority 4) — detailed options A-E, recommending B (literature ref) or D (manual proof). The formalize pipeline is proven and ready.
+2. **Did NOT create any new explore tasks** — per commitment from heartbeats #17-18. Agents cannot solve this step.
+**Watch next**:
+- **Human response is the ONLY path forward.** Check for: (1) new files in proofs/, (2) changes to hints.md, (3) new tasks created by human, (4) tm messages.
+- If human chooses option D (writes NL proof): create formalize task immediately. Pipeline is ready.
+- If human chooses option B (literature ref): create explore task with specific paper/theorem to translate.
+- If human chooses option A (accept sorry): project is done. Ship it.
+- **DO NOT create more automated explore tasks** unless human provides a genuinely new mathematical insight.
+- **Task economics final**: 32 closed, 2 deferred. Of 32: 17 productive (sigma-bounds chain, parity chain, helpers, skeleton), 15 dead ends (5 even-stability, 10 on σ/a→∞). 53% waste rate — typical for hard research problems.
+- **Project achievements**: Main theorem PROVED modulo 1 sorry. 183 lines of compiling Lean. 3 helper lemmas formalized. 2 NL proofs verified. Complete proof skeleton with precise type for remaining sorry.
+
+## Heartbeat — 2026-02-08T04:42 UTC (Heartbeat #20)
+
+**Metrics**: Sorry count: 1 (ratio_divergence at Basic.lean:56) | Verified proofs: 2 (sigma-parity, sigma-lower-bounds) | Tasks: 2 open, 0 in_progress, 32 closed | Build: ✅ | Worker: was IDLE 1.7 hrs, now has tasks
+**Status**: Created S-smooth escape lemma task to break idle stall. Human still unresponsive.
+**Observations**:
+- Worker was idle since 02:52 UTC (~1 hr 50 min). No human response to 2 escalations (sent at ~02:26 and ~02:58). It's ~4:33 AM UTC — human likely asleep.
+- No new git commits, no file changes, no messages since heartbeat #19.
+- Project state unchanged: 1 sorry (ratio_divergence), 183 lines compiling Lean, 2 verified NL proofs.
+- Deferred tasks (vp1, 8xc) are from old ω→∞ approach — still sidelined.
+- Analyzed S-smooth escape lemma mathematically: the proof is a clean ONE-STEP Zsygmondy contradiction that avoids the persistence/alignment trap. Key insight: pigeonhole on argmax exponent → fixed prime with growing exponent → primitive divisor escapes S.
+- S-smooth escape does NOT directly close ratio_divergence sorry (orbit escaping S ≠ ω → ∞ ≠ σ/a → ∞). But it's a provable sub-result that adds verified infrastructure.
+- The fundamental gap remains: going from "orbit escapes any fixed smooth set" to "σ(a_k)/a_k → ∞" requires showing primes accumulate, not just that they appear and leave.
+**Actions**:
+1. Created **rap** (explore S-smooth escape, p2, medium) — complete level-4 proof sketch in description. ONE-STEP argument, explicit warnings against persistence trap.
+2. Created **xr8** (verify smooth-escape, p2, small, depends on rap) — specific review checklist.
+3. Did NOT create tasks for ratio_divergence — per heartbeat #19 commitment. The S-smooth escape is a building block, not a claim to close the sorry.
+**Watch next**:
+- Does rap produce proofs/smooth-escape.md? This should succeed — the proof is complete and self-contained.
+- Does xr8 verify it? Key risk: reviewer might find issue with pigeonhole step 3 (it's correct but subtle).
+- After xr8: NO automatic follow-up. Wait for human to decide how to use smooth-escape toward ratio_divergence.
+- **HUMAN RESPONSE**: Still the critical path. Check for hints.md changes, new tasks, messages.
+- **DO NOT** create explore tasks for ratio_divergence after xr8. The gap between smooth-escape and ratio_divergence is the same gap that defeated 6 attempts.
+- Task economics: 32 closed + 2 new = 34 total. ~17 productive, ~15 dead ends, 2 new (building blocks). Worker utilization gap: 1.7 hrs idle.
+
+## Heartbeat — 2026-02-08T04:44 UTC (Heartbeat #20 addendum)
+
+**HUMAN INTERVENED**: Task p54 created (04:39 UTC) — "Prove ratio_divergence via energy argument" (p0, explore, medium). Human responded to escalation by creating a task directly.
+**Status**: Pipeline active again! Worker running p54. My tasks (rap, xr8) queued behind it at p2.
+**Observations**:
+- p54 description is sharp: EXPLICITLY FORBIDS persistence/alignment/ω-based arguments. Lists 4 alternative approaches (energy, multiplicative formula, growth-based, contradiction).
+- Worker picked it up instantly (was idle). Log at 158 lines, 4 min in. Agent actively reasoning about:
+  - Bounded ratio → exponential growth with rate between log(3/2) and log C
+  - 2-adic decomposition: a_k = 2^{v_k} · m_k, tracking odd part separately
+  - Mersenne factors from σ(2^v) = 2^{v+1}-1 introducing small odd primes
+  - Energy function E_k = log(σ(a_k)/a_k)
+  - Agent has NOT fallen into persistence trap — reasoning about structural constraints instead
+- **Concern**: Agent is exploring many angles (energy, v₂ tracking, odd-part decomposition, Mersenne factors) without converging on one clean argument. At 158 lines with no clear proof direction, may need more time.
+- My rap/xr8 tasks will run after p54 finishes — still useful as building blocks.
+**Actions**: None additional — human intervention is the right response. System working.
+**Watch next**:
+- Does p54 produce proofs/ratio-divergence-energy.md? Give it 30+ min (large mathematical task at p0).
+- If p54 fails: the rap (S-smooth escape) task will run, producing a new verified sub-result. Then need advisor to figure out bridging.
+- If p54 succeeds: need verify task (create one if agent doesn't) → then formalize task to close ratio_divergence sorry → DONE!
+- STALE THRESHOLD: If p54 > 500 lines without writing proof file next heartbeat → intervene.
