@@ -344,3 +344,33 @@
 - If epp approves → proceed to vp1 → 8xc → final formalize
 - If epp rejects → execute contingency immediately
 - **Risk**: 3co is a large task burning cycles on a likely-failing approach. But interrupting wastes work. Accept the cost.
+
+## Heartbeat — 2026-02-08T01:43 UTC (Heartbeat #15)
+
+**Metrics**: Sorry count: 1 (main theorem only) | Verified proofs: 2 | Tasks: 2 open, 1 in_progress, 24 closed | Build: ✅
+**Status**: Strategic pivot in progress — Zsygmondy approach REJECTED, advisor planning alternative. System self-corrected.
+**Observations**:
+- **OMEGA-DIVERGENCE REJECTED ❌** after 3 attempts (uwa → c6f → 3co). epp followed my guidance and rejected rather than requesting 4th revision. Correctly identified the "persistence trap" as fundamental.
+- **epp created 3r8** (advisor, p1, large) — "Plan alternative approach to omega-divergence using ratio argument." Good self-organization by the verify agent.
+- **3r8 (advisor) IN PROGRESS** — 418 lines, actively analyzing. Key mathematical reasoning:
+  - Understands the ratio σ(m)/m approach from hints.md ✅
+  - Considering 2-adic valuation tracking, Mersenne factor accumulation
+  - Exploring energy function on log(σ(m)/m)
+  - About to create explore task with level-4 proof sketch
+  - BUT: hasn't created any tasks yet (only tm update + tm show). Nearing task creation.
+- **STALE RISK**: Previous advisor (s3b) stalled at 477 lines. 3r8 at 418 lines with no tasks created. If it passes 500 lines next heartbeat → recover.
+- **Pipeline state**: vp1 (assembly) depends on epp (closed/rejected). Since epp rejected, vp1's dependency is technically satisfied but the proof it references is wrong. Advisor should handle this (it showed vp1 and 8xc descriptions).
+- omega-divergence.md status: Rejected ❌ (correct)
+- Sorry count stable at 1 for 4 heartbeats (since heartbeat #12). Not stagnant yet — sorry count CAN'T decrease until NL proof verified + formalized.
+**Actions**: None — advisor actively planning. System self-corrected after rejection.
+**STALE RECOVERY PLAN (if 3r8 >500 lines next heartbeat)**:
+1. Recover 3r8
+2. Create explore task myself: "Prove σ(a_k)/a_k → ∞ for the sequence a_0=n≥2, a_{k+1}=σ(a_k)" with level-4 sketch from hints.md
+3. Create verify task dependent on it
+4. Update vp1 description to use ratio divergence instead of ω→∞
+**Watch next**:
+- Does 3r8 finish and create tasks? Critical: should create 1 explore + 1 verify at minimum.
+- If 3r8 stalls → execute recovery plan above.
+- After new explore task: this is a DIFFERENT mathematical approach. Fresh start. Should not inherit the Zsygmondy baggage.
+- vp1 description needs updating to remove ω→∞ references. Advisor should do this, or I will.
+- Total task count: 24 closed + 1 in_progress + 2 open = 27 tasks. 7 were dead ends (5 even-stability + 3 omega-divergence Zsygmondy). 20 productive.
