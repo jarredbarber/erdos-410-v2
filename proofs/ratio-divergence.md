@@ -1,6 +1,7 @@
 # Divergence of the Abundancy Ratio in the Iterated σ-Sequence
 
-**Status:** Draft ✏️
+**Status:** Rejected ❌
+**Reviewed by:** erdos410v2-i9u
 **Statement:** For any $n \geq 2$, let $a_k = \sigma^{[k]}(n)$ denote the $k$-th iterate of the sum-of-divisors function. Then
 $$\lim_{k \to \infty} \frac{\sigma(a_k)}{a_k} = +\infty.$$
 **Dependencies:** sigma-lower-bounds.md (Verified ✅), sigma-parity.md (Verified ✅)
@@ -261,3 +262,102 @@ The key innovation is reducing the infinite-support case to the finite-support c
 - sigma-parity.md (Verified ✅): Parity structure of σ.
 - omega-divergence.md: The Case I (finite support) Zsygmondy argument.
 - Zsygmondy, K. (1892): "Zur Theorie der Potenzreste." Monatsh. Math. 3: 265–284.
+
+---
+
+## Review Notes (erdos410v2-i9u)
+
+**REJECTED** — The proof contains critical gaps, particularly in Case B of Theorem 3.1. While it successfully avoids the "persistence trap" (not requiring specific primes to persist), it falls into an "alignment trap" by making unjustified claims about controlling the sequence dynamics.
+
+### Critical Gaps
+
+**1. Case B, Alignment Argument - Residue Class Hitting (Gap from omega-divergence.md reappears)**
+
+The proof claims: "Since $v_k$ is unbounded, for any integer $d \geq 1$, there exists at least one $k$ with $d | v_k + 1$."
+
+Then provides a "Proof sketch": "The value $v_k = v_2(\sigma(m_{k-1}))$ depends on the exponents of odd primes in $m_{k-1}$... The unboundedness of $v_k$ combined with the richness of the Zsygmondy/Mersenne mechanism ensures that no residue class modulo $d$ is permanently avoided."
+
+**UNJUSTIFIED.** This is hand-waving. $v_k$ being unbounded means $\sup_k v_k = \infty$, NOT that $v_k$ hits every residue class modulo $d$. The sequence $v_k$ is determined by the iteration dynamics $v_k = v_2(\sigma(\text{odd}(a_{k-1})))$, not by free choice. 
+
+The claim that "no residue class modulo $d$ is permanently avoided" requires proof. For example, the sequence $v_k = 2^k$ is unbounded but only hits even numbers for $k \geq 1$. The proof needs to establish that the specific dynamics of the $\sigma$ iteration cause $v_k$ to hit all residue classes, which is a non-trivial claim about the number-theoretic structure of the iteration.
+
+**This is exactly Gap 1 from omega-divergence.md.**
+
+**2. Case B, Case 2 - Prime Multiplicative Order Control**
+
+The proof states: "We can choose the step $K$ such that the prime $p_K$ achieving max exponent has favorable multiplicative orders. Specifically, by choosing $K$ large enough and using the fact that the sequence visits many configurations, there exists $K$ where the prime $p_K$ has $\text{ord}_{q_j}(p_K) | m$ for all $j$ (or at least $B+1$ of them)."
+
+**UNJUSTIFIED.** The proof doesn't control which prime achieves the maximum exponent at step $K$ — that's determined by the $\sigma$ iteration. The claim "we can choose" suggests free selection, but $p_K$ is uniquely determined by the sequence dynamics.
+
+The suggestion to use "careful selection (or by a probabilistic argument on the density of such $K$)" is problematic:
+- "Careful selection" implies control we don't have
+- "Probabilistic argument" and "density" invoke Chebotarev density theorem or similar results, but:
+  - No formal setup for applying Chebotarev is provided
+  - Chebotarev gives density among ALL primes, not among primes that appear at max exponent positions in THIS specific sequence
+  - The sequence is deterministic, not random
+
+**This combines Gap 2 (exponent cycling) and Gap 3 (Chebotarev hand-waving) from omega-divergence.md.**
+
+**3. Case A - Zsygmondy Prime 2-adic Valuation**
+
+Case A argues: "Zsygmondy primes for odd base $p$ and large exponent $e$ include primes $q$ with $v_2(q+1)$ arbitrarily large (since $q \equiv 1 \pmod{e+1}$ and $e+1$ can have large 2-adic valuation)."
+
+The logic is: if $q$ is primitive for $p^{e+1}-1$, then $q \equiv 1 \pmod{e+1}$. If $e+1$ has high 2-adic valuation, so does $q-1$, hence so does $q+1$ (approximately).
+
+**Minor gap:** The proof needs to establish that the sequence actually produces odd prime powers $p^e$ where $e+1$ has high 2-adic valuation. The argument assumes "exponents grow unboundedly" (which is true), but needs to show some of these exponents have $v_2(e+1) \geq V+1$. 
+
+For exponents $e \in \{1, 2, 3, \ldots\}$, the values $e+1 \in \{2, 3, 4, 5, 6, \ldots\}$ include many with high 2-adic valuation ($e+1 = 2^k$ for various $k$), so this is plausible. However, the proof should verify that such exponents actually appear in the sequence, not just assert they could in principle.
+
+**This gap is less severe than Gaps 1-2, but still needs addressing.**
+
+### Secondary Issues
+
+**4. Part 4 (Implications) - Vague Growth Rate Argument**
+
+Corollary 4.1 attempts to prove $a_k^{1/k} \to \infty$ from $R_k \to \infty$, but the argument in Steps 2-4 is unnecessarily complicated and contains imprecision:
+
+- Step 2 indexes boosts as $k_1 < k_2 < \cdots$ with $R_{k_j} > 2^j$, but doesn't clarify how $j$ relates to the actual steps
+- Step 4 claims "extra contributions grow superlinearly" based on "$\Omega(\sqrt{k})$ terms" with no justification
+
+**The correct simple argument:** Once $R_k \to \infty$, for any $C > 1$, there exists $K$ with $R_k > C$ for all $k \geq K$. Then $a_{k+1} = \sigma(a_k) = R_k \cdot a_k > C \cdot a_k$ for all $k \geq K$. By induction, $a_k > C^{k-K} a_K$ for $k \geq K$, so $a_k^{1/k} > C \cdot (a_K/C^K)^{1/k} \to C$ as $k \to \infty$. Since $C$ was arbitrary, $a_k^{1/k} \to \infty$. $\square$
+
+This issue is not a fatal flaw (the conclusion is correct), but the presentation should be cleaned up.
+
+### Positive Aspects
+
+**1. Avoids Persistence Trap**
+
+The proof correctly does NOT require specific primes to persist across multiple iterations. The contradiction argument (assume $R_k \leq C$) combined with the Mersenne alignment creates constraints without tracking individual prime trajectories. This is good.
+
+**2. Case I (Theorem 2.1) is Sound**
+
+The finite support case using Zsygmondy escape is rigorous and well-executed. The argument that finite support + unbounded exponents → Zsygmondy prime escapes the support is correct.
+
+**3. Case A Structure is Reasonable**
+
+While Case A has a minor gap about 2-adic valuations, the overall structure (bounded $v_k$ → finite Mersenne contributions → Zsygmondy from odd bases → contradiction from high 2-adic valuation) is sound and could work with the gap filled.
+
+### Strategic Assessment
+
+The proof attempts an "alignment" strategy: show that all small primes in a set $S$ can be made to divide some $a_K$ by controlling when $v_K$ hits the right residue class. This is clever, but requires rigorous justification of the residue class hitting property.
+
+**Two paths forward:**
+
+**Path 1: Prove the residue class property rigorously.**
+- Establish that $v_2(\sigma(m))$ for odd $m$ can take any prescribed value modulo $d$ by choosing $m$ appropriately
+- Show the sequence dynamics actually produce such $m$ values as odd parts $\text{odd}(a_k)$
+- This requires deep analysis of the $\sigma$ map's number-theoretic behavior
+
+**Path 2: Abandon alignment, use energy/potential function.**
+- Instead of trying to make multiple primes appear simultaneously, track an "energy" quantity that must increase
+- For example: $E_k = \sum_{p | a_k} \log(1 + 1/p)$ or $E_k = \log(\sigma(a_k)/a_k)$
+- Prove $\limsup_k E_k = \infty$ by showing energy gains from Mersenne factors accumulate faster than losses from prime exits
+- This avoids needing to control residue classes or multiplicative orders
+
+**Recommendation:** Path 2 is more promising. The rejected omega-divergence.md proof attempted a similar prime-tracking approach and failed three times on the same issues. The ratio-divergence proof now fails on essentially the same gaps (residue class hitting, Chebotarev hand-waving). This suggests the alignment/control approach is fundamentally too difficult.
+
+An energy function approach that doesn't require controlling which primes appear when, only that the overall ratio $\sigma(a_k)/a_k$ grows on average, is more likely to succeed.
+
+### Verdict
+
+**Rejected ❌** — The proof has critical gaps in Case B that mirror those in the rejected omega-divergence.md. A fundamentally different approach is needed rather than revision attempts.
