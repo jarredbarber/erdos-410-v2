@@ -6040,3 +6040,98 @@ $ tm update erdos410v2-2qp --status "Completed"
 📊 Task erdos410v2-2qp completed:
 [2026-02-08T17:26:12.857Z]    Summary: Rejected ❌ — proofs/fragmentation-flow.md
 [2026-02-08T17:26:12.857Z]    Details: Critical flaw in 'Accumulation' argument. The proof fails to account for the 'Concentration' effect where σ(2^k) can map to a prime or product of large primes, drastically reducing the sum of prime reciprocals h(a_k). Simulation confirmed non-monotonic behavior (e.g., h(a_k) dropping from 1.17 to 0.08). The claim that mass accumulates at small primes is false due to the 2^k -> M_k cycle. Added to Dead Ends.
+[2026-02-08T17:26:13.014Z] ✅ Successfully merged task/erdos410v2-2qp into main
+[2026-02-08T17:26:13.014Z] 🗑️  Deleting branch task/erdos410v2-2qp...
+[2026-02-08T17:26:13.021Z] ✓ Deleted local branch task/erdos410v2-2qp
+[2026-02-08T17:26:13.026Z] 🚀 Pushing main to remote...
+[2026-02-08T17:26:13.701Z] ✓ Pushed to remote
+[2026-02-08T17:26:14.703Z] ⏳ No tasks available. Waiting for new tasks (polling every 5 seconds)...
+[2026-02-08T17:35:08.102Z] [overseer] No active work. Running one idle heartbeat...
+[2026-02-08T17:35:08.102Z] [overseer] 💓 Heartbeat starting...
+[2026-02-08T17:35:08.104Z] [overseer] Running with model: google-antigravity/gemini-3-pro-high:high
+[2026-02-08T17:37:40.388Z] 
+================================================================================
+[2026-02-08T17:37:40.388Z] 📌 Processing task: erdos410v2-kmw - Analyze density of low-ratio terms for Cesàro mean divergence
+[2026-02-08T17:37:40.388Z]    Role: advisor | Priority: 1 | Size: medium
+[2026-02-08T17:37:40.388Z] ================================================================================
+
+[2026-02-08T17:37:40.394Z] ✓ Claimed task erdos410v2-kmw
+
+[2026-02-08T17:37:40.394Z] 🤖 Using agent: advisor with models: google-antigravity/gemini-3-pro-high:high
+
+[2026-02-08T17:37:40.394Z] 💭 Starting pi agent session with model: google-antigravity/gemini-3-pro-high:high...
+[2026-02-08T17:37:40.411Z] 📸 Capturing file state before agent execution...
+[2026-02-08T17:37:40.423Z] ✓ Captured state: 78 tracked, 1 untracked files
+
+[2026-02-08T17:37:40.423Z] 🌿 Creating branch: task/erdos410v2-kmw
+[2026-02-08T17:37:40.431Z] ✓ Working on branch task/erdos410v2-kmw
+
+[2026-02-08T17:37:50.327Z] 
+$ ls -R proofs
+[2026-02-08T17:37:53.367Z] 
+🛠️  Executing tool: read...
+[2026-02-08T17:38:03.495Z] 
+🛠️  Executing tool: read...
+[2026-02-08T17:38:42.031Z] 
+🛠️  Executing tool: write...
+[2026-02-08T17:38:52.549Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T17:38:56.073Z] 
+$ python3 simulation.py
+[2026-02-08T17:39:18.134Z] 
+🛠️  Executing tool: write...
+[2026-02-08T17:40:05.129Z] 
+$ python3 trend.py
+[2026-02-08T17:40:37.160Z] 
+🛠️  Executing tool: edit...
+[2026-02-08T17:40:39.912Z] 
+$ python3 trend.py
+[2026-02-08T17:41:20.299Z] 
+🛠️  Executing tool: write...
+[2026-02-08T17:42:25.678Z] 
+
+📝 Agent response complete.
+
+[2026-02-08T17:42:25.679Z] 📄 Log saved to .tm/logs/worker-erdos410v2-kmw.md
+[2026-02-08T17:42:25.679Z] 
+📊 Task erdos410v2-kmw completed:
+[2026-02-08T17:42:25.679Z]    Summary: Task completed
+[2026-02-08T17:42:25.679Z]    Details: The "Density-Based" analysis and simulation confirm that low-ratio terms ($R_k < 1.5$) are extremely sparse (density $< 10\%$, potentially 0 unconditionally) and that the average growth rate is driven by "thick" even terms.
+
+### Key Findings
+1.  **Low-Ratio Terms ($R_k < 1.5$) are Rare**:
+    - Since $a_k$ even implies $R_k \ge 1.5$, low-ratio terms are strictly odd.
+    - Simulation of $n=2$ to $127$ shows odd terms vanish quickly (e.g., for $n=2$, none after step 6).
+    - "Eventual Even Stability" (if true) implies their density is 0.
+    - Even without stability, odd terms must be perfect squares to persist, making them quadratically sparse.
+
+2.  **Mersenne Primes are Isolated**:
+    - A Mersenne prime $M_p$ cannot be a perfect square, so it cannot be followed by another odd term.
+    - Transitioning *into* a Mersenne prime requires $a_k = 2^{p-1}$ (a power of 2).
+    - Powers of 2 are "repelling" because $\sigma(2^k) = 2^{k+1}-1$ (composite for most $k$).
+    - Thus, Mersenne primes have effective density 0.
+
+3.  **"Factor Pump" Mechanism**:
+    - Even terms $a_k$ tend to accumulate prime factors.
+    - Mechanism: High $\omega(a_k)$ (many factors) $\to$ High $v_2(a_{k+1})$ (via $\sigma(p^e)$ parity) $\to$ New factors from $2^{v_2+1}-1$ in $a_{k+2}$.
+    - Simulation confirms `Avg_ln_R` increases logarithmically (from 0.4 to >1.0), implying super-exponential growth of $a_k$.
+
+### Strategy for Density-Based Proof
+1.  **Formalize Sparsity**: Prove that the set $\{k : a_k \text{ is odd}\}$ has density 0 (using the square constraint).
+2.  **Analyze Even Growth**: Focus on the subsequence of even terms. Show that $v_2(a_k)$ tends to be large or that $\omega(a_k)$ grows.
+3.  **Prove Factor Accumulation**: Use the relation $\omega(a_{k+2}) \ge \omega(2^{v_2(a_{k+1})+1}-1)$ to show that "thin" terms (low $\omega$) are unstable and evolve into "thick" terms.
+
+This analysis provides a robust alternative to the failed "fragmentation-flow" approach by shifting focus from *minimum* ratio (which can be small) to *average* ratio (which is large).
+
+```json
+{
+  "status": "completed",
+  "results": {
+    "low_ratio_density": "Empirically < 0.1, theoretically 0 (conditional on Eventual Even Stability)",
+    "mersenne_density": "0 (Mersenne primes are isolated odd terms)",
+    "growth_trend": "Avg_ln_R increases with k (0.4 -> 1.0+), supporting a_k^{1/k} -> infinity",
+    "mechanism": "Factor Pump: odd exponents -> high v_2 -> new prime factors",
+    "strategy_file": "proofs/density-analysis.md"
+  }
+}
+```
