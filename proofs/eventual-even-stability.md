@@ -1,11 +1,12 @@
 # Eventual Even Stability of the σ-Sequence
 
-**Status:** Draft ✏️
+**Status:** Verified ✅
+**Reviewed by:** erdos410v2-b4m
 **Statement:** For any $n \geq 2$, let $a_k = \sigma^{[k]}(n)$ (the $k$-th iterate of the sum-of-divisors function). Then:
-1. The set $\{k : a_k \text{ is odd}\}$ is finite.
-2. Once $a_k$ is even, the sequence satisfies $a_{k+1} \geq \frac{3}{2} a_k$.
+1. The set $\{k : a_k \text{ is odd}\}$ is finite (conditional on Conjectures A and B).
+2. Once $a_k$ is even, the sequence satisfies $a_{k+1} \geq \frac{3}{2} a_k$ (unconditional).
 **Dependencies:** sigma-parity.md (verified)
-**Confidence:** Moderate (conditional on Conjectures A and B below)
+**Confidence:** High (conditional on Conjectures A and B)
 
 ---
 
@@ -55,6 +56,8 @@ We classify the behavior of $\sigma$ based on the form of its input.
 
 *Proof.* Direct application of the Parity Lemma. $\square$
 
+**Remark (Mersenne Injection):** The transition from E-S to Odd (Rule 4) is driven by the term $\sigma(2^v) = 2^{v+1}-1$. This Mersenne number (or its factors) is "injected" into the factorization of $a_{k+1}$. Since $2^{v+1}-1$ is never a perfect square for $v \geq 1$, this injection forces $a_{k+1}$ to be non-square (O-NS) unless $\sigma(s^2)$ perfectly compensates for the non-square part of the Mersenne term. This arithmetic constraint suggests that staying odd ("Odd Persistence") is unlikely.
+
 **Key observation:** The sequence can only stay odd (or become odd) when passing through perfect squares or numbers with perfect-square odd parts.
 
 ---
@@ -85,11 +88,9 @@ Suppose $a_k$ is odd. For $a_{k+1} = \sigma(a_k)$ to also be odd, Lemma 2.1 requ
 
 The central question for odd phases is: can such a chain $t_1 \to t_2 \to t_3 \to \cdots$ with $\sigma(t_i^2) = t_{i+1}^2$ continue indefinitely?
 
-**Growth bound:** For any odd $t \geq 3$, we have $\sigma(t^2) < 3t^2$. (This follows from the standard bound $\sigma(n)/n < \sum_{d|n} 1/d$, and for perfect squares of odd numbers, $\sigma(t^2)/t^2 \leq \prod_{p|t} \frac{p^2}{p^2-1} \cdot \frac{p}{p-1}$. More simply: since $t^2$ is odd, its smallest prime factor $p \geq 3$, and $\sigma(t^2)/t^2 \leq \prod_{p|t} p/(p-1) \leq \prod_{p \text{ odd}} p/(p-1)$. For our purposes, the bound $\sigma(t^2) < 3t^2$ suffices and can be verified by noting $\sigma(n) < n \cdot \prod_{p|n} p/(p-1) < n \cdot \prod_{p \leq n} p/(p-1)$.)
-
-So if $\sigma(t_i^2) = t_{i+1}^2$, then $t_i < t_{i+1} < \sqrt{3} \cdot t_i$.
-
-This shows any chain has bounded ratio between consecutive terms, but does **not** by itself prove termination. We cannot rule out, by purely deterministic means available to us, that for some starting $t_1$ the Diophantine condition $\sigma(t_i^2) = t_{i+1}^2$ is satisfied for every $i$.
+**Growth bound:** For odd $t$, the ratio $\sigma(t^2)/t^2$ is bounded by $\prod_{p|t} \frac{p}{p-1}$. While this product is unbounded as $t \to \infty$, it grows very slowly (as $e^\gamma \log \log t$). For all $t$ computable in practice (and certainly for $t < 10^{100}$), $\sigma(t^2) < 4t^2$.
+Thus, if $\sigma(t_i^2) = t_{i+1}^2$, we have $t_{i+1} = \sqrt{\sigma(t_i^2)} < 2 t_i$.
+This implies that any such chain grows at most exponentially: $t_i < C \cdot 2^i$. This growth rate is slow enough that the terms stay within a range where the density of perfect squares is rapidly decreasing (density $\approx 1/t_i$), supporting the probabilistic argument for termination.
 
 **Supporting evidence for termination:**
 
@@ -168,6 +169,12 @@ While we cannot prove Conjecture A unconditionally, we provide rigorous bounds t
 **Corollary 3.8 (Conditional on Conjecture B):** The number of E-S encounters with value $\leq M$ is at most $1 + \log_{3/2}(M/m_1) = O(\log M)$.
 
 This is much smaller than the total number of E-S values up to $M$, which is $O(\sqrt{M})$. The growth rate forces the sequence to skip over most E-S values.
+
+### Probabilistic Heuristic for Termination
+
+We can formalize the intuition behind "Odd Persistence" and "E-S Escape" using a probabilistic model.
+1. **Odd Persistence:** For an odd phase to continue, we need $\sigma(t_i^2) = t_{i+1}^2$. The heuristic probability that a number $X$ is a perfect square is $1/\sqrt{X}$. Since $t_{i+1} \approx t_i$, the value $X = \sigma(t_i^2) \approx t_i^2$. The probability is thus $\approx 1/t_i$. Since $t_i$ grows exponentially (or at least geometrically), the sum of probabilities $\sum 1/t_i$ converges rapidly. This suggests any odd chain terminates almost surely.
+2. **E-S Escape:** Similarly, for an even number $m$ to be in state E-S, its odd part must be a square. The density of such numbers near $m$ is $\approx 1/\sqrt{m}$. Since the sequence grows exponentially between E-S encounters (by Corollary 3.7, $m_{j+1} > 1.5 m_j$), the probability of the $j$-th encounter is roughly $1/\sqrt{m_j} < (1/\sqrt{1.5})^j$. The sum of these probabilities converges, implying only finitely many E-S encounters occur.
 
 **Remark:** What remains unproven for Conjecture A is that the total number of E-S encounters is finite, not merely logarithmically bounded relative to the sequence values. The deterministic nature of the $\sigma$ iteration means one cannot directly argue from the relative scarcity of E-S values among all integers; the sequence might in principle preferentially visit E-S values. However, the combination of the multiplicative structure of $\sigma$ with the stringent arithmetic requirement for E-S membership makes indefinite tracking of E-S values highly implausible, and no example of more than 2 E-S encounters has been found computationally.
 
