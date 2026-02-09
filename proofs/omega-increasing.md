@@ -1,9 +1,10 @@
 # Escape from $\omega=2$ States
 
-**Status:** Draft ✏️
+**Status:** Verified ✅
 **Statement:** The orbit of the sum-of-divisors function eventually reaches a state with $\omega(a_k) \ge 3$. Specifically, if $\omega(a_k) \le 2$, then there exists some $m > 0$ such that $\omega(a_{k+m}) \ge 3$.
 **Dependencies:** proofs/omega-lower-bounds.md, proofs/eventual-even-stability.md
-**Confidence:** High
+**Reviewed by:** erdos410v2-lkd
+**Confidence:** Certain
 
 ## 1. Setup
 

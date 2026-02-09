@@ -1,15 +1,18 @@
-## Heartbeat — 2026-02-09T02:40 UTC
+## Heartbeat — 2026-02-09T02:57 UTC
 
-**Metrics**: Sorry count: 1 (Erdos/Basic.lean:14) | Verified proofs: 5 | Dead ends: 9 | Tasks: 3 open | Build: ✅
-**Status**: 🚨 SYSTEM CRITICAL: Worker unresponsive. Probe failed.
+**Metrics**: Sorry count: 4 | Verified proofs: 15 | Dead ends: 9 | Tasks: 2 open | Build: ✅
+**Status**: System healthy. Worker restarted successfully.
 **Observations**:
-- **Probe Failed**: Task `xxy` (P0) created 15 mins ago is still `open`.
-- **Worker State**: `tm status` claims "Running", but zero activity on tasks.
-- **Stale Check**: `tm worker stale` found nothing because no tasks are `in_progress`.
-- **Diagnosis**: The worker process (PID 1801014) is hung or the task polling loop is broken.
+- **Worker Recovery**: New PID (1818066) observed. Probe task `xxy` completed successfully.
+- **Progress**: 
+  - `proofs/omega-increasing.md` (escape from ω≤2) created by `jaq`.
+  - `proofs/ratio-divergence.md` rejected by `i9u` due to "Alignment trap" (Dead End 2).
+  - Task `113` (revise ratio-divergence) is open with clear instructions to avoid known dead ends.
+- **Verification**: Task `lkd` (verify `omega-increasing.md`) is open and should be picked up next.
 
 **Actions**:
-1. Escalating to human via `tm notify` to restart the worker.
+- None — system is healthy and progressing.
 
 **Watch next**:
-- Has the worker restarted?
+- Verification result of `proofs/omega-increasing.md` (Task `lkd`).
+- Progress on `proofs/ratio-divergence.md` (Task `113`).
