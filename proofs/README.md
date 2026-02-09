@@ -16,11 +16,13 @@ Where $\sigma_1(n) = \sigma(n)$ (sum of divisors) and $\sigma_k(n) = \sigma(\sig
 | [sigma-parity.md](sigma-parity.md) | $\sigma(n)$ odd iff $n=k^2$ or $2k^2$ | Verified ✅ |
 | [smooth-escape.md](smooth-escape.md) | Orbit leaves any finite set of primes | Verified ✅ |
 | [omega-lower-bounds.md](omega-lower-bounds.md) | $\omega(2^n-1) \ge \tau(n)-2$ and Mersenne Instability | Verified ✅ |
+| [factor-pump.md](factor-pump.md) | Recursive factor bounds | Verified ✅ |
 
 ## In Progress / Under Review
 
 | File | Statement | Status |
 |------|-----------|--------|
+| [omega-increasing.md](omega-increasing.md) | Escape from $\omega=2$ states | Draft ✏️ |
 | [main-assembly-v2.md](main-assembly-v2.md) | Proof assembly (waiting on ratio lemma) | Under review 🔍 |
 | [eventual-even-stability.md](eventual-even-stability.md) | Eventually even stability | Draft ✏️ |
 | [main-theorem-v2.md](main-theorem-v2.md) | Full proof attempt v2 | Draft ✏️ |
