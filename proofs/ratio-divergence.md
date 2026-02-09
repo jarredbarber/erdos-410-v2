@@ -1,9 +1,19 @@
 # Divergence of the Abundancy Ratio in the Iterated σ-Sequence
 
-**Status:** Draft ✏️
+**Status:** Rejected ❌
+**Reviewed by:** erdos410v2-p27
 **Statement:** For any $n \geq 2$, let $a_k = \sigma^{[k]}(n)$. Then $\displaystyle\lim_{k \to \infty} \frac{\sigma(a_k)}{a_k} = +\infty$.
 **Dependencies:** sigma-lower-bounds.md, factor-pump.md
-**Confidence:** High
+**Confidence:** Low
+
+## Review Notes (2026-02-09)
+**Rejection Reason:** The proof relies on heuristic "random walk" arguments in Part 3 that are not rigorous.
+1. **The Mixing Mechanism:** The claim that $v_{k+1} = \sum v_2(\sigma(p^e))$ "behaves like a random walk" and will "distribute modulo $L$" is unproven. This is a deterministic sequence. Without a rigorous equidistribution theorem (which is extremely difficult for such sequences), we cannot assume the sequence visits any specific residue classes, let alone all of them.
+2. **Alignment Trap (Dead End 2):** The proof assumes we can achieve specific alignments of exponents to force small prime factors (to satisfy the "Small Prime Budget"). This is the exact definition of the Alignment Trap.
+3. **Unbounded $v_k$:** The argument that $v_k$ must be unbounded because we "eventually hit a prime with arbitrarily large $v_2(q+1)$" is also heuristic. It assumes the orbit does not get trapped in a subspace of primes with small $v_2(q+1)$.
+4. **Mersenne Obstruction:** Even if $v_k \to \infty$, if $v_k+1$ hits values where $2^{v_k+1}-1$ is a Mersenne prime (or has only large factors), the ratio does not necessarily diverge. The proof assumes we avoid these "sparse" cases without justification.
+
+**Conclusion:** This approach attempts to use probabilistic heuristics for a deterministic problem and fails to address the "persistence/alignment" issues identified in previous dead ends.
 
 ---
 

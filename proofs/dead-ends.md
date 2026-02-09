@@ -95,3 +95,10 @@ It cannot prove **bounded recovery time** for arbitrary thresholds L > 2. The ga
 **Tried:** Prove full limit divergence by arguing that the "Source Injection" $2^{v_{k+1}+1}-1$ constantly injects small primes, and that the sequence $v_k$ "cannot stick to primes" (Mersenne states), preventing long low-ratio excursions.
 
 **Failed because:** The claim that $v_k$ cannot stick to primes (and thus avoid Mersenne states) is unproven. While `proofs/omega-lower-bounds.md` proves escape from a *single* Mersenne state in $\le 4$ steps, it does not prevent the sequence from immediately entering *another* Mersenne state or oscillating in a low-density regime. The argument relies on a heuristic "mixing" assumption (that $v_k$ behaves like a random variable) which is not rigorous for this deterministic sequence.
+
+---
+
+## Dead End 10: Mixing Mechanism / Random Walk (rejected 2026-02-09)
+
+**Tried:** Prove ratio divergence by assuming $v_k = v_2(a_k)$ behaves like a random walk, thus exploring all residue classes modulo $Q$ and eventually forcing divisibility by small primes.
+**Failed because:** The sequence is deterministic. Proving it behaves pseudo-randomly (equidistribution) is extremely difficult and currently unproven. The proof relies on heuristics about "hitting" specific alignments, falling into the "Alignment Trap".
